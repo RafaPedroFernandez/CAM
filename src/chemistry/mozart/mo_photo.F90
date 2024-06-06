@@ -181,7 +181,10 @@ contains
     else if ( ptop_ref < 10._r8 ) then
        max_zen_angle = 97.01_r8 ! degrees
     else
-       max_zen_angle = 88.85_r8 ! degrees
+!rpf_CESM2_SLH
+!      max_zen_angle = 88.85_r8 ! degrees
+       max_zen_angle = 97.01_r8 ! degrees   !rpf : Doug's SLH code suggests using this value for CAM-Chem. Which one should be used??
+!rpf_CESM2_SLH
     endif
 
     ! jeuv_1,,, jeuv_25 --> need euv calculations --> must be waccm 

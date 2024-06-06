@@ -6,6 +6,8 @@ module mo_sethet
 !                   HCN, CH3CN have new Henry's Law coefficients, HCOOH is set to CH3COOH
 ! LKE (10/18/2010): SO2 washout corrected based on recommendation of R.Easter, PNNL
 !
+!     2020-Dec-08 - R. Fernandez - Merge vsl03 chemistry (AC2-CSIC-Madrid - A. Saiz-Lopez) ! rpf_CESM2_SLH
+
   use shr_kind_mod,    only: r8 => shr_kind_r8
   use cam_logfile,     only: iulog
   use gas_wetdep_opts, only: gas_wetdep_cnt, gas_wetdep_method, gas_wetdep_list
@@ -57,6 +59,29 @@ contains
     call phys_getopts( prog_modal_aero_out = prog_modal_aero )
 
     allocate( wetdep_map(gas_wetdep_cnt))
+
+!rpf_CESM2_SLH
+!================================VSL=============================================
+!  ordc (07/24/2012): Look for the most representative iodine species as well as
+!                     Br/Cl species resulting from VSL halogen chemistry.
+!                     Terminate run if they are present in the wet deposition list.
+!                     The NEU scheme should be used for them.
+!
+
+    if ( any (gas_wetdep_list == 'HI'   )  .or. &
+         any (gas_wetdep_list == 'HOI'  )  .or. &
+         any (gas_wetdep_list == 'IONO2')  .or. &
+         any (gas_wetdep_list == 'IBR'  )  .or. &
+         any (gas_wetdep_list == 'BRNO2')  .or. &
+         any (gas_wetdep_list == 'BR2'  )  .or. &  
+         any (gas_wetdep_list == 'ICL'  )  .or. &
+         any (gas_wetdep_list == 'CLNO2')  ) then
+           call endrun('sethet_inti: use gas_wetdep_method = NEU for VSL halogens')
+    endif
+!
+!  ordc
+!================================VSL=============================================
+!rpf_CESM2_SLH
 
     do k=1,gas_wetdep_cnt
        m = get_het_ndx( trim(gas_wetdep_list(k))) 

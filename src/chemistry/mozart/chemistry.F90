@@ -61,7 +61,7 @@ module chemistry
   ! lightning
 
   real(r8)           :: lght_no_prd_factor = 1._r8
-
+      
   ! photolysis
 
   logical            :: xactive_prates = .false.
@@ -229,7 +229,6 @@ end function chem_is
     f_ndx     = get_spc_ndx('F')
     hf_ndx    = get_spc_ndx('HF')
 
-
     !-----------------------------------------------------------------------
     ! Set names of diffused variable tendencies and declare them as history variables
     !-----------------------------------------------------------------------
@@ -356,6 +355,9 @@ end function chem_is
     use mo_sulf,          only: sulf_readnl
     use species_sums_diags,only: species_sums_readnl
     use ocean_emis,       only: ocean_emis_readnl
+!rpf_CESM2_SLH
+    use mo_slh_routines,  only: slh_readnl
+!rpf_CESM2_SLH
 
     ! args
 
@@ -503,6 +505,7 @@ end function chem_is
              call endrun('chem_readnl: ERROR reading namelist')
           end if
        end if
+    
        close(unitn)
        call freeunit(unitn)
     end if
@@ -678,6 +681,9 @@ end function chem_is
    call sulf_readnl(nlfile)
    call species_sums_readnl(nlfile)
    call ocean_emis_readnl(nlfile)
+!rpf_CESM2_SLH
+   call slh_readnl(nlfile)
+!rpf_CESM2_SLH
 
  end subroutine chem_readnl
 
@@ -773,6 +779,9 @@ end function chem_is_active
     use fire_emissions,      only : fire_emissions_init
     use short_lived_species, only : short_lived_species_initic
     use ocean_emis,          only : ocean_emis_init
+!rpf_CESM2_SLH
+    use iodine_emissions,    only : iodine_emissions_init
+!rpf_CESM2_SLH
     
     type(physics_buffer_desc), pointer :: pbuf2d(:,:)
     type(physics_state), intent(in):: phys_state(begchunk:endchunk)
@@ -968,6 +977,10 @@ end function chem_is_active
      call short_lived_species_initic()
 
      call ocean_emis_init()
+
+!rpf_CESM2_SLH
+     call iodine_emissions_init( srf_emis_specifier )
+!rpf_CESM2_SLH
      
   end subroutine chem_init
 
@@ -981,6 +994,9 @@ end function chem_is_active
     use mo_srf_emissions, only: set_srf_emissions
     use fire_emissions,   only: fire_emissions_srf
     use ocean_emis,       only: ocean_emis_getflux
+!rpf_CESM2_SLH
+    use iodine_emissions, only: iodine_emissions_srf
+!rpf_CESM2_SLH
 
     ! Arguments:
 
@@ -1031,6 +1047,14 @@ end function chem_is_active
     !-----------------------------------------------------------------------      
     call set_srf_emissions( lchnk, ncol, sflx(:,:) )
 
+!rpf_CESM2_SLH
+    ! I2 and HOI surface emissions
+    call iodine_emissions_srf( state, cam_in )
+!rpf_CESM2_SLH
+
+!rpf_CESM2_SLH
+!rpf: Why is thid loop of re-assignment performed before callinf fire_emissions_srf and ocean_emis_getflux ??
+!rpf: Shouln't this be called at the end of the routine??
     do m = 1,pcnst
        n = map2chm(m)
        if ( n /= h2o_ndx .and. n > 0 ) then
@@ -1038,6 +1062,7 @@ end function chem_is_active
           call outfld( sflxnam(m), cam_in%cflx(:ncol,m), ncol,lchnk )
        endif
     enddo
+!rpf_CESM2_SLH
 
     ! fire surface emissions if not elevated forcing
     call fire_emissions_srf( lchnk, ncol, cam_in%fireflx, cam_in%cflx )
@@ -1375,6 +1400,10 @@ end function chem_is_active
             ncldwtr(:ncol,k) = state%q(:ncol,k,ixndrop)
     end do
 
+! ---------------------------------------------------
+! WSY: VSLS chemistry. Include ocean fluxes of HOI/I2																				  
+! ---------------------------------------------------										  
+!rpf_CESM2_SLH
     call gas_phase_chemdr(lchnk, ncol, imozart, state%q, &
                           state%phis, state%zm, state%zi, calday, &
                           state%t, state%pmid, state%pdel, state%pint, &
@@ -1384,6 +1413,9 @@ end function chem_is_active
                           cam_out%precc, cam_out%precl, cam_in%snowhland, ghg_chem, state%latmapback, &
                           drydepflx, wetdepflx, cam_in%cflx, cam_in%fireflx, cam_in%fireztop, &
                           nhx_nitrogen_flx, noy_nitrogen_flx, ptend%q, pbuf )
+!rpf Now all the online iodine emissions is directly called in ocean_emissions routine
+!rpf_CESM2_SLH
+
     if (associated(cam_out%nhx_nitrogen_flx)) then
        cam_out%nhx_nitrogen_flx(:ncol) = nhx_nitrogen_flx(:ncol)
     endif

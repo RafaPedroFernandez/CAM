@@ -4,6 +4,7 @@
 ! model
 !
 ! LKE 2/23/2018 - correct setting flag for mass-limited (HNO3,etc.) vs Henry's Law washout
+! RPF 8/12/2020 - R. Fernandez - Merge vsl03 chemistry (AC2-CSIC-Madrid - A. Saiz-Lopez) ! rpf_CESM2_SLH
 !
 module mo_neu_wetdep
 !
@@ -13,7 +14,9 @@ module mo_neu_wetdep
   use spmd_utils,       only : masterproc
   use cam_abortutils,   only : endrun
   use seq_drydep_mod,   only : n_species_table, species_name_table, dheff
-  use gas_wetdep_opts,  only : gas_wetdep_method, gas_wetdep_list, gas_wetdep_cnt
+!rpf_CESM2_SLH
+  use gas_wetdep_opts,  only : gas_wetdep_method, gas_wetdep_list, gas_wetdep_cnt, gas_wetdep_ice_uptake_list
+!rpf_CESM2_SLH
 !
   implicit none
 !
@@ -40,6 +43,7 @@ module mo_neu_wetdep
 !
   logical :: do_neu_wetdep
 !
+! DEK
   real(r8), parameter  :: TICE=263._r8
 
 contains
@@ -53,8 +57,11 @@ subroutine neu_wetdep_init
   use cam_history,  only : addfld, add_default, horiz_only
   use phys_control, only : phys_getopts
 !
-  integer :: m,l
+!rpf_CESM2_SLH
+  integer :: m,l,n
   character*20 :: test_name
+  logical :: found
+!rpf_CESM2_SLH
 
   logical :: history_chemistry
 
@@ -93,8 +100,10 @@ subroutine neu_wetdep_init
          test_name = 'H2O2'
       case ( 'SO2t' )
          test_name = 'SO2'
-      case ( 'CLONO2','BRONO2','HCL','HOCL','HOBR','HBR', 'Pb', 'HF', 'COF2', 'COFCL')
+!rpf_CESM2_SLH
+      case ( 'Pb', 'HF', 'COF2', 'COFCL') !rpf: SLH reservoir species are not mapped any longer to HNO3
          test_name = 'HNO3'
+!rpf_CESM2_SLH
       case ( 'NH_50W', 'NDEP', 'NHDEP', 'NH4', 'NH4NO3' )
          test_name = 'HNO3'
       case(  'SOAGbb0' )  ! Henry's Law coeff. added for VBS SOA's, biomass burning is the same as fossil fuels
@@ -175,6 +184,32 @@ subroutine neu_wetdep_init
 !
 !
   end do
+
+!rpf_CESM2_SLH
+  do m = 1,pcnst
+
+     if ( len_trim(gas_wetdep_ice_uptake_list(m)) > 0 ) then
+
+        found = .false.
+        find_loop: do n = 1,gas_wetdep_cnt
+           if ( gas_wetdep_list(n) == gas_wetdep_ice_uptake_list(m) ) then
+              found = .true.
+              exit find_loop
+           endif
+        enddo find_loop
+
+        if ( found ) then
+           ice_uptake(n) = .true.
+        else
+           write(iulog,*) 'neu_wetdep_init: '//trim(gas_wetdep_ice_uptake_list(m))//' is not included in gas_wetdep_list '
+           write(iulog,*) 'neu_wetdep_init: gas_wetdep_list : ',gas_wetdep_list(:gas_wetdep_cnt)
+           call endrun('neu_wetdep_init: gas_wetdep_ice_uptake_list is not consistent with gas_wetdep_list')
+        endif
+
+     endif
+  enddo
+!rpf_CESM2_SLH
+
 !
 ! indices for cloud quantities
 !
