@@ -1,5 +1,7 @@
       module mo_sad
 
+!updated for TS1.2 (nat_part_dens)
+
       use shr_kind_mod,  only : r8 => shr_kind_r8
       use physconst,     only : pi
       use ppgrid,        only : pcols, pver
@@ -7,7 +9,6 @@
       use cam_logfile,   only : iulog
       use spmd_utils,    only : masterproc
       
-
       implicit none
 
       private
@@ -88,6 +89,9 @@
 !    14 April     2011; updated EQUIL logic
 !    19 December  2012; updated using Wegner et al., JGR, 2013a,b.
 !    25 April     2013; Removed volcanic heating logic.
+!    08 December  2020; R. Fernandez - Merge vsl03 chemistry (AC2-CSIC-Madrid - A. Saiz-Lopez) ! rpf_CESM2_SLH
+!     6 April     2022; update nat_part_dens from 1e-01 to 5.0e-4 
+!                       (Wilka et al., ACP, 2021)
 !
 ! DESCRIPTION
 !
@@ -961,7 +965,11 @@ sts_nat_sad : &
 !----------------------------------------------------------------------
       real(r8), parameter :: avo_num          = 6.02214e23_r8, &
                              nat_mass_dens    = 1.6_r8, &
-                             nat_part_dens    = 1.0e-2_r8, &
+!rpf_CESM2_SLH 
+!                            nat_part_dens    = 1.0e-2_r8, &
+! updated for TS1.2          nat_part_dens    = 5.0e-4_r8, &
+                             nat_part_dens    = 1.0e-5_r8, &   ! Changed to this value following Doug's e-mail Oct 7, 2020
+!rpf_CESM2_SLH 
                              mwnat            = 117._r8, &
                              sigma_nat        = 1.6_r8, &
                              nat_dens_aer     = nat_mass_dens / (mwnat/avo_num), &

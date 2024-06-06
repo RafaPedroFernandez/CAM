@@ -6,6 +6,8 @@ module mo_drydep
 
 !LKE (10/11/2010): added HCN, CH3CN, HCOOH
 !LKE (7/30/2015): added new TS1 species (phenooh, iepox, noa, etc.)
+! Siyuan Wang (27/4/2018): added reactive halogen species (original codes from D. Kinnison)
+! R. Fernandez(8/12/2020): Merge vsl03 chemistry (AC2-CSIC-Madrid - A. Saiz-Lopez) ! rpf_CESM2_SLH
 
   use shr_kind_mod,     only : r8 => shr_kind_r8, shr_kind_cl
   use chem_mods,        only : gas_pcnst
@@ -85,6 +87,19 @@ module mo_drydep
 
   integer :: o3a_ndx,xpan_ndx,xmpan_ndx,xno2_ndx,xhno3_ndx,xonit_ndx,xonitr_ndx,xno_ndx,xho2no2_ndx,xnh4no3_ndx
   logical :: o3a_dd, xpan_dd, xmpan_dd, xno2_dd, xhno3_dd, xonit_dd, xonitr_dd, xno_dd, xho2no2_dd, xnh4no3_dd
+
+!rpf_CESM2_SLH
+  ! ========================================================================================
+  ! WSY: reactive halogen species added
+  ! ----------------------------------------------------------------------------------------
+  integer :: hcl_ndx,  hocl_ndx, clono2_ndx, hbr_ndx,  hobr_ndx, brono2_ndx,           &
+             hi_ndx,   hoi_ndx,  iono2_ndx,  ino2_ndx, i2o2_ndx, i2o3_ndx, i2o4_ndx, br2_ndx
+!rpf_CESM2_SLH
+  integer :: brcl_ndx,ibr_ndx,icl_ndx,brno2_ndx,clno2_ndx
+  integer :: ipart_ndx
+  integer :: chcl2o2_ndx, cocl2_ndx
+  ! ========================================================================================
+!rpf_CESM2_SLH
 
 !lke-TS1
   integer :: phenooh_ndx, benzooh_ndx, c6h5ooh_ndx, bzooh_ndx, xylolooh_ndx, xylenooh_ndx 
@@ -328,6 +343,89 @@ contains
           dvelocity(:ncol,hcooh_ndx) = dvelocity(:ncol,ch3cooh_ndx)
        end if
     end if
+
+!rpf_CESM2_SLH
+! rpf: Implemented here follwoing CCMI implementation in CESM1. Not sure if needed
+    if( o3s_ndx>0 .and. o3_ndx>0 ) then
+       if( has_dvel(o3s_ndx) ) then
+          dvelocity(:ncol,o3s_ndx) = dvelocity(:ncol,o3_ndx)
+       endif
+    endif
+!rpf_CESM2_SLH
+       !
+       ! ordc (May 17, 2012): 
+       ! Overwrite dry deposition velocities for halogen species. 
+       ! They are fixed as in Table 6 of Supplement in Ordonez et al. (ACP, 2012).
+       ! Units are cm s-1
+       !
+    if( hcl_ndx>0 ) then
+       dvelocity(:ncol,hcl_ndx) = 2.00_r8
+    endif
+    if( hbr_ndx>0 ) then
+       dvelocity(:ncol,hbr_ndx) = 2.00_r8
+    endif
+    if( hocl_ndx>0 ) then
+       dvelocity(:ncol,hocl_ndx) = 1.00_r8
+    endif
+    if( clono2_ndx>0 ) then
+       dvelocity(:ncol,clono2_ndx) = 1.00_r8
+    endif
+    if( hobr_ndx>0 ) then
+       dvelocity(:ncol,hobr_ndx) = 1.60_r8
+    endif
+    if( br2_ndx>0 ) then
+       dvelocity(:ncol,br2_ndx) = 1.00_r8
+    endif
+    if( brono2_ndx>0 ) then
+       dvelocity(:ncol,brono2_ndx) = 0.50_r8
+    endif
+    if( i2o2_ndx>0 ) then
+       dvelocity(:ncol,i2o2_ndx) = 1.00_r8
+    endif
+    if( i2o3_ndx>0 ) then
+       dvelocity(:ncol,i2o3_ndx) = 1.00_r8
+    endif
+    if( i2o4_ndx>0 ) then
+       dvelocity(:ncol,i2o4_ndx) = 1.00_r8
+    endif
+    if( hi_ndx>0 ) then
+       dvelocity(:ncol,hi_ndx) = 1.00_r8
+    endif
+    if( hoi_ndx>0 ) then
+       dvelocity(:ncol,hoi_ndx) = 0.75_r8
+    endif
+    if( ino2_ndx>0 ) then
+       dvelocity(:ncol,ino2_ndx) = 0.75_r8
+    endif
+    if( iono2_ndx>0 ) then
+       dvelocity(:ncol,iono2_ndx) = 0.75_r8
+    endif
+    if( ipart_ndx>0 ) then
+       dvelocity(:ncol,ipart_ndx) = 1.00_r8
+    endif
+    if( chcl2o2_ndx>0 ) then
+       dvelocity(:ncol,chcl2o2_ndx) = 1.00_r8
+    endif
+    if( cocl2_ndx>0 ) then
+       dvelocity(:ncol,cocl2_ndx) = 1.00_r8
+    endif
+    if( brcl_ndx>0 ) then
+       dvelocity(:ncol,brcl_ndx) = 1.00_r8
+    endif
+    if( ibr_ndx>0 ) then
+       dvelocity(:ncol,ibr_ndx) = 1.00_r8
+    endif
+    if( icl_ndx>0 ) then
+       dvelocity(:ncol,icl_ndx) = 1.00_r8
+    endif
+    if( brno2_ndx>0 ) then
+       dvelocity(:ncol,brno2_ndx) = 0.50_r8
+    endif
+    if( clno2_ndx>0 ) then
+       dvelocity(:ncol,clno2_ndx) = 0.50_r8
+    endif
+! ========================================================================
+!rpf_CESM2_SLH
     
     !-------------------------------------------------------------------------------------
     !        ... assign CO tags to CO
@@ -587,6 +685,35 @@ contains
     ch3cn_ndx   = get_spc_ndx( 'CH3CN')
     hcn_ndx     = get_spc_ndx( 'HCN')
     hcooh_ndx   = get_spc_ndx( 'HCOOH' )
+
+!rpf_CESM2_SLH
+! =============================
+! WSY: reactive halogen species
+! -----------------------------
+    hcl_ndx    = get_spc_ndx('HCL' )
+    hocl_ndx   = get_spc_ndx('HOCL')
+    clono2_ndx = get_spc_ndx('CLONO2')
+    hbr_ndx    = get_spc_ndx('HBR' )
+    hobr_ndx   = get_spc_ndx('HOBR')
+    brono2_ndx = get_spc_ndx('BRONO2')
+    hi_ndx     = get_spc_ndx('HI')
+    hoi_ndx    = get_spc_ndx('HOI')
+    ino2_ndx   = get_spc_ndx('INO2')
+    iono2_ndx  = get_spc_ndx('IONO2')
+    i2o2_ndx   = get_spc_ndx('I2O2')
+    i2o3_ndx   = get_spc_ndx('I2O3')
+    i2o4_ndx   = get_spc_ndx('I2O4')
+    br2_ndx    = get_spc_ndx('BR2' )
+    ipart_ndx  = get_spc_ndx('IPART')    
+    chcl2o2_ndx= get_spc_ndx('CHCL2O2')
+    cocl2_ndx  = get_spc_ndx('COCL2')
+    brcl_ndx   = get_spc_ndx('BRCL')
+    ibr_ndx    = get_spc_ndx('IBR')
+    icl_ndx    = get_spc_ndx('ICL')
+    brno2_ndx  = get_spc_ndx('BRNO2')
+    clno2_ndx  = get_spc_ndx('CLNO2')
+! =============================
+!rpf_CESM2_SLH
 
     if( masterproc ) then
        write(iulog,*) 'dvel_inti: diagnostics'
@@ -1707,6 +1834,35 @@ contains
 !
     hcn_ndx     = get_spc_ndx( 'HCN')
     ch3cn_ndx   = get_spc_ndx( 'CH3CN')
+
+!rpf_CESM2_SLH
+! =============================
+! WSY: reactive halogen species
+! -----------------------------	
+    hcl_ndx    = get_spc_ndx('HCL' )
+    hocl_ndx   = get_spc_ndx('HOCL')
+    clono2_ndx = get_spc_ndx('CLONO2')
+    hbr_ndx    = get_spc_ndx('HBR' )
+    hobr_ndx   = get_spc_ndx('HOBR')
+    brono2_ndx = get_spc_ndx('BRONO2')
+    hi_ndx     = get_spc_ndx('HI')
+    hoi_ndx    = get_spc_ndx('HOI')
+    ino2_ndx   = get_spc_ndx('INO2')
+    iono2_ndx  = get_spc_ndx('IONO2')
+    i2o2_ndx   = get_spc_ndx('I2O2')
+    i2o3_ndx   = get_spc_ndx('I2O3')
+    i2o4_ndx   = get_spc_ndx('I2O4')
+    br2_ndx    = get_spc_ndx('BR2' )
+    ipart_ndx  = get_spc_ndx('IPART')    
+    chcl2o2_ndx= get_spc_ndx('CHCL2O2')
+    cocl2_ndx  = get_spc_ndx('COCL2')
+    brcl_ndx   = get_spc_ndx('BRCL')
+    ibr_ndx    = get_spc_ndx('IBR')
+    icl_ndx    = get_spc_ndx('ICL')
+    brno2_ndx  = get_spc_ndx('BRNO2')
+    clno2_ndx  = get_spc_ndx('CLNO2')
+! =============================
+!rpf_CESM2_SLH
 
 !lke-TS1
     phenooh_ndx  = get_spc_ndx( 'PHENOOH')
@@ -3028,6 +3184,51 @@ contains
                 endwhere
              end select
           end do lt_loop
+
+!rpf_CESM2_SLH
+! ========================================================================
+! WSY: reactive halogen species added (original code from D. Kinnison)
+!      added a few new species (BrCl, IBr, ICl, BrNO2, ClNO2, IO, and OIO)
+! ------------------------------------------------------------------------
+          !
+          ! ordc (May 09, 2012): Fixed dry deposition velocities for halogens. 
+          !                      See Table 6 in Supplement of Ordonez et al. (ACP, 2012).
+          !                      Units are m s-1 because they are scaled to cm s-1 below.
+          !
+          select case( trim( solsym(ispec) ) )
+          case( 'HCL', 'HBR' )
+             wrk(:ncol) = 2.00e-2_r8
+          case( 'HOCL', 'CLONO2' )
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'HOBR' )
+             wrk(:ncol) = 1.60e-2_r8
+          case( 'BR2' )
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'BRONO2' )
+             wrk(:ncol) = 0.50e-2_r8
+          case( 'I2O2', 'I2O3', 'I2O4' )
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'HI' )
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'HOI', 'IONO2', 'INO2' )
+             wrk(:ncol) = 0.75e-2_r8
+          case( 'IPART' )
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'CHCL2O2') 
+             wrk(:ncol) = 1.00e-2_r8 
+          case ( 'COCL2')
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'BRCL', 'IBR', 'ICL' )  ! WSY: these three newly added also mapped to Br2
+             wrk(:ncol) = 1.00e-2_r8
+          case( 'BRNO2', 'CLNO2' )	    ! WSY: these two newly added also mapped to BrONO2
+             wrk(:ncol) = 0.50e-2_r8    !      this is close to N2O5 dry deposition at high latitudes (Joyce et al 2014) just FYI
+          end select
+          !
+          ! ordc
+          !
+! ========================================================================
+!rpf_CESM2_SLH
+
           dvel(:ncol,ispec) = wrk(:ncol) * scaling_to_cm_per_s
           dflx(:ncol,ispec) = term(:ncol) * dvel(:ncol,ispec) * mmr(:ncol,plev,ispec)
        end if
