@@ -9,6 +9,7 @@ module physpkg
   ! 2005-10-17  B. Eaton       Add contents of inti.F90 to phys_init().  Add
   !                            initialization of grid info in phys_state.
   ! Nov 2010    A. Gettelman   Put micro/macro physics into separate routines
+  ! Dec 2020    R. Fernandez - Merge vsl03 chemistry (AC2-CSIC-Madrid - A. Saiz-Lopez) ! rpf_CESM2_SLH
   !-----------------------------------------------------------------------
 
   use shr_kind_mod,     only: r8 => shr_kind_r8
@@ -1279,7 +1280,9 @@ contains
     use dycore,             only: dycore_is
     use cam_control_mod,    only: aqua_planet
     use mo_gas_phase_chemdr,only: map2chm
-    use clybry_fam,         only: clybry_fam_set
+!rpf_CESM2_SLH
+    use clybryiy_fam,       only: clybryiy_fam_set
+!rpf_CESM2_SLH
     use charge_neutrality,  only: charge_balance
     use qbo,                only: qbo_relax
     use iondrag,            only: iondrag_calc, do_waccm_ions
@@ -1809,7 +1812,9 @@ contains
     call diag_phys_tend_writeout (state, pbuf,  tend, ztodt, tmp_q, tmp_cldliq, tmp_cldice, &
          qini, cldliqini, cldiceini)
 
-    call clybry_fam_set( ncol, lchnk, map2chm, state%q, pbuf )
+!rpf_CESM2_SLH
+    call clybryiy_fam_set( ncol, lchnk, map2chm, state%q, pbuf )
+!rpf_CESM2_SLH
 
   end subroutine tphysac
 
@@ -1875,7 +1880,9 @@ contains
     use cloud_diagnostics, only: cloud_diagnostics_calc
     use perf_mod
     use mo_gas_phase_chemdr,only: map2chm
-    use clybry_fam,         only: clybry_fam_adj
+!rpf_CESM2_SLH
+    use clybryiy_fam,    only: clybryiy_fam_adj
+!rpf_CESM2_SLH
     use clubb_intr,      only: clubb_tend_cam
     use sslt_rebin,      only: sslt_rebin_adv
     use tropopause,      only: tropopause_output
@@ -2034,16 +2041,18 @@ contains
     if (state_debug_checks) &
          call physics_state_check(state, name="before tphysbc (dycore?)")
 
-    call clybry_fam_adj( ncol, lchnk, map2chm, state%q, pbuf )
+!rpf_CESM2_SLH
+    call clybryiy_fam_adj( ncol, lchnk, map2chm, state%q, pbuf )
 
-    ! Since clybry_fam_adj operates directly on the tracers, and has no
+    ! Since clybryiy_fam_adj operates directly on the tracers, and has no
     ! physics_update call, re-run qneg3.
     call qneg3('TPHYSBCc',lchnk  ,ncol    ,pcols   ,pver    , &
          1, pcnst, qmin  ,state%q )
 
-    ! Validate output of clybry_fam_adj.
+    ! Validate output of clybryiy_fam_adj.
     if (state_debug_checks) &
-         call physics_state_check(state, name="clybry_fam_adj")
+         call physics_state_check(state, name="clybryiy_fam_adj")
+!rpf_CESM2_SLH
 
     !
     ! Dump out "before physics" state
