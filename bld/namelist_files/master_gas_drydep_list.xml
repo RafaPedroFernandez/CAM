@@ -147,7 +147,11 @@
  XYLOLOOH
  Pb
  EOOH
- HI, HOI, IONO2, INO2, I2O2, I2O3, I2O4, BR2
+<!--  CLONO2, HCL, HOCL -->
+<!--  BRONO2, HBR, HOBR -->
+<!--  BR2 -->
+<!--  IONO2,  HI,  HOI,  INO2 -->
+<!--  I2O2, I2O3, I2O4 -->
  NOA, ALKNIT, ISOPNITA, ISOPNITB, HONITR
  ISOPNOOH, NC4CHO, NC4CH2OH, TERPNIT, NTERPOOH
  SOAGff0, SOAGff1, SOAGff2, SOAGff3, SOAGff4, SOAGbb0
@@ -157,6 +161,14 @@
  XYLENES
  XYLOL
 </list>
+
+<!--<list id="SLH" chem="trop_strat_mam4_slhvbs" >
+ CLONO2, HCL, HOCL
+ BRONO2, HBR, HOBR
+ BR2
+ IONO2,  HI,  HOI,  INO2
+ I2O2, I2O3, I2O4
+</list>-->
 
 <!-- BAM species -->
 <!-- these aerosols are removed via the gas-phase dry dep method -->
