@@ -4193,7 +4193,8 @@ sub fv_decomp_set{
 
             # test that y subdomains contain at least 3 latitudes
             # if so then done
-            if (3*$ny <= $nlatitudes) {last NZLOOP;}
+#           if (3*$ny <= $nlatitudes) {last NZLOOP;}
+            if (3*$ny <= $nlat) {last NZLOOP;}
         }
     }
 
