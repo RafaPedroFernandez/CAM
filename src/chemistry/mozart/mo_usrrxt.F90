@@ -978,7 +978,7 @@ contains
     real(r8), parameter :: gamma_fr_hi_ice = 0.02_r8      ! identical to CESM1 (rpf)
     real(r8), parameter :: gamma_fr_hi_liq = 0.02_r8      ! identical to CESM1 (rpf)
 
-    real(r8), parameter :: gamma_fr_brono2_ice = 1.0e-2_r8 ! in CESM1 BrONO2 washout was based on NEU routine (rpf) - up to 0.030_r8 in CESM2 (rpf)
+    real(r8), parameter :: gamma_fr_brono2_ice = 0.030_r8  ! in CESM1 BrONO2 washout was based on NEU routine (rpf) - check update to 1.0e-2_r8 for nudged compsets (rpf)
 
     real(r8), parameter :: gamma_hclhocl_ice = 0.2_r8     ! copied values from stratosphere
     real(r8), parameter :: gamma_hclhobr_ice = 0.3_r8     ! copied values from stratosphere
