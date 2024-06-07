@@ -4203,10 +4203,10 @@ sub fv_decomp_set{
         die "$ProgName - ERROR: fv_decomp_set failed to find a decomposition.\n" .
             "  npr_yz needs to be set by the user.";
     }
-    if ($waccmx and $nmaglon/$nz < 4) {
-	die "$ProgName - ERROR: fv_decomp_set failed to find a decomposition.\n"
-	 . "  Too many MPI tasks to properly decompose WACCMX magnetic grid.";
-    }
+#     if ($waccmx and $nmaglon/$nz < 4) {
+# 	die "$ProgName - ERROR: fv_decomp_set failed to find a decomposition.\n"
+# 	 . "  Too many MPI tasks to properly decompose WACCMX magnetic grid.";
+#     }
 
     return "$ny,$nz,$nz,$ny";
 }
