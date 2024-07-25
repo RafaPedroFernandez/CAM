@@ -280,6 +280,7 @@
 <!--       <value compset="SSP245_CAM60.*CCTS1SLH"      >ssp245_cam6_slhvbs</value> -->
 <!--       <value compset="SSP370_CAM60.*CCTS1SLH"      >ssp370_cam6_slhvbs</value> -->
 <!--       <value compset="SSP585_CAM60.*CCTS1SLH"      >ssp585_cam6_slhvbs</value> -->
+      <value compset="SSPGEN_CAM60.*CCTS1SLH"      >sspGEN_trop_strat_cam6_slhvbs</value>
 
       <value compset="SSP126_CAM60%WCTS" >waccm_tsmlt_ssp126_cam6</value>
       <value compset="SSP245_CAM60%WCTS" >waccm_tsmlt_ssp245_cam6</value>
@@ -291,6 +292,7 @@
 <!--       <value compset="SSP370_CAM60%WCTSSLH" >waccm_tsmlt_ssp370_cam6_slh</value> -->
 <!--       <value compset="SSP534_CAM60%WCTSSLH" >waccm_tsmlt_ssp534_cam6_slh</value> -->
 <!--       <value compset="SSP585_CAM60%WCTSSLH" >waccm_tsmlt_ssp585_cam6_slh</value> -->
+      <value compset="SSPGEN_CAM60%WCTSSLH" >waccm_tsmlt_sspGEN_cam6_slh</value>
 
       <value compset="RCP2_CAM40"        >2005-2100_cam4_rcp26</value>
       <value compset="RCP4_CAM40"        >2005-2100_cam4_rcp45</value>
