@@ -931,8 +931,8 @@
 <CH2I2_slh_srf_file    chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2I2_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2I2_slh_srf_file>
 <CH2IBR_slh_srf_file   chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2IBr_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2IBR_slh_srf_file>
 <CH2ICL_slh_srf_file   chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2ICl_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2ICL_slh_srf_file>
-<CH2CL2_slh_srf_file   chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</CH2CL2_slh_srf_file>
-<C2CL4_slh_srf_file    chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</C2CL4_slh_srf_file>
+<CH2CL2_slh_srf_file   chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</CH2CL2_slh_srf_file>
+<C2CL4_slh_srf_file    chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</C2CL4_slh_srf_file>
 <I2_slh_srf_file       chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</I2_slh_srf_file>
 <HOI_slh_srf_file      chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</HOI_slh_srf_file>
 <!-- <CH4_slh_srf_file      chem="trop_strat_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH4_WetChartIPCC_RCP60_surface_Li2022_serial_1850-2100_1.9x2.5_c240418.nc</CH4_slh_srf_file> -->
@@ -946,8 +946,8 @@
 <CH2I2_slh_srf_file    chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2I2_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2I2_slh_srf_file>
 <CH2IBR_slh_srf_file   chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2IBr_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2IBR_slh_srf_file>
 <CH2ICL_slh_srf_file   chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2ICl_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2ICL_slh_srf_file>
-<CH2CL2_slh_srf_file   chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</CH2CL2_slh_srf_file>
-<C2CL4_slh_srf_file    chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</C2CL4_slh_srf_file>
+<CH2CL2_slh_srf_file   chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</CH2CL2_slh_srf_file>
+<C2CL4_slh_srf_file    chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</C2CL4_slh_srf_file>
 <I2_slh_srf_file       chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</I2_slh_srf_file>
 <HOI_slh_srf_file      chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</HOI_slh_srf_file>
 <!-- <CH4_slh_srf_file      chem="trop_strat_mam4_slhext" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH4_WetChartIPCC_RCP60_surface_Li2022_serial_1850-2100_1.9x2.5_c240418.nc</CH4_slh_srf_file> -->
@@ -961,8 +961,8 @@
 <CH2I2_slh_srf_file    chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2I2_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2I2_slh_srf_file>
 <CH2IBR_slh_srf_file   chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2IBr_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2IBR_slh_srf_file>
 <CH2ICL_slh_srf_file   chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2ICl_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2ICL_slh_srf_file>
-<CH2CL2_slh_srf_file   chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</CH2CL2_slh_srf_file>
-<C2CL4_slh_srf_file    chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</C2CL4_slh_srf_file>
+<CH2CL2_slh_srf_file   chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</CH2CL2_slh_srf_file>
+<C2CL4_slh_srf_file    chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</C2CL4_slh_srf_file>
 <I2_slh_srf_file       chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</I2_slh_srf_file>
 <HOI_slh_srf_file      chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</HOI_slh_srf_file>
 <!-- <CH4_slh_srf_file      chem="waccm_tsmlt_mam4_slh" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH4_WetChartIPCC_RCP60_surface_Li2022_serial_1850-2100_1.9x2.5_c240418.nc</CH4_slh_srf_file> -->
@@ -976,8 +976,8 @@
 <CH2I2_slh_srf_file    chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2I2_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2I2_slh_srf_file>
 <CH2IBR_slh_srf_file   chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2IBr_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2IBR_slh_srf_file>
 <CH2ICL_slh_srf_file   chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2ICl_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc</CH2ICL_slh_srf_file>
-<CH2CL2_slh_srf_file   chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</CH2CL2_slh_srf_file>
-<C2CL4_slh_srf_file    chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.0x1.0_c240418.nc</C2CL4_slh_srf_file>
+<CH2CL2_slh_srf_file   chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</CH2CL2_slh_srf_file>
+<C2CL4_slh_srf_file    chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc</C2CL4_slh_srf_file>
 <I2_slh_srf_file       chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</I2_slh_srf_file>
 <HOI_slh_srf_file      chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc</HOI_slh_srf_file>
 <!-- <CH4_slh_srf_file      chem="waccm_tsmlt_mam4_slhvbs" ver="cam6">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH4_WetChartIPCC_RCP60_surface_Li2022_serial_1850-2100_1.9x2.5_c240418.nc</CH4_slh_srf_file> -->
@@ -1730,48 +1730,49 @@
 <!-- dry deposition method for gas-phase species -->
 <drydep_method>xactive_lnd</drydep_method>
 
+
 <!-- SLH scaling factors for different compsets -->
 <!--<SSAdehal_ScalingFactor   phys="cam6" hgrid="0.9x1.25"  offline_dyn="1">1.00D0</SSAdehal_ScalingFactor-->
 <!--<SLHemiss_ScalingFactor   phys="cam6" hgrid="0.9x1.25"  offline_dyn="1">1.00D0</SLHemiss_ScalingFactor-->
-<SLHemiss_ScalingFactor    phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor    phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor   phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor   phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor    phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor        phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SSAdehal_ScalingFactor>
+<!-- <SLHemiss_ScalingFactor        phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SLHemiss_ScalingFactor> -->
+<!-- <ICEfraprx_ScalingFactor       phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</ICEfraprx_ScalingFactor> -->
+<!-- <LIQfraprx_ScalingFactor       phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</LIQfraprx_ScalingFactor> -->
+<SSAhno3_ScalingFactor         phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor         phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I     phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I     phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br    phys="cam6"   chem="trop_strat_mam4_slhvbs"    >1.00D0</ICEfraprx_ScalingFactor_Br>
 
-<SLHemiss_ScalingFactor    phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor    phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor   phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor   phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor     phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor    phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor        phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SSAdehal_ScalingFactor>
+<!-- <SLHemiss_ScalingFactor        phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SLHemiss_ScalingFactor> -->
+<!-- <ICEfraprx_ScalingFactor       phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</ICEfraprx_ScalingFactor> -->
+<!-- <LIQfraprx_ScalingFactor       phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</LIQfraprx_ScalingFactor> -->
+<SSAhno3_ScalingFactor         phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor         phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I     phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I     phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br    phys="cam6"   chem="trop_strat_mam4_slhext"    >1.00D0</ICEfraprx_ScalingFactor_Br>
 
-<SLHemiss_ScalingFactor    phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor    phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor   phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor   phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor    phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor        phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SSAdehal_ScalingFactor>
+<!-- <SLHemiss_ScalingFactor        phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SLHemiss_ScalingFactor> -->
+<!-- <ICEfraprx_ScalingFactor       phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</ICEfraprx_ScalingFactor> -->
+<!-- <LIQfraprx_ScalingFactor       phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</LIQfraprx_ScalingFactor> -->
+<SSAhno3_ScalingFactor         phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor         phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I     phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I     phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br    phys="cam6"   chem="waccm_tsmlt_mam4_slh"   >1.00D0</ICEfraprx_ScalingFactor_Br>
 
-<SLHemiss_ScalingFactor    phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor    phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor   phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor   phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor     phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor    phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor        phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SSAdehal_ScalingFactor>
+<!-- <SLHemiss_ScalingFactor        phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SLHemiss_ScalingFactor> -->
+<!-- <ICEfraprx_ScalingFactor       phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</ICEfraprx_ScalingFactor> -->
+<!-- <LIQfraprx_ScalingFactor       phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</LIQfraprx_ScalingFactor> -->
+<SSAhno3_ScalingFactor         phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor         phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I     phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I     phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br    phys="cam6"   chem="waccm_tsmlt_mam4_slhvbs"   >1.00D0</ICEfraprx_ScalingFactor_Br>
 <!-- SLH scaling factors for different compsets -->
 
 <!-- Dry Dep surface data file needed by prognostic MAM on unstructured grid only. -->

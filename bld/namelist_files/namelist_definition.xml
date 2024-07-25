@@ -5182,53 +5182,53 @@ Resolution-dependent scaling-factor for SSA-dehalogenation efficiency
 Default: set by build-namelist
 </entry>
 
-<entry id="SLHemiss_ScalingFactor" type="real" category="cam_chem"
+<!--<entry id="SLHemiss_ScalingFactor" type="real" category="cam_chem"
+       group="slh_nl" valid_values="" >
+Scaling-factor for SLH Halocarbon surface emissions
+Default: set by build-namelist
+</entry>-->
+
+<!--<entry id="ICEfraprx_ScalingFactor" type="real" category="cam_chem"
+       group="slh_nl" valid_values="" >
+Scaling-factor for SLH Halocarbon surface emissions
+Default: set by build-namelist
+</entry>-->
+
+<!--<entry id="LIQfraprx_ScalingFactor" type="real" category="cam_chem"
+       group="slh_nl" valid_values="" >
+Scaling-factor for SLH Halocarbon surface emissions
+Default: set by build-namelist
+</entry>-->
+
+<entry id="SSAhno3_ScalingFactor" type="real" category="cam_chem"
        group="slh_nl" valid_values="" >
 Scaling-factor for SLH Halocarbon surface emissions
 Default: set by build-namelist
 </entry>
 
-<entry id="ICEfraprx_ScalingFactor" type="real" category="cam_chem"
+<entry id="SSAn2o5_ScalingFactor" type="real" category="cam_chem"
        group="slh_nl" valid_values="" >
 Scaling-factor for SLH Halocarbon surface emissions
 Default: set by build-namelist
 </entry>
 
-<entry id="LIQfraprx_ScalingFactor" type="real" category="cam_chem"
+<entry id="LIQfraprx_ScalingFactor_I" type="real" category="cam_chem"
        group="slh_nl" valid_values="" >
 Scaling-factor for SLH Halocarbon surface emissions
 Default: set by build-namelist
 </entry>
 
-<!--<entry id="SSAhno3_ScalingFactor" type="real" category="cam_chem"
+<entry id="ICEfraprx_ScalingFactor_I" type="real" category="cam_chem"
        group="slh_nl" valid_values="" >
 Scaling-factor for SLH Halocarbon surface emissions
 Default: set by build-namelist
-</entry>-->
+</entry>
 
-<!--<entry id="SSAn2o5_ScalingFactor" type="real" category="cam_chem"
+<entry id="ICEfraprx_ScalingFactor_Br" type="real" category="cam_chem"
        group="slh_nl" valid_values="" >
 Scaling-factor for SLH Halocarbon surface emissions
 Default: set by build-namelist
-</entry>-->
-
-<!--<entry id="LIQfraI_ScalingFactor" type="real" category="cam_chem"
-       group="slh_nl" valid_values="" >
-Scaling-factor for SLH Halocarbon surface emissions
-Default: set by build-namelist
-</entry>-->
-
-<!--<entry id="ICEfraI_ScalingFactor" type="real" category="cam_chem"
-       group="slh_nl" valid_values="" >
-Scaling-factor for SLH Halocarbon surface emissions
-Default: set by build-namelist
-</entry>-->
-
-<!--<entry id="ICEfraBr_ScalingFactor" type="real" category="cam_chem"
-       group="slh_nl" valid_values="" >
-Scaling-factor for SLH Halocarbon surface emissions
-Default: set by build-namelist
-</entry>-->
+</entry>
 
 <!-- RPF: New Short-Lived Halogen (SLH) Namelist Definitions -->
 
