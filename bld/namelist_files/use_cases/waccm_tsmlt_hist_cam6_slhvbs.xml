@@ -18,7 +18,7 @@
 <ncdata dyn="fv"  hgrid="0.9x1.25">cesm2_init/b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.001/1950-01-01/b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.001.cam.i.1950-01-01-00000.nc</ncdata>
 <ncdata dyn="fv"  hgrid="1.9x2.5" >atm/waccm/ic/f.e15.FWmaAMIP.f19_f19.misc08_cam5_4_81.003.cam.i.1980-01-01-00000_c160928.nc</ncdata>
 <ncdata dyn="fv"  hgrid="4x5"     >atm/waccm/ic/f2000.waccm-mam3_4x5_L70.cam2.i.0017-01-01.c121113.nc</ncdata>
-
+<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test7_gI_sc1_lghtNO4.5.FWnudged_slh.cam.i.1998-01-01-00000.nc</ncdata>
 
 <!-- LBC, UBC Files -->
 <flbc_type>SERIAL</flbc_type>
@@ -39,15 +39,12 @@
 <qbo_use_forcing>.false.</qbo_use_forcing>
 
 <!--<!-- slh_nl -->
-<SLHemiss_ScalingFactor> 1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor> 1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor>1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor>1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor>  1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor>  1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor>  1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor>  1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor> 1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
+<SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  2.00D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  3.00D0  </ICEfraprx_ScalingFactor_Br>
 
 <!-- emissions -->
 

@@ -19,8 +19,7 @@
 <ncdata dyn="fv"  hgrid="1.9x2.5" >atm/waccm/ic/f.e15.FWmaAMIP.f19_f19.misc08_cam5_4_81.003.cam.i.1980-01-01-00000_c160928.nc</ncdata>
 <ncdata dyn="fv"  hgrid="4x5"     >atm/waccm/ic/f2000.waccm-mam3_4x5_L70.cam2.i.0017-01-01.c121113.nc</ncdata>
 <ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="88">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/FW.f19_f19_mg17.L88.cesm2.2-asdbranch_vsl03_CSIC.SLH_Ozone.FWSDslh.cam.i.2000-01-01-00000.nc</ncdata>
-<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test1.FWnudged_slh.cam.i.2000-01-01-00000.nc</ncdata>
-
+<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test7_gI_sc1_lghtNO4.5.FWnudged_slh.cam.i.1998-01-01-00000.nc</ncdata>
 
 <!-- LBC, UBC Files -->
 <flbc_type>SERIAL</flbc_type>
@@ -39,15 +38,12 @@
 <qbo_use_forcing>.false.</qbo_use_forcing>
 
 <!--<!-- slh_nl -->
-<SLHemiss_ScalingFactor> 1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor> 1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor>1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor>1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor>  1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor>  1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor>  1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor>  1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor> 1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
+<SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.30D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  3.00D0  </ICEfraprx_ScalingFactor_Br>
 
 <!-- nudging -->
 <Nudge_Model>.true.</Nudge_Model>
@@ -277,7 +273,8 @@
          'RO2_RO2_sum = CH3O2_CH3O2a + CH3O2_CH3O2b + C2H5O2_CH3O2 + C2H5O2_C2H5O2 + CH3CO3_CH3O2 + CH3CO3_CH3CO3 + C3H7O2_CH3O2 + RO2_CH3O2 + MACRO2_CH3O2 + MACRO2_CH3CO3 + MCO3_CH3O2 +',
          ' MCO3_CH3CO3 + MCO3_MCO3 + ISOPAO2_CH3O2 + ISOPBO2_CH3O2 + ISOPAO2_CH3CO3 + ISOPBO2_CH3CO3 + XO2_CH3O2 + XO2_CH3CO3',
          'RCO2_NO2_sum = CH3CO3_NO2 + MCO3_NO2',
-	 'O3S_Loss = O1D_H2O + OH_O3 + HO2_O3',
+<!-- 	 'O3S_Loss = O1D_H2O + OH_O3 + HO2_O3', -->
+	 'O3S_Loss = O1D_H2O + OH_O3 + HO2_O3 + H_O3',     
          'O3_Prod_Trop = NO_HO2 + CH3O2_NO + PO2_NO + CH3CO3_NO + C2H5O2_NO + .92*ISOPAO2_NO + .92*ISOPBO2_NO + MACRO2_NOa + MCO3_NO + C3H7O2_NO + RO2_NO + XO2_NO + .9*TOLO2_NO +',
 	 ' .9*PHENO2_NO + .9*C6H5O2_NO + .9*BENZO2_NO + .9*MALO2_NO + .9*BZOO_NO + .9*ACBZO2_NO + .9*DICARBO2_NO + .9*MDIALO2_NO  + .9*XYLOLO2_NO + .9*XYLENO2_NO + TERPO2_NO +',
 	 ' TERP2O2_NO + NTERPO2_NO + ALKO2_NO + ENEO2_NO +  EO2_NO + MEKO2_NO + HOCH2OO_NO + jonitr',

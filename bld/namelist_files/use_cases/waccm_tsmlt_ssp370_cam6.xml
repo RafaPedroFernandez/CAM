@@ -16,6 +16,7 @@
 
 <!--Species IC -->
 <ncdata dyn="fv"  hgrid="0.9x1.25">atm/waccm/ic/b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.001.cam.i.2015-01-01-00000.nc</ncdata>
+<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test7_gI_sc1_lghtNO4.5.FWnudged_slh.cam.i.1998-01-01-00000.nc</ncdata>
 
 <!-- LBC, UBC Files -->
 <flbc_type>SERIAL</flbc_type>
@@ -270,6 +271,7 @@
           '.9*PHENO2_NO + .9*C6H5O2_NO + .9*BENZO2_NO + .9*MALO2_NO + .9*BZOO_NO + .9*ACBZO2_NO + .9*DICARBO2_NO + .9*MDIALO2_NO  + .9*XYLOLO2_NO + .9*XYLENO2_NO + TERPO2_NO +',
           'TERP2O2_NO + NTERPO2_NO + ALKO2_NO + ENEO2_NO +  EO2_NO + MEKO2_NO + HOCH2OO_NO + jonitr',
   'O3_Loss = O1D_H2O + OH_O3 + HO2_O3 + H_O3 + C3H6_O3 + .9*ISOP_O3 + C2H4_O3 + .8*MVK_O3 + 0.8*MACR_O3 + MTERP_O3 + BCARY_O3',
+  'O3S_Loss = O1D_H2O + OH_O3 + HO2_O3 + H_O3',
   'RO2_NO_sum  = NO_HO2 + CH3O2_NO + HOCH2OO_NO + EO2_NO + C2H5O2_NO + CH3CO3_NO + C3H7O2_NO + PO2_NO + RO2_NO + ENEO2_NO + ENEO2_NOb + MEKO2_NO + MACRO2_NOa + MACRO2_NOb +',
               'MCO3_NO + ISOPAO2_NO + ISOPBO2_NO + ALKO2_NO + ALKO2_NOb + XO2_NO + TOLO2_NO + PHENO2_NO + C6H5O2_NO + BENZO2_NO + MALO2_NO + BZOO_NO + ACBZO2_NO + DICARBO2_NO +',
               'MDIALO2_NO + XYLOLO2_NO + XYLENO2_NO + TERPO2_NO + TERP2O2_NO + NTERPO2_NO',

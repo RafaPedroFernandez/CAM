@@ -29,15 +29,12 @@
 <ndep_list>'noy', 'nhx'</ndep_list>
 
 <!--<!-- slh_nl -->
-<SLHemiss_ScalingFactor> 1.00D0</SLHemiss_ScalingFactor>
-<SSAdehal_ScalingFactor> 1.00D0</SSAdehal_ScalingFactor>
-<ICEfraprx_ScalingFactor>1.00D0</ICEfraprx_ScalingFactor>
-<LIQfraprx_ScalingFactor>1.00D0</LIQfraprx_ScalingFactor>
-<!-- <SSAhno3_ScalingFactor>  1.00D0</SSAhno3_ScalingFactor> -->
-<!-- <SSAn2o5_ScalingFactor>  1.00D0</SSAn2o5_ScalingFactor> -->
-<!-- <LIQfraI_ScalingFactor>  1.00D0</LIQfraI_ScalingFactor> -->
-<!-- <ICEfraI_ScalingFactor>  1.00D0</ICEfraI_ScalingFactor> -->
-<!-- <ICEfraBr_ScalingFactor> 1.00D0</ICEfraBr_ScalingFactor> -->
+<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
+<SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  0.85D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  1.00D0  </ICEfraprx_ScalingFactor_Br>
 
 
 <!-- nudging -->
