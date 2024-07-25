@@ -2504,15 +2504,15 @@ if ($chem =~ /_mam4/ and $phys =~ /cam6/) {
     # RPF: New Short-Lived Halogen (SLH) Namelist Definitions
 if ($chem eq 'trop_strat_mam4_slhvbs' or $chem eq 'trop_strat_mam4_slhext' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slhvbs') {
     # Prescribed species
-    add_default($nl, 'SLHemiss_ScalingFactor'  );
-    add_default($nl, 'SSAdehal_ScalingFactor'  );
-    add_default($nl, 'ICEfraprx_ScalingFactor' );
-    add_default($nl, 'LIQfraprx_ScalingFactor' );
-#     add_default($nl, 'SSAhno3_ScalingFactor'   );
-#     add_default($nl, 'SSAn2o5_ScalingFactor'   );
-#     add_default($nl, 'LIQfraI_ScalingFactor'   );
-#     add_default($nl, 'ICEfraI_ScalingFactor'   );
-#     add_default($nl, 'ICEfraBr_ScalingFactor ' );
+    add_default($nl, 'SSAdehal_ScalingFactor'     );
+#     add_default($nl, 'SLHemiss_ScalingFactor'     );
+#     add_default($nl, 'ICEfraprx_ScalingFactor'    );
+#     add_default($nl, 'LIQfraprx_ScalingFactor'    );
+    add_default($nl, 'SSAhno3_ScalingFactor'      );
+    add_default($nl, 'SSAn2o5_ScalingFactor'      );
+    add_default($nl, 'LIQfraprx_ScalingFactor_I'  );
+    add_default($nl, 'ICEfraprx_ScalingFactor_I'  );
+    add_default($nl, 'ICEfraprx_ScalingFactor_Br' );
 }
     # RPF: SLH Namelist Definitions
 
