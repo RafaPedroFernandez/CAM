@@ -807,7 +807,8 @@ contains
 !rpf_CESM2_SLH
     use time_manager,     only : get_curr_calday
     use infnan,           only : nan
-    use mo_slh_routines,  only : SSAdehal_ScalingFactor, ICEfraprx_ScalingFactor, LIQfraprx_ScalingFactor
+    use mo_slh_routines,  only : SSAdehal_ScalingFactor, SSAhno3_ScalingFactor, SSAn2o5_ScalingFactor, &
+                                 ICEfraprx_ScalingFactor_I, ICEfraprx_ScalingFactor_Br, LIQfraprx_ScalingFactor_I
 !rpf_CESM2_SLH
 
     implicit none
@@ -943,9 +944,9 @@ contains
   ! --------------------------------------
   ! VSLS Halogen chemistry incorporated
   ! -------------------------------------
-    real(r8), parameter :: gamma_brono2_ss    = 0.020_r8   ! originally 0.08_r8 in CESM1 (ordc)
-    real(r8), parameter :: gamma_brno2_ss     = 0.010_r8   ! originally 0.04_r8 in CESM1 (ordc)
-    real(r8), parameter :: gamma_hobr_ss      = 0.025_r8   ! originally 0.1_r8  in CESM1 (ordc)
+    real(r8), parameter :: gamma_brono2_ss    = 0.01_r8    ! originally 0.08_r8 in CESM1 (ordc) ! originaly in CESM2 0.020_r8, now x0.5 (jv)
+    real(r8), parameter :: gamma_brno2_ss     = 0.005_r8   ! originally 0.04_r8 in CESM1 (ordc) ! originaly in CESM2 0.010_r8, now x0.5 (jv)
+    real(r8), parameter :: gamma_hobr_ss      = 0.0125_r8  ! originally 0.1_r8  in CESM1 (ordc) ! originaly in CESM2 0.025_r8, now x0.5 (jv)
     real(r8), parameter :: gamma_clono2_ss    = 0.006_r8   ! originally 0.02_r8 in CESM1 (ordc)
     real(r8), parameter :: gamma_clno2_ss     = 0.006_r8   ! originally 0.02_r8 in CESM1 (ordc)
     real(r8), parameter :: gamma_hocl_ss      = 0.03_r8    ! originally 0.1_r8  in CESM1 (ordc)
@@ -971,14 +972,14 @@ contains
     real(r8), parameter :: gamma_hi_wet     = 0.1_r8
 
     !rpf: Now we implemented ScalingFactors in user_nl_cam (&slh_nl)
-    real(r8), parameter :: gamma_fr_hoi_ice   = 3.0e-4_r8 ! originally 3.0e-4 for 2x2.5(26L) and 1.6e-4 for 1x1(56L) in CESM1 (rpf)
-    real(r8), parameter :: gamma_fr_hoi_liq   = 3.0e-4_r8 ! originally 1.0e-4_r8 in CESM1 (rpf) - up to 3.0e-3_r8 in CESM2 (rpf)
+    real(r8), parameter :: gamma_fr_hoi_ice   = 3.0e-4_r8 ! originally 3.0e-4 for 2x2.5(26L) and 1.6e-4 for 1x1(56L) in CESM1 - Use ICEfraprx_ScalingFactor_I (rpf)
+    real(r8), parameter :: gamma_fr_hoi_liq   = 3.0e-4_r8 ! originally 1.0e-4_r8 in CESM1 (rpf) - up to 3.0e-3_r8 in CESM2 - Use LIQfraprx_ScalingFactor_I (rpf)
     real(r8), parameter :: gamma_fr_iono2_ice = 0.02_r8   ! originally 0.005_r8 in CESM1 (rpf)
     real(r8), parameter :: gamma_fr_iono2_liq = 0.03_r8   ! identical to CESM1 (rpf)
     real(r8), parameter :: gamma_fr_hi_ice = 0.02_r8      ! identical to CESM1 (rpf)
     real(r8), parameter :: gamma_fr_hi_liq = 0.02_r8      ! identical to CESM1 (rpf)
 
-    real(r8), parameter :: gamma_fr_brono2_ice = 0.030_r8  ! in CESM1 BrONO2 washout was based on NEU routine (rpf) - check update to 1.0e-2_r8 for nudged compsets (rpf)
+    real(r8), parameter :: gamma_fr_brono2_ice = 1.0e-2_r8  ! in CESM1 BrONO2 washout was based on NEU routine (rpf) - from 1.0e-2_r8 up to 0.030_r8 in CESM2 - Use ICEfraprx_ScalingFactor_Br (rpf)
 
     real(r8), parameter :: gamma_hclhocl_ice = 0.2_r8     ! copied values from stratosphere
     real(r8), parameter :: gamma_hclhobr_ice = 0.3_r8     ! copied values from stratosphere
@@ -2390,8 +2391,8 @@ contains
              !**********************************************************************************
 
              if ( het_ss_0_ndx > 0 ) then
-!               rxt(i,k,het_ss_0_ndx) = 0.25_r8 * gamma_brono2_ss * sad_sslt_mask * 1.22e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
-                rxt(i,k,het_ss_0_ndx) = SSAdehal_ScalingFactor * 0.25_r8 * gamma_brono2_ss * sad_sslt_mask * 1.22e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
+!              rxt(i,k,het_ss_0_ndx) = 0.25_r8 * gamma_brono2_ss * sad_sslt_mask * 1.22e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
+               rxt(i,k,het_ss_0_ndx) = SSAdehal_ScalingFactor * 0.25_r8 * gamma_brono2_ss * sad_sslt_mask * 1.22e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
              endif
              if ( het_ss_1_ndx > 0 ) then
 !              rxt(i,k,het_ss_1_ndx) = 0.25_r8 * gamma_brno2_ss  * sad_sslt_mask * 1.29e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
@@ -2427,21 +2428,21 @@ contains
              endif
              if ( het_ss_9_ndx > 0 ) then
 !              rxt(i,k,het_ss_9_ndx) = 0.25_r8 * gamma_hno3_ss   * sad_sslt_mask * 1.83e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
-               rxt(i,k,het_ss_9_ndx) = SSAdehal_ScalingFactor * 0.25_r8 * gamma_hno3_ss   * sad_sslt_mask * 1.83e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
+               rxt(i,k,het_ss_9_ndx) = SSAhno3_ScalingFactor  * 0.25_r8 * gamma_hno3_ss   * sad_sslt_mask * 1.83e3_r8 * sqrt(temp(i,k)) * DF * logical_sslt
              endif
 
 
              if ( het_ss_10_ndx > 0 ) then
 !              rxt(i,k,het_ss_10_ndx)=                               0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
-               rxt(i,k,het_ss_10_ndx)= SSAdehal_ScalingFactor  *                              0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
+               rxt(i,k,het_ss_10_ndx)= SSAn2o5_ScalingFactor  *                              0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
              endif
              if ( het_ss_11_ndx > 0 ) then
 !              rxt(i,k,het_ss_11_ndx) = (1._r8 - clno2_yield(i,k)) * 0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
-               rxt(i,k,het_ss_11_ndx) = SSAdehal_ScalingFactor * (1._r8 - clno2_yield(i,k)) * 0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
+               rxt(i,k,het_ss_11_ndx) = SSAn2o5_ScalingFactor * (1._r8 - clno2_yield(i,k)) * 0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
              endif
              if ( het_ss_12_ndx > 0 ) then
 !              rxt(i,k,het_ss_12_ndx) =           clno2_yield(i,k) * 0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
-               rxt(i,k,het_ss_12_ndx) = SSAdehal_ScalingFactor *           clno2_yield(i,k) * 0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
+               rxt(i,k,het_ss_12_ndx) = SSAn2o5_ScalingFactor *           clno2_yield(i,k) * 0.25_r8 * gamma_n2o5_ss   * sad_sslt_mask * 1.4e3_r8  * sqrt(temp(i,k)) * logical_sslt
              endif
 
 
@@ -2632,7 +2633,7 @@ contains
                 if ( sad_ice_trop(i,k) > 0._r8 ) then
                    if( hoivmr > small ) then
 !                     rxt(i,k,ice_fr_hoi_ndx) = 0.25_r8 * gamma_fr_hoi_ice * sad_ice_trop(i,k) * 1.21e3_r8 * sqrt(temp(i,k))
-                      rxt(i,k,ice_fr_hoi_ndx) = ICEfraprx_ScalingFactor * 0.25_r8 * gamma_fr_hoi_ice * sad_ice_trop(i,k) * 1.21e3_r8 * sqrt(temp(i,k))
+                      rxt(i,k,ice_fr_hoi_ndx) = ICEfraprx_ScalingFactor_I * 0.25_r8 * gamma_fr_hoi_ice * sad_ice_trop(i,k) * 1.21e3_r8 * sqrt(temp(i,k))
                    endif
                 endif
              endif            
@@ -2640,7 +2641,7 @@ contains
                 if ( sad_liq_trop(i,k) > 0._r8 ) then
                    if( hoivmr > small ) then
 !                     rxt(i,k,liq_fr_hoi_ndx) = 0.25_r8 * gamma_fr_hoi_liq * sad_liq_trop(i,k) * 1.21e3_r8 * sqrt(temp(i,k))
-                      rxt(i,k,liq_fr_hoi_ndx) = LIQfraprx_ScalingFactor * 0.25_r8 * gamma_fr_hoi_liq * sad_liq_trop(i,k) * 1.21e3_r8 * sqrt(temp(i,k))
+                      rxt(i,k,liq_fr_hoi_ndx) = LIQfraprx_ScalingFactor_I * 0.25_r8 * gamma_fr_hoi_liq * sad_liq_trop(i,k) * 1.21e3_r8 * sqrt(temp(i,k))
                    endif
                 endif
              endif
@@ -2648,7 +2649,7 @@ contains
              if ( sad_ice_trop(i,k) > 0 ) then
                if( hivmr > small ) then
 !                rxt(i,k,ice_fr_hi_ndx) = 0.25 * gamma_fr_hi_ice * sad_ice_trop(i,k) * 1.287e3_r8 * sqrt(temp(i,k))
-                 rxt(i,k,ice_fr_hi_ndx) = ICEfraprx_ScalingFactor * 0.25 * gamma_fr_hi_ice * sad_ice_trop(i,k) * 1.287e3_r8 * sqrt(temp(i,k))
+                 rxt(i,k,ice_fr_hi_ndx) = ICEfraprx_ScalingFactor_I * 0.25 * gamma_fr_hi_ice * sad_ice_trop(i,k) * 1.287e3_r8 * sqrt(temp(i,k))
                endif
              endif
              endif
@@ -2656,7 +2657,7 @@ contains
              if ( sad_liq_trop(i,k) > 0 ) then
                if( hivmr > small ) then
 !                rxt(i,k,liq_fr_hi_ndx) = 0.25 * gamma_fr_hi_liq * sad_liq_trop(i,k) * 1.287e3_r8 * sqrt(temp(i,k))
-                 rxt(i,k,liq_fr_hi_ndx) = LIQfraprx_ScalingFactor * 0.25 * gamma_fr_hi_liq * sad_liq_trop(i,k) * 1.287e3_r8 * sqrt(temp(i,k))
+                 rxt(i,k,liq_fr_hi_ndx) = LIQfraprx_ScalingFactor_I * 0.25 * gamma_fr_hi_liq * sad_liq_trop(i,k) * 1.287e3_r8 * sqrt(temp(i,k))
                endif
              endif
              endif
@@ -2664,7 +2665,7 @@ contains
              if ( sad_ice_trop(i,k) > 0 ) then
                if( iono2vmr > small ) then
 !                rxt(i,k,ice_fr_iono2_ndx) = 0.25 * gamma_fr_iono2_ice * sad_ice_trop(i,k) * 1.059e3_r8 * sqrt(temp(i,k))
-                 rxt(i,k,ice_fr_iono2_ndx) = ICEfraprx_ScalingFactor * 0.25 * gamma_fr_iono2_ice * sad_ice_trop(i,k) * 1.059e3_r8 * sqrt(temp(i,k))
+                 rxt(i,k,ice_fr_iono2_ndx) = ICEfraprx_ScalingFactor_I * 0.25 * gamma_fr_iono2_ice * sad_ice_trop(i,k) * 1.059e3_r8 * sqrt(temp(i,k))
                endif
              endif
              endif
@@ -2672,7 +2673,7 @@ contains
              if ( sad_liq_trop(i,k) > 0 ) then
                if( iono2vmr > small ) then
 !                rxt(i,k,liq_fr_iono2_ndx) = 0.25 * gamma_fr_iono2_liq * sad_liq_trop(i,k) * 1.059e3_r8 * sqrt(temp(i,k))
-                 rxt(i,k,liq_fr_iono2_ndx) = LIQfraprx_ScalingFactor * 0.25 * gamma_fr_iono2_liq * sad_liq_trop(i,k) * 1.059e3_r8 * sqrt(temp(i,k))
+                 rxt(i,k,liq_fr_iono2_ndx) = LIQfraprx_ScalingFactor_I * 0.25 * gamma_fr_iono2_liq * sad_liq_trop(i,k) * 1.059e3_r8 * sqrt(temp(i,k))
                endif
              endif
              endif
@@ -2684,7 +2685,7 @@ contains
              if ( sad_ice_trop(i,k) > 0 ) then
                if( brono2vmr > small ) then
 !                rxt(i,k,ice_fr_brono2_ndx) = 0.25 * gamma_fr_brono2_ice * sad_ice_trop(i,k) * 1.22e3_r8 * sqrt(temp(i,k))
-                 rxt(i,k,ice_fr_brono2_ndx) = ICEfraprx_ScalingFactor * 0.25 * gamma_fr_brono2_ice * sad_ice_trop(i,k) * 1.22e3_r8 * sqrt(temp(i,k))
+                 rxt(i,k,ice_fr_brono2_ndx) = ICEfraprx_ScalingFactor_Br * 0.25 * gamma_fr_brono2_ice * sad_ice_trop(i,k) * 1.22e3_r8 * sqrt(temp(i,k))
                endif
              endif
              endif
