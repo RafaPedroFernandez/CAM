@@ -568,6 +568,7 @@ if ( ($chem ne 'none') or ( $prog_species ) ){
          add_default($nl, 'gas_wetdep_ice_uptake_list', 'val'=>$gas_wetdep_ice_uptake_list );
       } else {
          add_default($nl, 'gas_wetdep_list', 'val'=>$gas_wetdep_list );
+         add_default($nl, 'gas_wetdep_ice_uptake_list', 'val'=>$gas_wetdep_ice_uptake_list );
       }
     }
 
