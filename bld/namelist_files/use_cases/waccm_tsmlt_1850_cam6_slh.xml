@@ -42,6 +42,12 @@
 <qbo_use_forcing hgrid="1.9x2.5" >.true.</qbo_use_forcing>
 <qbo_use_forcing>.false.</qbo_use_forcing>
 
+<!-- Photolysis of SLH -->
+<!-- <xs_long_file>/glade/campaign/cesm/inputdata/atm/waccm/phot/temp_prs_GT200nm_c221005mm.nc</xs_long_file> -->
+<!-- <xs_short_file>/glade/campaign/cesm/inputdata/atm/waccm/phot/xs_short_c221005mm.nc</xs_short_file> -->
+<xs_long_file>atm/waccm/phot/temp_prs_GT200nm_c221005mm.nc</xs_long_file>
+<xs_short_file>atm/waccm/phot/xs_short_c221005mm.nc</xs_short_file>
+
 <!--<!-- slh_nl -->
 <SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
 <SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
