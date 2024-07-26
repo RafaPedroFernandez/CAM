@@ -8,7 +8,8 @@
       CAM
     ===============
    -->
-    <desc atm="CAM60[%1PCT][%4xCO2][%CCTS1][%CCTS2][%CFIRE][%CVBSX][%CCTS1SLH][%CVBSXSLH][%NUDG][%PORT][%RCO2][%SCAM][%SDYN][%WCCM][%WCMD][%WCSC][%WCTS][%WCTSSLH][%WVBSSLH][%WXIE][%WXIED]">CAM cam6 physics:</desc>
+<!--     <desc atm="CAM60[%1PCT][%4xCO2][%CCTS1][%CCTS2][%CFIRE][%CVBSX][%CCTS1SLH][%CVBSXSLH][%NUDG][%PORT][%RCO2][%SCAM][%SDYN][%WCCM][%WCMD][%WCSC][%WCTS][%WCTSSLH][%WVBSSLH][%WXIE][%WXIED]">CAM cam6 physics:</desc> -->
+    <desc atm="CAM60[%1PCT][%4xCO2][%CCTS1][%CCTS2][%CFIRE][%CVBSX][%CCTS1SLH][%NUDG][%PORT][%RCO2][%SCAM][%SDYN][%WCCM][%WCMD][%WCSC][%WCTS][%WCTSSLH][%WXIE][%WXIED]">CAM cam6 physics:</desc>
     <desc atm="CAM50[%CCTS1][%CLB][%PORT][%RCO2][%SCAM][%SDYN][%WCSC][%WCTS]"                                                                      >CAM cam5 physics:</desc>
     <desc atm="CAM40[%PORT][%RCO2][%SCAM][%SDYN][%TMOZ][%WX][%WXIE][%WXIED][%WCMD]"                                                                >CAM cam4 physics:</desc>
     <desc atm="CAM30"                                                                                                                              >CAM cam3 physics:</desc>
@@ -41,7 +42,7 @@
     <desc option="CFIRE"        >CAM-Chem troposphere/stratosphere chem with simplified volatility basis set SOA scheme and fire emissons :</desc>
     <desc option="CLB"          >CAM CLUBB - turned on by default in CAM60:</desc>
     <desc option="CVBSX"        >CAM-Chem troposphere/stratosphere chem with extended volatility basis set SOA scheme and modal aersols :</desc>
-    <desc option="CVBSXSLH"     >CAM-Chem SLH troposphere/stratosphere chemistry based on VBSX:</desc>
+<!--     <desc option="CVBSXSLH"     >CAM-Chem SLH troposphere/stratosphere chemistry based on VBSX:</desc> -->
     <desc option="RCO2"         >CAM CO2 ramp: </desc>
     <desc option="SPCAMS"       >CAM super-parameterized CAM one moment SAM microphysics </desc>
     <desc option="SPCAMCLBS"    >CAM super-parameterized CAM one moment SAM microphysics using CLUBB </desc>
@@ -61,7 +62,7 @@
     <desc option="WCSC"         >WACCM specified chemistry:</desc>
     <desc option="WCTS"         >WACCM with tropospheric, stratospheric, mesospheric, and lower thermospheric chemistry:</desc>
     <desc option="WCTSSLH"      >WACCM SLH with tropospheric, stratospheric, mesospheric, and lower thermospheric chemistry:</desc>
-    <desc option="WVBSSLH "     >WACCM SLH with trop, strat, meso, and low-thermo chemistry plus simplified VBS-SOA:</desc>
+<!--     <desc option="WVBSSLH "     >WACCM SLH with trop, strat, meso, and low-thermo chemistry plus simplified VBS-SOA:</desc> -->
 
   <!--
     ===============
@@ -126,7 +127,7 @@
 
       <!-- Modifiers for CAM runs (%.* includes SCAM runs) -->
       <value compset="_(CAM50|CAM60)%.*(CCTS1|CFIRE)">-chem trop_strat_mam4_vbs</value>
-      <value compset="_(CAM50|CAM60)%.*(CCTS1SLH|CFIRE)">-chem trop_strat_mam4_slhvbs</value>
+      <value compset="_(CAM50|CAM60)%.*(CCTS1SLH|CFIRE)">-chem trop_strat_mam4_slh</value>
 
       <value compset="CAM60%CVBSX">-chem trop_strat_mam4_vbsext</value>
 <!--       <value compset="CAM60%CVBSXSLH">-chem trop_strat_mam4_slhext</value> -->
@@ -150,7 +151,7 @@
       <value compset="_(CAM50|CAM60)%WCSC">-chem waccm_sc_mam4</value>
       <value compset="_(CAM50|CAM60)%WCTS">-chem waccm_tsmlt_mam4</value>
       <value compset="_(CAM50|CAM60)%WCTSSLH">-chem waccm_tsmlt_mam4_slh</value>
-<!--       <value compset="_(CAM50|CAM60)%WVBSSLH">-chem waccm_tsmlt_mam4_slhvbs</value> -->
+<!--       <value compset="_(CAM50|CAM60)%WVBSSLH">-chem waccm_tsmlt_mam4_slhext</value> -->
       <value compset="_CAM40%WCMD">-chem waccm_mad</value>
       <value compset="_CAM\d0%WXIE">-waccmx -ionosphere wxie</value>
       <value compset="_CAM40%WXIE(_|%)">-chem waccm_ma</value>
@@ -200,10 +201,10 @@
 
       <value compset="1850_CAM60"        >1850_cam6</value>
       <value compset="1850_CAM60%.*CCTS1"     >1850_trop_strat_cam6</value>
-      <value compset="1850_CAM60%.*CCTS1SLH"  >1850_trop_strat_cam6_slhvbs</value>
+      <value compset="1850_CAM60%.*CCTS1SLH"  >1850_trop_strat_cam6_slh</value>
 
       <value compset="HIST_CAM60%.*CCTS1"  >hist_trop_strat_cam6</value>
-      <value compset="HIST_CAM60%.*CCTS1SLH"  >hist_trop_strat_cam6_slhvbs</value>
+      <value compset="HIST_CAM60%.*CCTS1SLH"  >hist_trop_strat_cam6_slh</value>
 
 
       <value compset="1850_CAM60%WCTS"   >waccm_tsmlt_1850_cam6</value>
@@ -220,7 +221,7 @@
       <value compset="2000_CAM60%WCCM"   >waccm_ma_2000_cam6</value>
       <value compset="2000_CAM60%WCSC"   >waccm_sc_2000_cam6</value>
       <value compset="2000_CAM60%.*CCTS1"  >2000_trop_strat_cam6</value>
-      <value compset="2000_CAM60%.*CCTS1SLH" >2000_trop_strat_cam6_slhvbs</value>
+      <value compset="2000_CAM60%.*CCTS1SLH" >2000_trop_strat_cam6_slh</value>
       <value compset="2000_CAM60%WXIE"   >waccmx_ma_2000_cam6</value>
 
       <value compset="2000_CAM30_SLND_SICE_DOCN%AQP"   >aquaplanet_cam3</value>
@@ -235,7 +236,7 @@
 
       <value compset="2010_CAM60"        >2010_cam6</value>
       <value compset="2010_CAM60%.*CCTS1"  >2010_trop_strat_cam6</value>
-<!--       <value compset="2010_CAM60%.*CCTS1SLH"  >2010_trop_strat_cam6_slhvbs</value> -->
+<!--       <value compset="2010_CAM60%.*CCTS1SLH"  >2010_trop_strat_cam6_slh</value> -->
       <value compset="2010_CAM60%WCTS"   >waccm_tsmlt_2010_cam6</value>
       <value compset="2010_CAM60%WCTSSLH"   >waccm_tsmlt_2010_cam6_slh</value>
       <value compset="2010_CAM60%WCSC"   >waccm_sc_2010_cam6</value>
@@ -250,7 +251,7 @@
       <value compset="HIST_CAM60"        >hist_cam6</value>
       <value compset="HIST_CAM60%WCTS"   >waccm_tsmlt_hist_cam6</value>
       <value compset="HIST_CAM60%WCTSSLH"   >waccm_tsmlt_hist_cam6_slh</value>
-      <value compset="HIST_CAM60%WVBSSLH"   >waccm_tsmlt_hist_cam6_slhvbs</value>
+<!--       <value compset="HIST_CAM60%WVBSSLH"   >waccm_tsmlt_hist_cam6_slhext</value> -->
 <!--  CESM2-SLH: Please check (rpf) -->
       <value compset="HIST_CAM60%.*WCTS%NUDG"   >waccm_tsmlt_nudged_cam6</value>
       <value compset="HIST_CAM60%.*WCTSSLH%NUDG"   >waccm_tsmlt_nudged_cam6_slh</value>
@@ -260,12 +261,12 @@
       <value compset="HIST_CAM60%WCMD"   >waccm_ma_hist_cam6</value>
       <value compset="HIST_CAM40%WCMD"   >waccm_ma_hist_cam4</value>
       <value compset="HIST_CAM60%.*CCTS1"  >hist_trop_strat_cam6</value>
-      <value compset="HIST_CAM60%.*CCTS1SLH"  >hist_trop_strat_cam6_slhvbs</value>
+      <value compset="HIST_CAM60%.*CCTS1SLH"  >hist_trop_strat_cam6_slh</value>
       <value compset="HIST_CAM60%.*CCTS[12]%NUDG">hist_trop_strat_nudged_cam6</value>
-      <value compset="HIST_CAM60%.*CCTS1SLH%NUDG">hist_trop_strat_nudged_cam6_slhvbs</value>
-      <value compset="HIST_CAM60%.*CVBSXSLH%NUDG">hist_trop_strat_nudged_cam6_slhext</value>
+      <value compset="HIST_CAM60%.*CCTS1SLH%NUDG">hist_trop_strat_nudged_cam6_slh</value>
+<!--       <value compset="HIST_CAM60%.*CVBSXSLH%NUDG">hist_trop_strat_nudged_cam6_slhext</value> -->
       <value compset="HIST_CAM60%CVBSX"  >hist_trop_strat_vbsext_cam6</value>
-<!--       <value compset="HIST_CAM60%CVBSXSLH"  >hist_trop_strat_slhext_cam6</value> -->
+<!--       <value compset="HIST_CAM60%CVBSXSLH"  >hist_trop_strat_cam6_slhext</value> -->
       <value compset="HIST_CAM60%CFIRE"  >hist_trop_strat_vbsfire_cam6</value>
       <value compset="HIST_CAM60%WXIE"   >waccmx_ma_hist_cam6</value>
 
@@ -276,11 +277,11 @@
       <value compset="SSP245_CAM60"      >ssp245_cam6</value>
       <value compset="SSP370_CAM60"      >ssp370_cam6</value>
       <value compset="SSP585_CAM60"      >ssp585_cam6</value>
-<!--       <value compset="SSP126_CAM60.*CCTS1SLH"      >ssp126_cam6_slhvbs</value> -->
-<!--       <value compset="SSP245_CAM60.*CCTS1SLH"      >ssp245_cam6_slhvbs</value> -->
-<!--       <value compset="SSP370_CAM60.*CCTS1SLH"      >ssp370_cam6_slhvbs</value> -->
-<!--       <value compset="SSP585_CAM60.*CCTS1SLH"      >ssp585_cam6_slhvbs</value> -->
-      <value compset="SSPGEN_CAM60.*CCTS1SLH"      >sspGEN_trop_strat_cam6_slhvbs</value>
+<!--       <value compset="SSP126_CAM60.*CCTS1SLH"      >ssp126_cam6_slh</value> -->
+<!--       <value compset="SSP245_CAM60.*CCTS1SLH"      >ssp245_cam6_slh</value> -->
+<!--       <value compset="SSP370_CAM60.*CCTS1SLH"      >ssp370_cam6_slh</value> -->
+<!--       <value compset="SSP585_CAM60.*CCTS1SLH"      >ssp585_cam6_slh</value> -->
+      <value compset="SSPGEN_CAM60.*CCTS1SLH"      >sspGEN_trop_strat_cam6_slh</value>
 
       <value compset="SSP126_CAM60%WCTS" >waccm_tsmlt_ssp126_cam6</value>
       <value compset="SSP245_CAM60%WCTS" >waccm_tsmlt_ssp245_cam6</value>
@@ -312,12 +313,12 @@
       <value compset="_CAM60%WXIE%SDYN"   >sd_waccmx_ma_cam6</value>
       <value compset="_CAM60%WCTS%SDYN"   >sd_waccm_tsmlt_cam6</value>
       <value compset="_CAM60%WCTSSLH%SDYN"   >sd_waccm_tsmlt_cam6_slh</value>
-      <value compset="_CAM60%WVBSSLH%SDYN"   >sd_waccm_tsmlt_cam6_slhvbs</value>
+<!--       <value compset="_CAM60%WVBSSLH%SDYN"   >sd_waccm_tsmlt_cam6_slhext</value> -->
       <value compset="_CAM60%WCCM%SDYN"   >sd_waccm_ma_cam6</value>
       <value compset="_CAM60%WCMD%SDYN"   >sd_waccm_ma_cam6</value>
       <value compset="_CAM40%WCMD%SDYN"   >sd_waccm_ma_cam4</value>
       <value compset="_CAM60%.*CCTS1%SDYN"  >sd_trop_strat_cam6</value>
-      <value compset="_CAM60%.*CCTS1SLH%SDYN"  >sd_trop_strat_cam6_slhvbs</value>
+      <value compset="_CAM60%.*CCTS1SLH%SDYN"  >sd_trop_strat_cam6_slh</value>
 <!--       <value compset="_CAM60%.*CVBSXSLH%SDYN"  >sd_trop_strat_cam6_slhext</value> -->
       <value compset="_CAM60%.*CCTS2%SDYN"  >sd_trop_strat2_cam6</value>
       <value compset="_CAM60%SDYN_CLM50"  >sd_cam6</value>

@@ -1131,8 +1131,8 @@
     </options>
   </test>
 
-<!-- # RPF_WARNING: need to check if all this block should be included here ... and updated for slhvbs-->
-  <!--test compset="FCnudgedslhvbs" grid="ne30_ne30_mg17" name="ERP_Ln9" testmods="cam/outfrq9s">
+<!-- # RPF_WARNING: need to check if all this block should be included here ... and updated for slh-->
+  <!--test compset="FCnudged_slh" grid="ne30_ne30_mg17" name="ERP_Ln9" testmods="cam/outfrq9s">
     <machines>
       <machine name="cheyenne" compiler="intel" category="aux_cam"/>
       <machine name="cheyenne" compiler="intel" category="camchem"/>
@@ -1141,7 +1141,7 @@
       <option name="wallclock">00:20:00</option>
     </options>
   </test>
-  <test compset="FCnudgedslhvbs" grid="ne0CONUSne30x8_ne0CONUSne30x8_mt12" name="SMS_D_Ln9" testmods="cam/outfrq9s_refined_camchem">
+  <test compset="FCnudged_slh" grid="ne0CONUSne30x8_ne0CONUSne30x8_mt12" name="SMS_D_Ln9" testmods="cam/outfrq9s_refined_camchem">
     <machines>
       <machine name="cheyenne" compiler="intel" category="prealpha"/>
       <machine name="cheyenne" compiler="intel" category="camchem"/>
@@ -1150,7 +1150,7 @@
       <option name="wallclock">00:20:00</option>
     </options>
   </test-->
-<!-- # RPF_WARNING: need to check if all this block should be included here ... and updated for slhvbs-->
+<!-- # RPF_WARNING: need to check if all this block should be included here ... and updated for slh-->
 
   <test compset="FCts2nudged" grid="f09_f09_mg17" name="SMS_D_Ln9" testmods="cam/outfrq9s_leapday">
     <machines>
@@ -1281,8 +1281,8 @@
     </machines>
   </test>
 
-<!-- # RPF_WARNING: need to check if all this block should be included here ... and updated for slhvbs-->
-<!--  <test compset="FCHISTslhvbs" grid="f09_f09_mg17" name="SMS_D_Ln9" testmods="cam/outfrq9s">
+<!-- # RPF_WARNING: need to check if all this block should be included here ... and updated for slh-->
+<!--  <test compset="FCHIST_slh" grid="f09_f09_mg17" name="SMS_D_Ln9" testmods="cam/outfrq9s">
     <machines>
       <machine name="cheyenne" compiler="intel" category="camchem"/>
       <machine name="cheyenne" compiler="intel" category="aux_cam"/>
@@ -1291,7 +1291,7 @@
       <option name="wallclock">00:30:00</option>
     </options>
   </test>
-  <test compset="FCHISTslhvbs" grid="f09_f09_mg17" name="ERP_Ld3" testmods="cam/outfrq1d">
+  <test compset="FCHIST_slh" grid="f09_f09_mg17" name="ERP_Ld3" testmods="cam/outfrq1d">
     <machines>
       <machine name="cheyenne" compiler="intel" category="camchem"/>
     </machines>

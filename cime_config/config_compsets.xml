@@ -290,7 +290,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
   <compset>
-    <alias>FC2000climoslhvbs</alias>
+    <alias>FC2000climo_slh</alias>
     <lname>2000_CAM60%CCTS1SLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset> 
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
@@ -301,7 +301,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
 <!--   <compset> -->
-<!--     <alias>FC2010climoslhvbs</alias> -->
+<!--     <alias>FC2010climo_slh</alias> -->
 <!--     <lname>2010_CAM60%CCTS1SLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
 <!--   </compset> -->
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
@@ -313,7 +313,7 @@
     <lname>1850_CAM60%CCTS1_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
   <compset>
-    <alias>FC1850slhvbs</alias>
+    <alias>FC1850_slh</alias>
 <!--     <lname>1850_CAM60%CCTS1SLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
     <lname>1850_CAM60%CCTS1SLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
@@ -325,7 +325,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
   <compset>
-    <alias>FCHISTslhvbs</alias>
+    <alias>FCHIST_slh</alias>
 <!--     <lname>HIST_CAM60%CCTS1SLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
     <lname>HIST_CAM60%CCTS1SLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
@@ -336,10 +336,10 @@
     <lname>HIST_CAM60%CVBSX_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
-  <compset>
-    <alias>FCvbsxHISTslh</alias>
+<!--  <compset>
+    <alias>FCvbsxHIST_slh</alias>
     <lname>HIST_CAM60%CVBSXSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
-  </compset>
+  </compset>-->
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
 
   <compset>
@@ -353,15 +353,15 @@
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
   <compset>
-    <alias>FCnudgedslhvbs</alias>
+    <alias>FCnudged_slh</alias>
     <lname>HIST_CAM60%CCTS1SLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
 <!--     <lname>HIST_CAM60%CCTS1SLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
   </compset>
-  <compset>
-    <alias>FCnudgedslhext</alias>
+<!--  <compset>
+    <alias>FCnudged_slhext</alias>
     <lname>HIST_CAM60%CVBSXSLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
-<!--     <lname>HIST_CAM60%CVBSXSLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
-  </compset>
+    <lname>HIST_CAM60%CVBSXSLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname>
+  </compset>-->
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
 
   <compset>
@@ -375,7 +375,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
   <compset>
-    <alias>FCSDslhvbs</alias>
+    <alias>FCSD_slh</alias>
     <lname>HIST_CAM60%CCTS1SLH%SDYN_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
@@ -460,7 +460,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
   <compset>
-    <alias>FWHISTslh</alias>
+    <alias>FWHIST_slh</alias>
 <!--     <lname>HIST_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
     <lname>HIST_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
     <science_support grid="f09_f09_mg17"/>
@@ -475,17 +475,17 @@
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
   <compset>
-    <alias>FWHIST_BGCslh</alias>
+    <alias>FWHIST_BGC_slh</alias>
 <!--     <lname>HIST_CAM60%WCTSSLH_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
     <lname>HIST_CAM60%WCTSSLH_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
     <science_support grid="f09_f09_mg17"/>
   </compset>
-  <compset>
-    <alias>FWHIST_BGCslhvbs</alias>
-<!--     <lname>HIST_CAM60%WVBSSLH_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
+<!--  <compset>
+    <alias>FWHIST_BGC_slhext</alias>
+    <lname>HIST_CAM60%WVBSSLH_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname>
     <lname>HIST_CAM60%WVBSSLH_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
     <science_support grid="f09_f09_mg17"/>
-  </compset>
+  </compset>-->
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
 
 <!--  CESM2-SLH: Please check (rpf) -->
@@ -499,7 +499,7 @@
     <alias>FWnudged_slh</alias>
 <!--     <lname>HIST_CAM60%WCTSSLH_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname> -->
 <!--     <lname>HIST_CAM60%WCTSSLH%NUDG_CLM50%BGC-CROP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname> -->
-<!--     <lname>HIST_CAM60%CCTS1SLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname> (copied from FCnudgedslhvbs)--> 
+<!--     <lname>HIST_CAM60%CCTS1SLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname> (copied from FCnudged_slh)--> 
     <lname>HIST_CAM60%WCTSSLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
     <science_support grid="f09_f09_mg17"/>
   </compset>
@@ -536,7 +536,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
   <compset>
-    <alias>FW1850slh</alias>
+    <alias>FW1850_slh</alias>
 <!--     <lname>1850_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
     <lname>1850_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
     <science_support grid="f09_f09_mg17"/>
@@ -558,7 +558,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
   <compset>
-    <alias>FW2000climoslh</alias>
+    <alias>FW2000climo_slh</alias>
 <!--     <lname>2000_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
     <lname>2000_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
@@ -570,7 +570,7 @@
   </compset>
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
 <!--   <compset> -->
-<!--     <alias>FW2010climoslh</alias> -->
+<!--     <alias>FW2010climo_slh</alias> -->
 <!--     <lname>2010_CAM60%WCTSSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname> -->
 <!--   </compset> -->
 <!--  CESM2-SLH: Mapped but never tested (rpf) -->
@@ -581,13 +581,13 @@
   </compset>
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
   <compset>
-    <alias>FWSDslh</alias>
+    <alias>FWSD_slh</alias>
     <lname>HIST_CAM60%WCTSSLH%SDYN_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
-  <compset>
-    <alias>FWSDslhvbs</alias>
+<!--  <compset>
+    <alias>FWSD_slhext</alias>
     <lname>HIST_CAM60%WVBSSLH%SDYN_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
-  </compset>
+  </compset>-->
 <!--  CESM2-SLH: Mapped and Tested. Please check (rpf) -->
 
 
@@ -671,12 +671,13 @@
 	<value  compset="HIST_CAM60%CCTS1SLH">2010-01-01</value>
 <!-- 	<value  compset="HIST_CAM60%CCTS1SLH" grid="a%ne0np4CONUS">2013-01-01</value> -->
 	<value  compset="HIST_CAM60%CVBSX">1995-01-01</value>
-	<value  compset="HIST_CAM60%CVBSXSLH">1995-01-01</value>
+<!-- 	<value  compset="HIST_CAM60%CVBSXSLH">1995-01-01</value> -->
 	<value  compset="HIST_CAM60%CFIRE">1995-01-01</value>
 	<value  compset="RCP[2468]_CAM\d+">2005-01-01</value>
  	<value  compset="_CAM.*%SDYN"                   >2005-01-01</value>
  	<value  compset="_CAM.*%SDYN" grid="a%0.47x0.63">2010-01-01</value>
-	<value  compset="_CAM60%(WCCM|WCTS|WCTSSLH|WVBSXSLH|WXIE).*%SDYN">1980-01-01</value>
+<!-- 	<value  compset="_CAM60%(WCCM|WCTS|WCTSSLH|WVBSXSLH|WXIE).*%SDYN">1980-01-01</value> -->
+	<value  compset="_CAM60%(WCCM|WCTS|WCTSSLH|WXIE).*%SDYN">1980-01-01</value>
  	<value  compset="_CAM40%WX.*%SDYN">2000-01-01</value>
 
 	<value  compset="C2R4_CAM">2004-01-01</value>
