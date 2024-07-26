@@ -511,7 +511,10 @@
            'NC4CHO + NOA + NTERPOOH + PBZNIT + TERPNIT', 
  'IOy_sums  = I + 2*I2 + IO + OIO + HI + HOI + IONO2 + INO2  + 2*I2O2 + 2*I2O3 + 2*I2O4 + INO + IBR + ICL',
  'BROy_sums = BR + BRO + 2*BR2 + BRCL + BRNO2 + BRONO2 + HBR + HOBR + IBR', 
- 'CLOy_sums = CL + OCLO + 2*CL2 + 2*CL2O2 + CLNO2 + CLO + CLONO2 + HCL + HOCL + ICL + BRCL'
+ 'CLOy_sums = CL + OCLO + 2*CL2 + 2*CL2O2 + CLNO2 + CLO + CLONO2 + HCL + HOCL + ICL + BRCL',
+ 'SLHi_sums  = CH3I + 2*CH2I2 + CH2IBR + CH2ICL', 'SLHbr_sums = 3*CHBR3 + 2*CH2BR2 + CH2BRCL + 2*CHBR2CL + CHBRCL2 + CH2IBR',
+ 'SLHcl_sumsNat = CH2BRCL + CHBR2CL + 2*CHBRCL2 + CH2ICL', 'SLHcl_sumsAnt = 3*CHCL3 + 2*CH2CL2 + 4*C2CL4 + 2*C2H4CL2 + 2*CHCL2O2 + 2*COCL2',
+ 'LLHbr_sums = CF2CLBR + CF3BR + 2*H2402  ', 'LLHcl_sums = 4*CCL4 + CF2CLBR + 3*CFC11 + 3*CFC113 + 2*CFC114 + CFC115 + 2*CFC12 + 2*HCFC141B + HCFC142B + HCFC22 + 3*CH3CCL3'
 </vmr_sums>
 
 </namelist_defaults>

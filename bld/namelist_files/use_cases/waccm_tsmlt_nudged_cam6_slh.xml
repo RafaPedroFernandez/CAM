@@ -55,8 +55,10 @@
 
 <!-- nudging -->
 <Nudge_Model>.true.</Nudge_Model>
-<Nudge_Path hgrid="0.9x1.25" nlev="70">'/glade/campaign/acom/acom-climate/met_data/MERRA2_fv09_70L/'</Nudge_Path>
+<Nudge_Path hgrid="0.9x1.25" nlev="70">'atm/cam/met/nudging/MERRA2_fv09_70L/'</Nudge_Path>
+<Nudge_Path hgrid="1.9x2.5"  nlev="70">'atm/cam/met/nudging/MERRA2_fv19_70L/'</Nudge_Path>
 <Nudge_File_Template hgrid="0.9x1.25" nlev="70">'%y/MERRA2_fv09.cam2.i.%y-%m-%d-%s.nc'</Nudge_File_Template>
+<Nudge_File_Template hgrid="1.9x2.5"  nlev="70">'%y/MERRA2_fv19.cam2.i.%y-%m-%d-%s.nc'</Nudge_File_Template>
 <Nudge_Force_Opt>0</Nudge_Force_Opt>
 <Nudge_TimeScale_Opt>0</Nudge_TimeScale_Opt>
 <Nudge_Times_Per_Day>8</Nudge_Times_Per_Day>
@@ -71,10 +73,10 @@
 <Nudge_Qcoef>0.00</Nudge_Qcoef>
 <Nudge_PSprof>0</Nudge_PSprof>
 <Nudge_PScoef>0.00</Nudge_PScoef>
-<Nudge_Beg_Year>2010</Nudge_Beg_Year>
+<Nudge_Beg_Year>1980</Nudge_Beg_Year>
 <Nudge_Beg_Month>1</Nudge_Beg_Month>
 <Nudge_Beg_Day>1</Nudge_Beg_Day>
-<Nudge_End_Year>2020</Nudge_End_Year>
+<Nudge_End_Year>2023</Nudge_End_Year>
 <Nudge_End_Month>12</Nudge_End_Month>
 <Nudge_End_Day>31</Nudge_End_Day>
 <Nudge_Hwin_lat0>0.0</Nudge_Hwin_lat0>
@@ -321,7 +323,10 @@
            'NC4CHO + NOA + NTERPOOH + PBZNIT + TERPNIT', 
  'IOy_sums  = I + 2*I2 + IO + OIO + HI + HOI + IONO2 + INO2  + 2*I2O2 + 2*I2O3 + 2*I2O4 + INO + IBR + ICL',
  'BROy_sums = BR + BRO + 2*BR2 + BRCL + BRNO2 + BRONO2 + HBR + HOBR + IBR', 
- 'CLOy_sums = CL + OCLO + 2*CL2 + 2*CL2O2 + CLNO2 + CLO + CLONO2 + HCL + HOCL + ICL + BRCL'
+ 'CLOy_sums = CL + OCLO + 2*CL2 + 2*CL2O2 + CLNO2 + CLO + CLONO2 + HCL + HOCL + ICL + BRCL',
+ 'SLHi_sums  = CH3I + 2*CH2I2 + CH2IBR + CH2ICL', 'SLHbr_sums = 3*CHBR3 + 2*CH2BR2 + CH2BRCL + 2*CHBR2CL + CHBRCL2 + CH2IBR',
+ 'SLHcl_sumsNat = CH2BRCL + CHBR2CL + 2*CHBRCL2 + CH2ICL', 'SLHcl_sumsAnt = 3*CHCL3 + 2*CH2CL2 + 4*C2CL4 + 2*C2H4CL2 + 2*CHCL2O2 + 2*COCL2',
+ 'LLHbr_sums = CF2CLBR + CF3BR + 2*H2402  ', 'LLHcl_sums = 4*CCL4 + CF2CLBR + 3*CFC11 + 3*CFC113 + 2*CFC114 + CFC115 + 2*CFC12 + 2*HCFC141B + HCFC142B + HCFC22 + 3*CH3CCL3'
 </vmr_sums>
 
 </namelist_defaults>
