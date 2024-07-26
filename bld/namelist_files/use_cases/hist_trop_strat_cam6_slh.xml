@@ -2,31 +2,13 @@
 
 <namelist_defaults>
 
-<start_ymd>20050101</start_ymd>
+<start_ymd>00010101</start_ymd>
 
 <!-- Initial conditions -->
 <ncdata dyn="fv" hgrid="1.9x2.5">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_vsl03_CSIC.Testing_USR_v2jv1.FCHISTslhvbs.cam.i.2000-01-01-00000.nc</ncdata>
 
-<ncdata dyn="fv"  hgrid="0.9x1.25">/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/ncdata_SLH/f.e11.FTSREFC1SD.f09.f09_SouthTRAC_2022_GEOS5_VSL_2005-2019_mnth.cam.i.2006-01-01-00000.nc</ncdata>
-<bnd_topo hgrid="0.9x1.25">atm/cam/met/MERRA2/0.9x1.25/fv_0.9x1.25_nc3000_Nsw042_Nrs008_Co060_Fi001_ZR_sgh30_24km_GRNL_MERRA2_c171218.nc</bnd_topo>
-
-<ncdata dyn="fv"  hgrid="0.47x0.63">atm/cam/inic/fv/camchem_2010-01-01_0.47x0.63_56L_c180613.nc</ncdata>
-<bnd_topo hgrid="0.47x0.63">atm/cam/met/MERRA2/0.5x0.63/fv_0.47x0.63_nc3000_Co030_Fi001_PF_nullRR_Nsw021_MERRA2_c180612.nc</bnd_topo>
-
-<met_rlx_time>50.</met_rlx_time>
-<met_fix_mass>.true.</met_fix_mass>
-
-<met_data_file dyn="fv"  hgrid="0.9x1.25">2005/MERRA2_0.9x1.25_20050101.nc</met_data_file>
-<met_data_path dyn="fv"  hgrid="0.9x1.25">atm/cam/met/MERRA2/0.9x1.25</met_data_path>
-<met_filenames_list dyn="fv"  hgrid="0.9x1.25">atm/cam/met/MERRA2/0.9x1.25/filenames_1975-2017_c190125.txt</met_filenames_list>
-
-<met_data_file dyn="fv"  hgrid="0.47x0.63">2010/MERRA2_0.5x0.63_20100101.nc</met_data_file>
-<met_data_path dyn="fv"  hgrid="0.47x0.63">atm/cam/met/MERRA2/0.5x0.63</met_data_path>
-<met_filenames_list dyn="fv"  hgrid="0.47x0.63">atm/cam/met/MERRA2/0.5x0.63/filenames_list_c180612</met_filenames_list>
-
-<!-- Solar data from NRL -->
-<solar_irrad_data_file>atm/cam/solar/SolarForcingNRLSSI2_daily_s18820101_e20171231_c191122.nc</solar_irrad_data_file>
-<solar_data_type>SERIAL</solar_data_type>
+<!-- Solar data -->
+<solar_irrad_data_file>atm/cam/solar/SolarForcingCMIP6_18491230-23000102_c20200615.nc</solar_irrad_data_file>
 
 <!-- WACCM GW Settings -->
 <use_gw_front>.true.</use_gw_front>
@@ -39,6 +21,11 @@
 <flbc_file>/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/LBC_SLH/lbcSLH1p15/LBC_1750-2100_CMIP6_0p5degLat_HIST_c170126_SSP370_c180905_VSL_Cl_CHCL3x1p15_C2H4CL2x1p15_c20240419.nc</flbc_file>
 <flbc_list>'CCL4', 'CF2CLBR', 'CF3BR', 'CFC11', 'CFC113', 'CFC12', 'CH3BR', 'CH3CCL3', 'CH3CL', 'CH4', 'CO2', 'H2', 'HCFC22',
            'N2O', 'CFC114', 'CFC115', 'HCFC141B', 'HCFC142B', 'H2402', 'OCS', 'SF6', 'CHCL3', 'C2H4CL2'</flbc_list>
+
+<prescribed_strataero_type>SERIAL</prescribed_strataero_type>
+<!-- <prescribed_strataero_datapath>/glade/campaign/cesm/inputdata/atm/waccm/sulf</prescribed_strataero_datapath> -->
+<prescribed_strataero_datapath>atm/waccm/sulf</prescribed_strataero_datapath>
+<prescribed_strataero_file>CESM_1949_2100_sad_V2_c130627.nc</prescribed_strataero_file>
 
 <!-- Photolysis of SLH -->
 <!-- <xs_long_file>/glade/campaign/cesm/inputdata/atm/waccm/phot/temp_prs_GT200nm_c221005mm.nc</xs_long_file> -->
@@ -54,14 +41,15 @@
 
 <ndep_list>'noy', 'nhx'</ndep_list>
 
+<lght_no_prd_factor>4.50D0</lght_no_prd_factor>
 
 <!--<!-- slh_nl -->
 <SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
 <SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
 <SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
 <LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
-<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  0.85D0  </ICEfraprx_ScalingFactor_I>
-<ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  1.00D0  </ICEfraprx_ScalingFactor_Br>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.30D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  2.00D0  </ICEfraprx_ScalingFactor_Br>
 
 <!-- History Files -->
 
@@ -80,7 +68,7 @@
 <history_scwaccm_forcing>.false.</history_scwaccm_forcing>
 
 <!-- Monthly -->
-<fincl1 chem="trop_strat_mam4_slhvbs">
+<fincl1 chem="trop_strat_mam4_slh">
          'CFC11STAR', 'AODDUST', 'AODDUST2', 'T', 'U', 'V', 'O3', 'OH', 'NO3', 'HO2',
          'LNO_COL_PROD', 'NO2_CLXF', 'SFNO', 'SFNH3', 'BRO',
          'CLO', 'CO2', 'HCL', 'HOCL', 'H2O', 'PHIS', 'Z3',

@@ -178,7 +178,7 @@
 <history_scwaccm_forcing>.false.</history_scwaccm_forcing>
 
 <!-- Monthly -->
-<fincl1 chem="trop_strat_mam4_slhvbs">
+<fincl1 chem="trop_strat_mam4_slh">
          'CFC11STAR', 'AODDUST', 'AODDUST2', 'T', 'U', 'V', 'O3', 'OH', 'NO3', 'HO2',
          'LNO_COL_PROD', 'NO2_CLXF', 'SFNO', 'SFNH3', 'BRO',
          'CLO', 'CO2', 'HCL', 'HO2', 'HOCL', 'H2O', 'PHIS', 'Z3',
