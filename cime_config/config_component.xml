@@ -238,7 +238,7 @@
       <value compset="2010_CAM60%.*CCTS1"  >2010_trop_strat_cam6</value>
 <!--       <value compset="2010_CAM60%.*CCTS1SLH"  >2010_trop_strat_cam6_slh</value> -->
       <value compset="2010_CAM60%WCTS"   >waccm_tsmlt_2010_cam6</value>
-      <value compset="2010_CAM60%WCTSSLH"   >waccm_tsmlt_2010_cam6_slh</value>
+<!--       <value compset="2010_CAM60%WCTSSLH"   >waccm_tsmlt_2010_cam6_slh</value> -->
       <value compset="2010_CAM60%WCSC"   >waccm_sc_2010_cam6</value>
 
       <value compset="AMIP_CAM50"        >1850-2005_cam5</value>
@@ -250,11 +250,15 @@
       <value compset="HIST_CAM50"        >1850-2005_cam5</value>
       <value compset="HIST_CAM60"        >hist_cam6</value>
       <value compset="HIST_CAM60%WCTS"   >waccm_tsmlt_hist_cam6</value>
-      <value compset="HIST_CAM60%WCTSSLH"   >waccm_tsmlt_hist_cam6_slh</value>
+<!--       <value compset="HIST_CAM60%WCTSSLH"   >waccm_tsmlt_hist_cam6_slh</value> -->
+<!--       <value compset="HIST_CAM60%.*WCTSSLH" >waccm_tsmlt_hist_cam6_slh</value> -->
+      <value compset="HIST_CAM60%WCTSSLH_CLM50"  >waccm_tsmlt_hist_cam6_slh</value>
 <!--       <value compset="HIST_CAM60%WVBSSLH"   >waccm_tsmlt_hist_cam6_slhext</value> -->
 <!--  CESM2-SLH: Please check (rpf) -->
       <value compset="HIST_CAM60%.*WCTS%NUDG"   >waccm_tsmlt_nudged_cam6</value>
-      <value compset="HIST_CAM60%.*WCTSSLH%NUDG"   >waccm_tsmlt_nudged_cam6_slh</value>
+<!--       <value compset="HIST_CAM60%WCTSSLH%NUDG"      >waccm_tsmlt_nudged_cam6_slh</value> -->
+<!--       <value compset="HIST_CAM60%.*WCTSSLH%NUDG"    >waccm_tsmlt_nudged_cam6_slh</value> -->
+      <value compset="HIST_CAM60%.*WCTSSLH_CLM50%NUDG"   >waccm_tsmlt_nudged_cam6_slh</value>
 <!--  CESM2-SLH: Please check (rpf) -->
       <value compset="HIST_CAM60%WCSC"   >waccm_sc_hist_cam6</value>
       <value compset="HIST_CAM60%WCCM"   >waccm_ma_hist_cam6</value>
