@@ -48,6 +48,8 @@
 <xs_long_file>atm/waccm/phot/temp_prs_GT200nm_c221005mm.nc</xs_long_file>
 <xs_short_file>atm/waccm/phot/xs_short_c221005mm.nc</xs_short_file>
 
+<lght_no_prd_factor>4.50D0</lght_no_prd_factor>
+
 <!--<!-- slh_nl -->
 <SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
 <SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
@@ -440,7 +442,7 @@
          'O3_Loss_Trop', 'O3_Prod_Trop', 'OddOx_Prod_JO2', 
          'OddOx_Ox_Loss', 'OddOx_NOx_Loss', 'OddOx_CLOxBROx_Loss', 'OddOx_HOx_Loss', 'OddOx_Loss_SMLT',
          'OddOx_Prod_Tot','OddOx_Loss_Tot',  'OddOx_Loss_More', 'OddOx_Loss_Het', 'OddOx_Prod_More',
-         'OddOx_CLOx_Loss','OddOx_BROx_Loss','OddOx_IOx_Loss',
+         'OddOx_CLOx_Loss','OddOx_BROx_Loss','OddOx_IOx_Loss','NOy_sums',
          'r_jo2_a', 'r_jo2_b', 'r_jo3_a', 'r_jo3_b', 'r_jcl2o2', 'r_jhocl', 'r_jno3_b', 'r_O_O', 'r_O_O3',
          'r_NO2_O', 'r_H_O3', 'r_HO2_O', 'r_HO2_O3', 'r_OH_O3', 'r_OH_O', 'r_CLO_O', 'r_CLO_HO2', 'r_BRO_CLOa',
          'r_BRO_CLOb', 'r_BRO_CLOc', 'r_BRO_O', 'r_BRO_HO2', 'r_BRO_BRO', 'r_CLO_CLOa', 'r_CLO_CLOb',
@@ -510,6 +512,5 @@
  'BROy_sums = BR + BRO + 2*BR2 + BRCL + BRNO2 + BRONO2 + HBR + HOBR + IBR', 
  'CLOy_sums = CL + OCLO + 2*CL2 + 2*CL2O2 + CLNO2 + CLO + CLONO2 + HCL + HOCL + ICL + BRCL'
 </vmr_sums>
-
 
 </namelist_defaults>
