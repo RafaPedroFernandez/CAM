@@ -265,10 +265,7 @@
          'CFC114_CHML', 'CFC115_CHML', 'HCFC22_CHML', 'HCFC141B_CHML', 'HCFC142B_CHML', 'CH3BR_CHML',
          'H2402_CHML', 'CH2BR2_CHML', 'CHBR3_CHML', 'CH3CL_CHML', 'CH3BR_CHML',
          'CH3CCL3_CHML', 'CCL4_CHML', 
-         'FLDS_d1', 'FLNSC_d1', 'FLNS_d1', 'FLNTC_d1', 'FLNT_d1',
-         'FLUTC_d1', 'FLUT_d1', 'FSDSC_d1', 'FSDS_d1', 'FSNSC_d1', 'FSNS_d1', 'FSNTC_d1', 'FSNTOAC_d1',
-         'FUS_d1', 'FDS_d1', 'FUL_d1', 'FDL_d1', 'FUSC_d1', 'FDSC_d1', 'FULC_d1', 'FDLC_d1',
-         'FSNTOA_d1', 'FSNT_d1', 'FSUTOA_d1', 'LWCF_d1', 'QRL_d1', 'QRS_d1', 'SOLIN_d1', 'SWCF_d1',
+
          'OCS_CHML', 'EPP_ionpairs'
 </fincl1>
 
