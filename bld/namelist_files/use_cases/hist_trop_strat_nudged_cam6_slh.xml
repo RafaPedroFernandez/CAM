@@ -64,11 +64,11 @@
 <Nudge_Times_Per_Day>8</Nudge_Times_Per_Day>
 <Model_Times_Per_Day>48</Model_Times_Per_Day>
 <Nudge_Uprof>1</Nudge_Uprof>
-<Nudge_Ucoef>0.06</Nudge_Ucoef>
+<Nudge_Ucoef>0.25</Nudge_Ucoef>
 <Nudge_Vprof>1</Nudge_Vprof>
-<Nudge_Vcoef>0.06</Nudge_Vcoef>
+<Nudge_Vcoef>0.25</Nudge_Vcoef>
 <Nudge_Tprof>1</Nudge_Tprof>
-<Nudge_Tcoef>0.06</Nudge_Tcoef>
+<Nudge_Tcoef>0.25</Nudge_Tcoef>
 <Nudge_Qprof>0</Nudge_Qprof>
 <Nudge_Qcoef>0.00</Nudge_Qcoef>
 <Nudge_PSprof>0</Nudge_PSprof>
