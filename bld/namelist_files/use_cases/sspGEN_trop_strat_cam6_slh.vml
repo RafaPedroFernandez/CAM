@@ -134,19 +134,19 @@
          'so4_a1   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp370/emissions-cmip6-ScenarioMIP_IAMC-AIM-ssp370-1-1_so4_a1_anthro-ag-ship_surface_mol_175001-210101_0.9x1.25_c20190222.nc',
          'so4_a1   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp370/emissions-cmip6-ScenarioMIP_IAMC-AIM-ssp370-1-1_so4_a1_bb_surface_mol_175001-210101_0.9x1.25_c20190222.nc',
          'so4_a2   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp370/emissions-cmip6-ScenarioMIP_IAMC-AIM-ssp370-1-1_so4_a2_anthro-res_surface_mol_175001-210101_0.9x1.25_c20190222.nc',
-         'CHBR3  -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CHBr3_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CH2BR2 -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Br2_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CH2BRCL-> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2BrCl_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CHBR2CL-> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CHBr2Cl_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CHBRCL2-> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CHBrCl2_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CH3I   -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH3I_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CH2I2  -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2I2_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CH2IBR -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2IBr_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc',
-         'CH2ICL -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2ICl_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240418.nc',
+         'CHBR3  -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CHBr3_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CH2BR2 -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Br2_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CH2BRCL-> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2BrCl_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CHBR2CL-> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CHBr2Cl_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CHBRCL2-> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CHBrCl2_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CH3I   -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH3I_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CH2I2  -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2I2_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CH2IBR -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2IBr_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240804.nc',
+         'CH2ICL -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_CH2ICl_chlorophyll_surface_Ordonez2012_cyclical_1850-2100_1.9x2.5_c240804.nc',
          'CH2CL2 -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_CH2Cl2_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc',
          'C2CL4  -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/flxSLH1p15/emissions_C2Cl4_NoNeg_surface_Claxton2020_flx1p15_serial_1850-2100_1.9x2.5_c240722.nc',
-         'I2     -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc',
-         'HOI    -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240418.nc'
+         'I2     -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240804.nc',
+         'HOI    -> /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v0/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1850-2100_1.9x2.5_c240804.nc'
 </srf_emis_specifier>
 
 <ndep_list>'noy', 'nhx'</ndep_list>
