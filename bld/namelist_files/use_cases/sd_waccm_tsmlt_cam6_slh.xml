@@ -60,7 +60,7 @@
 <SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
 <SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
 <LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
-<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.30D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.40D0  </ICEfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  3.00D0  </ICEfraprx_ScalingFactor_Br>
 
 <!-- emissions -->
