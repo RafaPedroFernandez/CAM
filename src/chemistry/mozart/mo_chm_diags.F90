@@ -10,7 +10,6 @@ module mo_chm_diags
   use cam_history,  only : fieldname_len
   use mo_jeuv,      only : neuv
   use gas_wetdep_opts,only : gas_wetdep_method
-  use mo_drydep,    only : has_drydep
 
   implicit none
   private
@@ -36,7 +35,7 @@ module mo_chm_diags
   integer :: id_chbr2cl,id_chbrcl2,id_ch2brcl
   integer :: id_ch3i,id_ch2icl,id_ch2ibr,id_ch2i2
   integer :: id_ch2cl2, id_chcl3, id_c2cl4, id_c2h4cl2, id_chcl2o2, id_cocl2, id_c2hcl3
-!rpf_CESM2_SLH 
+!rpf_CESM2_SLH  
 
   integer, parameter :: NJEUV = neuv
   integer :: rid_jeuv(NJEUV), rid_jno_i, rid_jno
@@ -47,7 +46,6 @@ module mo_chm_diags
 !rpf Now #_species(:) and #_specvsl(:) arrays are duplicated so we can use the same chm_diag routine independently of using VSLs or not 
 !rpf #_species(:) arrays are the original ones, and #_specvsl(:) are the ones indluding VSL chemistry
   integer :: nox_species(3),  noy_species(56)
-! integer :: clox_species(6), cloy_species(9), tcly_species(21)
   integer :: clox_species(6), cloy_species(10), tcly_species(22)
   integer :: brox_species(4), broy_species(6), tbry_species(13)
 !rpf_CESM2_SLH
@@ -91,12 +89,13 @@ contains
     use cam_history,  only : addfld, add_default, horiz_only
     use constituents, only : cnst_get_ind, cnst_longname
     use phys_control, only : phys_getopts
+    use mo_drydep,    only : has_drydep
     use species_sums_diags, only : species_sums_init
 
     integer :: j, k, m, n
     character(len=16) :: jname, spc_name, attr
     character(len=2)  :: jchar
-    character(len=2)  :: unit_basename  ! Units 'kg' or '1'
+    character(len=2)  :: unit_basename  ! Units 'kg' or '1' 
 
     integer :: id_pan, id_onit, id_mpan, id_isopno3, id_onitr, id_nh4no3
     integer :: id_so2, id_so4, id_h2so4
@@ -115,7 +114,7 @@ contains
     integer :: id_dst01, id_dst02, id_dst03, id_dst04, id_sslt01, id_sslt02, id_sslt03, id_sslt04
     integer :: id_soa,  id_oc1, id_oc2, id_cb1, id_cb2
     integer :: id_soam,id_soai,id_soat,id_soab,id_soax
-    integer :: id_bry, id_cly
+    integer :: id_bry, id_cly 
     integer :: id_isopn2b, id_isopn3b, id_isopn1d, id_isopn4d, id_isopnbno3
     integer :: id_isopfnp, id_isopnoohb, id_isopnoohd, id_inheb, id_inhed
     integer :: id_no3ch2cho, id_macrn, id_mvkn, id_isopfnc, id_terpns
@@ -255,19 +254,19 @@ contains
     id_mpan    = get_spc_ndx( 'MPAN' )
     id_isopno3 = get_spc_ndx( 'ISOPNO3' )
     id_onitr   = get_spc_ndx( 'ONITR' )
-!   id_nh4no3  = get_spc_ndx( 'NH4NO3' ) !rpf Also implemented below
+!   id_nh4no3  = get_spc_ndx( 'NH4NO3' ) !rpf Already implemented above
 
-    id_honitr    = get_spc_ndx( 'HONITR' )
-    id_alknit    = get_spc_ndx( 'ALKNIT' )
-    id_isopnita  = get_spc_ndx( 'ISOPNITA' )
-    id_isopnitb  = get_spc_ndx( 'ISOPNITB' )
-    id_isopnooh  = get_spc_ndx( 'ISOPNOOH' )
-    id_nc4ch2oh  = get_spc_ndx( 'NC4CH2OH' )
-    id_nc4cho    = get_spc_ndx( 'NC4CHO' )
-    id_noa       = get_spc_ndx( 'NOA' )
-    id_nterpooh  = get_spc_ndx( 'NTERPOOH' )
+    id_honitr    = get_spc_ndx( 'HONITR' ) 
+    id_alknit    = get_spc_ndx( 'ALKNIT' ) 
+    id_isopnita  = get_spc_ndx( 'ISOPNITA' ) 
+    id_isopnitb  = get_spc_ndx( 'ISOPNITB' ) 
+    id_isopnooh  = get_spc_ndx( 'ISOPNOOH' ) 
+    id_nc4ch2oh  = get_spc_ndx( 'NC4CH2OH' ) 
+    id_nc4cho    = get_spc_ndx( 'NC4CHO' ) 
+    id_noa       = get_spc_ndx( 'NOA' ) 
+    id_nterpooh  = get_spc_ndx( 'NTERPOOH' ) 
     id_pbznit    = get_spc_ndx( 'PBZNIT' )
-    id_terpnit   = get_spc_ndx( 'TERPNIT' )
+    id_terpnit   = get_spc_ndx( 'TERPNIT' ) 
     id_ndep      = get_spc_ndx( 'NDEP' )
     id_nhdep     = get_spc_ndx( 'NHDEP' )
 
@@ -340,14 +339,15 @@ contains
     noy_species = (/ id_n, id_no, id_no2, id_no3, id_n2o5, id_hno3, id_ho2no2, id_clono2, &
                      id_brono2, id_pan, id_onit, id_mpan, id_isopno3, id_onitr, id_nh4no3, &
                      id_honitr, id_alknit, id_isopnita, id_isopnitb, id_isopnooh, id_nc4ch2oh, &
-                     id_nc4cho, id_noa, id_nterpooh, id_pbznit, id_terpnit, &
+                     id_nc4cho, id_noa, id_nterpooh, id_pbznit, id_terpnit, & 
                      id_isopn2b, id_isopn3b, id_isopn1d, id_isopn4d, id_isopnbno3, &
-                     id_isopfdn, id_isopfdnc, id_terpfdn, &
+                     id_isopfdn, id_isopfdnc, id_terpfdn, &                               
                      id_isopfnp, id_isopnoohb, id_isopnoohd, id_inheb, id_inhed, &
                      id_no3ch2cho, id_macrn, id_mvkn, id_isopfnc, id_terpns, &
                      id_terpnt, id_terpnt1, id_terpns1, id_terpnpt, id_terpnps, &
                      id_terpnpt1, id_terpnps1, id_sqtn, id_terphfn, &
                      id_terpapan, id_terpa2pan, id_terpa3pan /)
+
 !rpf_CESM2_SLH
     if ( id_clno2>0 .and. id_brno2>0 .and. id_iono2>0 ) then
     nox_specvsl = (/ id_n, id_no, id_no2 /)
@@ -372,9 +372,7 @@ contains
 !... CLOY species
     clox_species = (/ id_cl, id_clo, id_hocl, id_cl2, id_cl2o2, id_oclo /)
 !rpf_CESM2_SLH
-!   cloy_species = (/ id_cl, id_clo, id_hocl, id_cl2, id_cl2o2, id_oclo, id_hcl, id_clono2, id_brcl /)
     cloy_species = (/ id_cl, id_clo, id_hocl, id_cl2, id_cl2o2, id_oclo, id_hcl, id_clono2, id_brcl, id_cofcl /)
-!   tcly_species = (/ id_cl, id_clo, id_hocl, id_cl2, id_cl2o2, id_oclo, id_hcl, id_clono2, id_brcl, &
     tcly_species = (/ id_cl, id_clo, id_hocl, id_cl2, id_cl2o2, id_oclo, id_hcl, id_clono2, id_brcl, id_cofcl, &
                       id_ccl4, id_cfc11, id_cfc113, id_cfc114, id_cfc115, id_ch3ccl3, id_cfc12, id_ch3cl, &
                       id_hcfc22, id_hcfc141b, id_hcfc142b, id_cf2clbr /)
@@ -451,13 +449,12 @@ contains
 !rpf Chlorine and Bromine nitrites (XNO2) are only considered in VSL scheme
     if ( id_clno2>0 .and. id_brno2>0 ) then
        call addfld( 'NOY',     (/ 'lev' /), 'A', 'mol/mol', &
-                    'noy = total nitrogen (N+NO+NO2+NO3+2N2O5+HNO3+HO2NO2+ORGNOY+NH4NO3+HALOGEN_NOY)' )
+                    'noy = total nitrogen (N+NO+NO2+NO3+2N2O5+HNO3+HO2NO2+ORGNOY+NH4NO3+HALOGEN_NOY' )
     else
        call addfld( 'NOY',     (/ 'lev' /), 'A', 'mol/mol', &
-                    'noy = total nitrogen (N+NO+NO2+NO3+2N2O5+HNO3+HO2NO2+ORGNOY+NH4NO3)' )
+                    'noy = total nitrogen (N+NO+NO2+NO3+2N2O5+HNO3+HO2NO2+ORGNOY+NH4NO3' )
     endif
 !rpf_CESM2_SLH
-
     call addfld( 'NOY_SRF', horiz_only,  'A', 'mol/mol', 'surface noy volume mixing ratio' )
     call addfld( 'HOX',     (/ 'lev' /), 'A', 'mol/mol', 'HOx (H+OH+HO2+2H2O2)' )
 
@@ -472,7 +469,7 @@ contains
 !rpf_CESM2_SLH
     call addfld( 'TBRY',    (/ 'lev' /), 'A', 'mol/mol', 'total Br (ORG+INORG) volume mixing ratio' )
 
-    call addfld( 'CLOX',    (/ 'lev' /), 'A', 'mol/mol', 'clox (Cl+CLO+HOCl+2Cl2+2Cl2O2+OClO)' )
+    call addfld( 'CLOX',    (/ 'lev' /), 'A', 'mol/mol', 'clox (Cl+CLO+HOCl+2Cl2+2Cl2O2+OClO' )
 !rpf_CESM2_SLH
 !rpf Chlorine and Bromine nitrites (XNO2) are only considered in VSL scheme
     if ( id_clno2>0 .and. id_ch2brcl>0 ) then
@@ -548,17 +545,16 @@ contains
           attr = spc_name
        endif
 
-       dtchem_name(m) = 'D'//trim(spc_name)//'CHM'
-       call addfld( dtchem_name(m), (/ 'lev' /), 'A', 'kg/s',    'net tendency from chem' )
-
        depvel_name(m) = 'DV_'//trim(spc_name)
        depflx_name(m) = 'DF_'//trim(spc_name)
-       if (has_drydep(spc_name)) then
-          call addfld( depvel_name(m), horiz_only,  'A', 'cm/s',    'deposition velocity ' )
-          call addfld( depflx_name(m), horiz_only,  'A', 'kg/m2/s', 'dry deposition flux ' )
-          if (history_chemistry) then
-             call add_default( depflx_name(m), 1, ' ' )
-          endif
+       dtchem_name(m) = 'D'//trim(spc_name)//'CHM'
+
+       call addfld( depvel_name(m), horiz_only,  'A', 'cm/s',    'deposition velocity ' )
+       call addfld( depflx_name(m), horiz_only,  'A', 'kg/m2/s', 'dry deposition flux ' )
+       call addfld( dtchem_name(m), (/ 'lev' /), 'A', 'kg/s',    'net tendency from chem' )
+
+       if (has_drydep(spc_name).and.history_chemistry) then
+          call add_default( depflx_name(m), 1, ' ' )
        endif
 
        if (gas_wetdep_method=='MOZ') then
@@ -586,7 +582,7 @@ contains
        if ((m /= id_cly) .and. (m /= id_bry)) then
           if (history_aerosol.or.history_chemistry) then
              call add_default( spc_name, 1, ' ' )
-          endif
+          endif 
           if (history_chemspecies_srf) then
              call add_default( trim(spc_name)//'_SRF', 1, ' ' )
           endif
@@ -634,18 +630,18 @@ contains
     call addfld( 'DF_SOX',                  horiz_only, 'I', 'kg/m2/s', 'SOx dry deposition flux ' )
     call addfld( 'dry_deposition_NHx_as_N', horiz_only, 'I', 'kg/m2/s', 'NHx dry deposition flux ' )
 !rpf_CESM2_SLH
-    call addfld( 'dry_dep_ClOy_as_Cl',      horiz_only, 'I', 'kg/m2/s', 'ClOy dry deposition flux ' )
-    call addfld( 'dry_dep_BrOy_as_Br',      horiz_only, 'I', 'kg/m2/s', 'BrOy dry deposition flux ' )
-    call addfld( 'dry_dep_IOy_as_I',        horiz_only, 'I', 'kg/m2/s', 'IOy  dry deposition flux ' )
+    call addfld( 'dry_dep_ClOy_as_Cl', horiz_only, 'I', 'kg/m2/s', 'ClOy dry deposition flux ' )
+    call addfld( 'dry_dep_BrOy_as_Br', horiz_only, 'I', 'kg/m2/s', 'BrOy dry deposition flux ' )
+    call addfld( 'dry_dep_IOy_as_I',   horiz_only, 'I', 'kg/m2/s', 'IOy  dry deposition flux ' )
 !rpf_CESM2_SLH
 
     if (gas_wetdep_method=='NEU') then
        call addfld( 'wet_deposition_NOy_as_N', horiz_only, 'A', 'kg/m2/s', 'NOy wet deposition' )
        call addfld( 'wet_deposition_NHx_as_N', horiz_only, 'A', 'kg/m2/s', 'NHx wet deposition' )
 !rpf_CESM2_SLH
-       call addfld( 'wet_dep_ClOy_as_Cl',      horiz_only, 'A', 'kg/m2/s', 'ClOy wet deposition' )
-       call addfld( 'wet_dep_BrOy_as_Br',      horiz_only, 'A', 'kg/m2/s', 'BrOy wet deposition' )
-       call addfld( 'wet_dep_IOy_as_I',        horiz_only, 'A', 'kg/m2/s', 'IOy  wet deposition' )
+       call addfld( 'wet_dep_ClOy_as_Cl', horiz_only, 'A', 'kg/m2/s', 'ClOy wet deposition' )
+       call addfld( 'wet_dep_BrOy_as_Br', horiz_only, 'A', 'kg/m2/s', 'BrOy wet deposition' )
+       call addfld( 'wet_dep_IOy_as_I',   horiz_only, 'A', 'kg/m2/s', 'IOy  wet deposition' )
 !rpf_CESM2_SLH
     elseif (gas_wetdep_method=='MOZ') then
        call addfld( 'wet_deposition_NOy_as_N', horiz_only, 'A', 'kg/s', 'NOy wet deposition' )
@@ -677,7 +673,7 @@ contains
     !--------------------------------------------------------------------
     !	... utility routine to output chemistry diagnostic variables
     !--------------------------------------------------------------------
-
+    
     use cam_history,  only : outfld
     use phys_grid,    only : get_area_all_p
     use species_sums_diags, only : species_sums_output
@@ -713,7 +709,7 @@ contains
     !      real(r8)    :: tmp(ncol,pver)
     !      real(r8)    :: m(ncol,pver)
     real(r8)    :: un2(ncol)
-
+    
     real(r8), dimension(ncol,pver) :: vmr_nox, vmr_noy, vmr_clox, vmr_cloy, vmr_tcly, vmr_brox, vmr_broy, vmr_toth
 !rpf_CESM2_SLH
     real(r8), dimension(ncol,pver) :: vmr_tbry, vmr_foy, vmr_tfy
@@ -730,7 +726,6 @@ contains
 
     real(r8) :: area(ncol), mass(ncol,pver)
 !rpf_CESM2_SLH
-!   real(r8) :: wgt
     real(r8) :: wgt, wgt1, wgt2
 !rpf_CESM2_SLH
 
@@ -803,6 +798,7 @@ contains
        if ( any( tfy_species == m ) ) then
           vmr_tfy(:ncol,:) = vmr_tfy(:ncol,:) +  wgt * vmr(:ncol,:,m)
        endif
+
 
 !rpf_CESM2_SLH
 !... WSY: why is ch4 here? wgt = 2?
@@ -908,6 +904,7 @@ contains
        endif
     endif
 !rpf_CESM2_SLH
+
 !...BROY
 !rpf_CESM2_SLH
     if ( id_brno2>0 .and. id_ch2brcl>0 ) then
@@ -954,7 +951,7 @@ contains
        if ( any( hox_species == m ) ) then
           vmr_hox(:ncol,:) = vmr_hox(:ncol,:) +  wgt * vmr(:ncol,:,m)
        endif
-
+       
        if ( any( aer_species == m ) ) then
           call outfld( solsym(m), mmr(:ncol,:,m), ncol ,lchnk )
           call outfld( trim(solsym(m))//'_SRF', mmr(:ncol,pver,m), ncol ,lchnk )
@@ -963,10 +960,8 @@ contains
           call outfld( trim(solsym(m))//'_SRF', vmr(:ncol,pver,m), ncol ,lchnk )
        endif
 
-       if (has_drydep(solsym(m))) then
-          call outfld( depvel_name(m), depvel(:ncol,m), ncol ,lchnk )
-          call outfld( depflx_name(m), depflx(:ncol,m), ncol ,lchnk )
-       endif
+       call outfld( depvel_name(m), depvel(:ncol,m), ncol ,lchnk )
+       call outfld( depflx_name(m), depflx(:ncol,m), ncol ,lchnk )
 
        if ( any( noy_species == m ) ) then
           df_noy(:ncol) = df_noy(:ncol) +  wgt * depflx(:ncol,m)*N_molwgt/adv_mass(m)
@@ -988,10 +983,10 @@ contains
 ! add contribution from non-conservation tracers
 !
        if ( id_ndep == m ) then
-          wd_noy(:ncol) = wd_noy(:ncol) +  wgt * wetdepflx(:ncol,m)*N_molwgt/adv_mass(m)
+          wd_noy(:ncol) = wd_noy(:ncol) +  wgt * wetdepflx(:ncol,m)*N_molwgt/adv_mass(m) 
        end if
        if ( id_nhdep == m ) then
-          wd_nhx(:ncol) = wd_nhx(:ncol) +  wgt * wetdepflx(:ncol,m)*N_molwgt/adv_mass(m)
+          wd_nhx(:ncol) = wd_nhx(:ncol) +  wgt * wetdepflx(:ncol,m)*N_molwgt/adv_mass(m) 
        end if
 
 !rpf_CESM2_SLH
@@ -1027,7 +1022,7 @@ contains
 
        do k=1,pver
           do i=1,ncol
-             net_chem(i,k) = mmr_tend(i,k,m) * mass(i,k)
+             net_chem(i,k) = mmr_tend(i,k,m) * mass(i,k) 
           end do
        end do
        call outfld( dtchem_name(m), net_chem(:ncol,:), ncol, lchnk )
@@ -1086,17 +1081,16 @@ contains
     call outfld( 'SOX_mmr', mmr_sox(:ncol,:), ncol ,lchnk )
     call outfld( 'NHX_mmr', mmr_nhx(:ncol,:), ncol ,lchnk )
     call outfld( 'dry_deposition_NOy_as_N', df_noy(:ncol), ncol ,lchnk )
-!   call outfld( 'DF_SOX', df_sox(:ncol), ncol ,lchnk )
-    call outfld( 'DF_SOX',                  df_sox(:ncol), ncol ,lchnk )
+    call outfld( 'DF_SOX', df_sox(:ncol), ncol ,lchnk )
     call outfld( 'dry_deposition_NHx_as_N', df_nhx(:ncol), ncol ,lchnk )
 !rpf_CESM2_SLH
-    call outfld( 'dry_dep_ClOy_as_Cl',      df_cloy(:ncol), ncol ,lchnk )
-    call outfld( 'dry_dep_BrOy_as_Br',      df_broy(:ncol), ncol ,lchnk )
-    call outfld( 'dry_dep_IOy_as_I',        df_ioy (:ncol), ncol ,lchnk )
+    call outfld( 'dry_dep_ClOy_as_Cl', df_cloy(:ncol), ncol ,lchnk )
+    call outfld( 'dry_dep_BrOy_as_Br', df_broy(:ncol), ncol ,lchnk )
+    call outfld( 'dry_dep_IOy_as_I',   df_ioy (:ncol), ncol ,lchnk )
 !rpf_CESM2_SLH
 
     if (gas_wetdep_method=='NEU') then
-      wd_noy(:ncol) = -wd_noy(:ncol) ! downward is possitive
+      wd_noy(:ncol) = -wd_noy(:ncol) ! downward is possitive 
       wd_nhx(:ncol) = -wd_nhx(:ncol)
       call outfld( 'wet_deposition_NOy_as_N', wd_noy(:ncol), ncol, lchnk )
       call outfld( 'wet_deposition_NHx_as_N', wd_nhx(:ncol), ncol, lchnk )
@@ -1104,9 +1098,9 @@ contains
       wd_cloy(:ncol) = -wd_cloy(:ncol) ! downward is possitive 
       wd_broy(:ncol) = -wd_broy(:ncol)
       wd_ioy (:ncol) = -wd_ioy (:ncol)
-      call outfld( 'wet_dep_ClOy_as_Cl',      wd_cloy(:ncol), ncol, lchnk )
-      call outfld( 'wet_dep_BrOy_as_Br',      wd_broy(:ncol), ncol, lchnk )
-      call outfld( 'wet_dep_IOy_as_I',        wd_ioy (:ncol), ncol, lchnk )
+      call outfld( 'wet_dep_ClOy_as_Cl', wd_cloy(:ncol), ncol, lchnk )
+      call outfld( 'wet_dep_BrOy_as_Br', wd_broy(:ncol), ncol, lchnk )
+      call outfld( 'wet_dep_IOy_as_I',   wd_ioy (:ncol), ncol, lchnk )
 !rpf_CESM2_SLH
     end if
 
@@ -1238,7 +1232,7 @@ contains
        !
        wrk_wd(:ncol) = 0._r8
        do k = 1,pver
-          wrk_wd(:ncol) = wrk_wd(:ncol) + het_rates(:ncol,k,m) * mmr(:ncol,k,m) * pdel(:ncol,k)
+          wrk_wd(:ncol) = wrk_wd(:ncol) + het_rates(:ncol,k,m) * mmr(:ncol,k,m) * pdel(:ncol,k) 
        end do
        !
        wrk_wd(:ncol) = wrk_wd(:ncol) * rgrav * wght(:ncol) * rearth**2

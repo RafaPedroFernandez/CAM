@@ -29,13 +29,14 @@ module mo_srf_emissions
 
   private
 
-  public  :: srf_emissions_inti, set_srf_emissions, set_srf_emissions_time
+  public  :: srf_emissions_inti, set_srf_emissions, set_srf_emissions_time 
 
-  logical, public, protected :: has_emis(gas_pcnst) = .false.
+  save
 
   real(r8), parameter :: amufac = 1.65979e-23_r8         ! 1.e4* kg / amu
+  logical :: has_emis(gas_pcnst)
   type(emission), allocatable :: emissions(:)
-  integer                     :: n_emis_files
+  integer                     :: n_emis_files 
   integer :: c10h16_ndx, isop_ndx
 
 !rpf_CESM2_SLH
@@ -46,12 +47,12 @@ module mo_srf_emissions
              ch2i2_ndx, ch2icl_ndx, ch2ibr_ndx,  ch3i_ndx
 
   integer :: ch2cl2_ndx, c2cl4_ndx
-!rpf Now all the online iodine emissions is directly called in mo_slh_routines.F90 routine
+!rpf Now all the online iodine emissions is directly called in iodine_emissions routine
 ! This is just to force input emissions from srf_emis_specifier in user_nl_cam to be ZERO
   integer :: hoi_ndx, i2_ndx
 !rpf_CESM2_SLH
 
-contains
+  contains
 
   subroutine srf_emissions_inti( srf_emis_specifier, emis_type_in, emis_cycle_yr, emis_fixed_ymd, emis_fixed_tod )
 
@@ -60,7 +61,7 @@ contains
     !-----------------------------------------------------------------------
 
     use chem_mods,        only : adv_mass
-    use mo_chem_utls,     only : get_spc_ndx
+    use mo_chem_utls,     only : get_spc_ndx 
     use tracer_data,      only : trcdata_init
     use cam_pio_utils,    only : cam_pio_openfile
     use pio,              only : pio_inquire, pio_nowrite, pio_closefile, pio_inq_varndims
@@ -90,11 +91,11 @@ contains
     character(len=16)  :: spc_name
     character(len=256) :: filename
 
-    character(len=16)  :: emis_species(size(srf_emis_specifier))
-    character(len=256) :: emis_filenam(size(srf_emis_specifier))
-    integer  :: emis_indexes(size(srf_emis_specifier))
-    integer  :: indx(size(srf_emis_specifier))
-    real(r8) :: emis_scalefactor(size(srf_emis_specifier))
+    character(len=16)  :: emis_species(gas_pcnst)
+    character(len=256) :: emis_filenam(gas_pcnst)
+    integer  :: emis_indexes(gas_pcnst)
+    integer  :: indx(gas_pcnst)
+    real(r8) :: emis_scalefactor(gas_pcnst)
 
     integer :: vid, nvars, isec, num_dims_emis
     integer :: vndims
@@ -114,19 +115,19 @@ contains
     real(r8) :: xdbl
     integer :: time_dimid, ncol_dimid
     integer, allocatable :: dimids(:)
-
+    
     has_emis(:) = .false.
     nn = 0
     indx(:) = 0
 
-    count_emis: do n=1,size(srf_emis_specifier)
+    count_emis: do n=1,gas_pcnst
        if ( len_trim(srf_emis_specifier(n) ) == 0 ) then
           exit count_emis
        endif
 
        i = scan(srf_emis_specifier(n),'->')
        spc_name = trim(adjustl(srf_emis_specifier(n)(:i-1)))
-
+       
        ! need to parse out scalefactor ...
        tmp_string = adjustl(srf_emis_specifier(n)(i+2:))
        j = scan( tmp_string, '*' )
@@ -143,7 +144,7 @@ contains
 
        if (m > 0) then
           has_emis(m) = .true.
-       else
+       else 
           write(iulog,*) 'srf_emis_inti: spc_name ',spc_name,' is not included in the simulation'
           call endrun('srf_emis_inti: invalid surface emission specification')
        endif
@@ -174,7 +175,7 @@ contains
     end if
 
     !-----------------------------------------------------------------------
-    ! Sort the input files so that the emissions sources are summed in the
+    ! Sort the input files so that the emissions sources are summed in the 
     ! same order regardless of the order of the input files in the namelist
     !-----------------------------------------------------------------------
     if (n_emis_files > 0) then
@@ -184,7 +185,7 @@ contains
     !-----------------------------------------------------------------------
     ! 	... setup the emission type array
     !-----------------------------------------------------------------------
-    do m=1,n_emis_files
+    do m=1,n_emis_files 
        emissions(m)%spc_ndx          = emis_indexes(indx(m))
        emissions(m)%units            = 'Tg/y'
        emissions(m)%species          = emis_species(indx(m))
@@ -199,11 +200,7 @@ contains
     spc_loop: do m = 1, n_emis_files
 
        emissions(m)%nsectors = 0
-
-       if (masterproc) then
-          write(iulog,'(a,i3,a)') 'srf_emissions_inti m: ',m,' init file : '//trim(emissions(m)%filename)
-       endif
-
+       
        call getfil (emissions(m)%filename, locfn, 0)
        call cam_pio_openfile ( ncid, trim(locfn), PIO_NOWRITE)
        ierr = pio_inquire (ncid, nVariables=nvars)
@@ -215,7 +212,7 @@ contains
 
        allocate(is_sector(nvars))
        is_sector(:) = .false.
-
+       
        if (unstructured) then
           ierr = pio_inq_dimid( ncid, 'time', time_dimid )
        end if
@@ -271,7 +268,7 @@ contains
        deallocate(is_sector)
 
        ! Global attribute 'input_method' overrides the srf_emis_type namelist setting on
-       ! a file-by-file basis.  If the emis file does not contain the 'input_method'
+       ! a file-by-file basis.  If the emis file does not contain the 'input_method' 
        ! attribute then the srf_emis_type namelist setting is used.
        call pio_seterrorhandling(ncid, PIO_BCAST_ERROR)
        ierr = pio_get_att(ncid, PIO_GLOBAL, 'input_method', file_interp_type)
@@ -316,7 +313,7 @@ contains
 
     ch2cl2_ndx  = get_spc_ndx('CH2CL2' )
     c2cl4_ndx   = get_spc_ndx('C2CL4'  )
-!rpf Now all the online iodine emissions is directly called in mo_slh_routines.F90 routine
+!rpf Now all the online iodine emissions is directly called in iodine_emissions routine
 ! This is just to force input emissions from srf_emis_specifier in user_nl_cam to be ZERO
     i2_ndx      = get_spc_ndx('I2'     )
     hoi_ndx     = get_spc_ndx('HOI'    )
@@ -336,7 +333,7 @@ contains
 
     implicit none
 
-    type(physics_state), intent(in):: state(begchunk:endchunk)
+    type(physics_state), intent(in):: state(begchunk:endchunk)                 
     type(physics_buffer_desc), pointer :: pbuf2d(:,:)
 
     !-----------------------------------------------------------------------
@@ -360,6 +357,7 @@ contains
     use time_manager, only : get_curr_calday
     use string_utils, only : to_lower, GLC
     use phys_grid,    only : get_rlat_all_p, get_rlon_all_p
+
 
 !rpf_CESM2_SLH
 !     SLHemiss_ScalingFactor = 1.0 always. If needed emissions should be modified directly in srf_emis_specifier file (rpf)
@@ -408,7 +406,7 @@ contains
                                                      "kg/m^2/sec  " /)
     character(len=12) :: units
 
-    real(r8), dimension(ncol) :: rlats, rlons
+    real(r8), dimension(ncol) :: rlats, rlons 
 
 !rpf_CESM2_SLH
     integer :: hal_ndx, n_hal
@@ -613,7 +611,7 @@ contains
 
 !rpf_CESM2_SLH
 ! This is just to force input emissions from srf_emis_specifier in user_nl_cam to be ZERO
-! Note that I2 and HOI emissions are computed online within mo_slh_routines.F90 routine
+! Note that I2 and HOI emissions are computed online within iodine_emissions.F90 routine
 ! If not forced to ZERO, then SFHOI and SFI2 output is larger than FLX_I2 and FLX_HOI
        if ( i2_ndx > 0 ) then
          if( has_emis(i2_ndx)  ) then
