@@ -2860,7 +2860,11 @@ CONTAINS
       do fld=nflds(t)-1,1,-1
         do ffld=1,fld
 
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
+!         if (tape(t)%hlist(ff)%field%name > tape(t)%hlist(ff+1)%field%name) then
           if (tape(t)%hlist(ffld)%field%numlev > tape(t)%hlist(ffld+1)%field%numlev) then
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
+
             tmp = tape(t)%hlist(ffld)
             tape(t)%hlist(ffld  ) = tape(t)%hlist(ffld+1)
             tape(t)%hlist(ffld+1) = tmp

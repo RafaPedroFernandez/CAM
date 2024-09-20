@@ -414,7 +414,10 @@ contains
           strt(1) = dim1b
           strt(2) = dim2b
           cnt = arraydimsize
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
+!         call shr_scam_getCloseLatLon(ncid%fh,scmlat,scmlon,closelat,closelon,latidx,lonidx)
           call shr_scam_getCloseLatLon(ncid,scmlat,scmlon,closelat,closelon,latidx,lonidx)
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
           if (trim(field_dnames(1)) == 'lon') then
             strt(1) = lonidx ! First dim always lon for Eulerian dycore
           else
@@ -870,7 +873,10 @@ contains
           strt(2) = dim2b
           strt(3) = dim3b
           cnt = arraydimsize
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
+!         call shr_scam_getCloseLatLon(ncid%fh,scmlat,scmlon,closelat,closelon,latidx,lonidx)
           call shr_scam_getCloseLatLon(ncid,scmlat,scmlon,closelat,closelon,latidx,lonidx)
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
           if (trim(field_dnames(1)) == 'lon') then
             strt(1) = lonidx ! First dim always lon for Eulerian dycore
           else
