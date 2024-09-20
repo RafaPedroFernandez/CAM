@@ -1661,6 +1661,18 @@
       <option name="wallclock">00:30:00</option>
     </options>
   </test>
+
+<!-- # RPF_WARNING: need to check if all this block should be included here -->
+<!--  <test compset="FCnudged_slh" grid="ne30pg3_ne30pg3_mg17" name="ERP_Ln9" testmods="cam/outfrq9s">
+    <machines>
+      <machine name="derecho" compiler="intel" category="aux_cam"/>
+      <machine name="derecho" compiler="intel" category="camchem"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:30:00</option>
+    </options>
+  </test>-->
+
   <test compset="FCnudged" grid="ne30pg3_ne30pg3_mg17" name="SMS_D_Ln9" testmods="cam/outfrq3s_zmean_nudging">
     <machines>
       <machine name="derecho" compiler="intel" category="zmean_nudging"/>
@@ -1743,6 +1755,19 @@
       <option name="comment">"Nudged CAM-Chem on a regionally refined grid"</option>
     </options>
   </test>
+
+<!-- # RPF_WARNING: need to check if all this block should be included here -->
+<!--  <test compset="FCnudged_slh" grid="ne0CONUSne30x8_ne0CONUSne30x8_mt12" name="SMS_D_Ln9_P1280x1" testmods="cam/outfrq9s">
+    <machines>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="intel" category="camchem"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:30:00</option>
+      <option name="comment">"Nudged CAM-Chem on a regionally refined grid"</option>
+    </options>
+  </test>-->
+  
   <test compset="FHIST" grid="ne0CONUSne30x8_ne0CONUSne30x8_mt12" name="SMS_D_Ln9_P1280x1" testmods="cam/outfrq9s" supported="false">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
@@ -1752,6 +1777,18 @@
       <option name="wallclock">00:30:00</option>
     </options>
   </test>
+
+<!-- # RPF_WARNING: need to check if all this block should be included here -->
+  <!--<test compset="FHIST_slh" grid="ne0CONUSne30x8_ne0CONUSne30x8_mt12" name="SMS_D_Ln9_P1280x1" testmods="cam/outfrq9s" supported="false">
+    <machines>
+      <machine name="derecho" compiler="intel" category="prealpha"/>
+      <machine name="derecho" compiler="intel" category="cam_refined"/>
+    </machines>
+    <options>
+      <option name="wallclock">00:30:00</option>
+    </options>
+  </test>-->
+
   <test compset="FHIST" grid="ne0ARCTICne30x4_ne0ARCTICne30x4_mt12" name="SMS_D_Ln9_P1280x1" testmods="cam/outfrq9s" supported="false">
     <machines>
       <machine name="derecho" compiler="intel" category="aux_cam"/>
@@ -1770,6 +1807,7 @@
       <option name="wallclock">00:20:00</option>
     </options>
   </test>
+<!-- # RPF_WARNING: need to check if all this block should be included here -->
   <test compset="FLTHIST" grid="ne30pg3_ne30pg3_mg17" name="SMS_D_Ln9" testmods="cam/outfrq9s">
     <machines>
       <machine name="derecho" compiler="intel" category="prealpha"/>
