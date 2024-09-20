@@ -17,13 +17,11 @@ contains
        , photon_file &
        , electron_file &
        , airpl_emis_file &
-       , depvel_file &
        , depvel_lnd_file &
-       , clim_soilw_file &
-       , season_wes_file &
        , xs_coef_file &
        , xs_short_file &
        , xs_long_file &
+       , photo_max_zen &
        , rsf_file &
        , fstrat_file &
        , fstrat_list &
@@ -37,11 +35,8 @@ contains
        , ext_frc_cycle_yr &
        , ext_frc_fixed_ymd &
        , ext_frc_fixed_tod &
-       , xactive_prates &
        , exo_coldens_file &
-       , tuv_xsect_file &
-       , o2_xsect_file &
-       , lght_no_prd_factor &
+       , use_hemco &
        , pbuf2d &
        )
 
@@ -53,67 +48,59 @@ contains
     use mo_srf_emissions,  only : srf_emissions_inti
     use mo_sulf,           only : sulf_inti
     use mo_photo,          only : photo_inti
-    use mo_lightning,      only : lightning_inti
     use mo_drydep,         only : drydep_inti
-    use seq_drydep_mod,    only : DD_XLND, DD_XATM, drydep_method
     use mo_imp_sol,        only : imp_slv_inti
     use mo_exp_sol,        only : exp_sol_inti
     use spmd_utils,        only : iam
     use mo_fstrat,         only : fstrat_inti
     use mo_sethet,         only : sethet_inti
     use mo_usrrxt,         only : usrrxt_inti
+    use hco_cc_emissions,  only : hco_extfrc_inti
     use mo_extfrc,         only : extfrc_inti
     use mo_setext,         only : setext_inti
     use mo_setinv,         only : setinv_inti
     use mo_gas_phase_chemdr,only: gas_phase_chemdr_inti
-    
+
     use tracer_cnst,       only : tracer_cnst_init
     use tracer_srcs,       only : tracer_srcs_init
-    use mo_synoz,          only : synoz_inti
-    use mo_chem_utls,      only : get_spc_ndx
     use mo_airglow,        only : init_airglow
     use mo_mean_mass,      only : init_mean_mass
     use mo_mass_xforms,    only : init_mass_xforms
     use mo_strato_rates,   only : init_strato_rates
     use mo_cph,            only : init_cph
     use mo_sad,            only : sad_inti
-!rpf_CESM2_SLH
-    use mo_sadtrop,        only : sadtrop_inti
-!rpf_CESM2_SLH
+!rpf_CESM3_SLH - merging SLH halogen routines in a single module
+!   use mo_sadtrop,        only : sadtrop_inti
+    use mo_sad,            only : sadtrop_inti
+!rpf_CESM3_SLH - merging SLH halogen routines in a single module
     use euvac,             only : euvac_init
     use mo_heatnirco2,     only : heatnirco2_init
     use mo_waccm_hrates,   only : init_hrates
     use mo_aurora,         only : aurora_inti
 !rpf_CESM2_SLH
+!   use clybry_fam,        only : clybry_fam_init
     use clybryiy_fam,      only : clybryiy_fam_init
 !rpf_CESM2_SLH
-    use mo_neu_wetdep,     only : neu_wetdep_init 
+    use mo_neu_wetdep,     only : neu_wetdep_init
     use physics_buffer,    only : physics_buffer_desc
-
-    implicit none
+    use cam_abortutils,    only : endrun
 
     character(len=*), intent(in) :: euvac_file
     character(len=*), intent(in) :: photon_file
     character(len=*), intent(in) :: electron_file
 
     character(len=*), intent(in) :: airpl_emis_file
-    character(len=*), intent(in) :: depvel_file
     character(len=*), intent(in) :: depvel_lnd_file
-    character(len=*), intent(in) :: clim_soilw_file
-    character(len=*), intent(in) :: season_wes_file
     character(len=*), intent(in) :: xs_coef_file
     character(len=*), intent(in) :: xs_short_file
     character(len=*), intent(in) :: xs_long_file
+    real(r8),         intent(in) :: photo_max_zen
     character(len=*), intent(in) :: rsf_file
     character(len=*), intent(in) :: fstrat_file
     character(len=*), intent(in) :: fstrat_list(:)
     character(len=*), dimension(:), intent(in) :: srf_emis_specifier
     character(len=*), dimension(:), intent(in) :: ext_frc_specifier
-    logical, intent(in)          :: xactive_prates
     character(len=*), intent(in) :: exo_coldens_file
-    character(len=*), intent(in) :: tuv_xsect_file
-    character(len=*), intent(in) :: o2_xsect_file
-    real(r8),         intent(in) :: lght_no_prd_factor
     character(len=*), intent(in) :: ext_frc_type
     integer,          intent(in) :: ext_frc_cycle_yr
     integer,          intent(in) :: ext_frc_fixed_ymd
@@ -122,6 +109,7 @@ contains
     integer,          intent(in) :: srf_emis_cycle_yr
     integer,          intent(in) :: srf_emis_fixed_ymd
     integer,          intent(in) :: srf_emis_fixed_tod
+    logical,          intent(in) :: use_hemco
 
     type(physics_buffer_desc), pointer :: pbuf2d(:,:)
 
@@ -168,8 +156,15 @@ contains
     ! 	... initialize external forcings module
     !-----------------------------------------------------------------------
     call setext_inti()
-    call extfrc_inti(ext_frc_specifier, ext_frc_type, ext_frc_cycle_yr, ext_frc_fixed_ymd, ext_frc_fixed_tod)
-    if (masterproc) write(iulog,*) 'chemini: after extfrc_inti on node ',iam
+
+    if ( use_hemco ) then
+        ! Initialize HEMCO version of extfrc_inti
+        call hco_extfrc_inti()
+        if (masterproc) write(iulog,*) 'chemini: after hco_extfrc_inti on node ',iam
+    else
+        call extfrc_inti(ext_frc_specifier, ext_frc_type, ext_frc_cycle_yr, ext_frc_fixed_ymd, ext_frc_fixed_tod)
+        if (masterproc) write(iulog,*) 'chemini: after extfrc_inti on node ',iam
+    endif
 
     call sulf_inti()
     if (masterproc) write(iulog,*) 'chemini: after sulf_inti on node ',iam
@@ -185,19 +180,9 @@ contains
 !rpf_CESM2_SLH
 
     !-----------------------------------------------------------------------
-    !	... initialize the lightning module
-    !-----------------------------------------------------------------------
-    call lightning_inti(lght_no_prd_factor)
-    if (masterproc) write(iulog,*) 'chemini: after lightning_inti on node ',iam
-
-    !-----------------------------------------------------------------------
     !	... initialize the dry deposition module
     !-----------------------------------------------------------------------
-    if ( drydep_method == DD_XATM .or. drydep_method == DD_XLND ) then
-       call drydep_inti(depvel_lnd_file, clim_soilw_file, season_wes_file )
-    else
-       call drydep_inti( depvel_file )
-    endif
+    call drydep_inti(depvel_lnd_file)
 
     if (masterproc) write(iulog,*) 'chemini: after drydep_inti on node ',iam
 
@@ -223,17 +208,9 @@ contains
 
     call photo_inti( xs_coef_file, xs_short_file, xs_long_file, rsf_file, &
          photon_file, electron_file, &
-         exo_coldens_file, tuv_xsect_file, o2_xsect_file, xactive_prates )
+         exo_coldens_file, photo_max_zen )
 
     if (masterproc) write(iulog,*) 'chemini: after photo_inti on node ',iam
-
-    !-----------------------------------------------------------------------
-    !       ... initialize the stratospheric ozone source
-    !-----------------------------------------------------------------------
-    if( get_spc_ndx( 'SYNOZ' ) > 0 ) then
-       call synoz_inti( )
-       ! over ride the ozone constituent used for radiation feedbacks
-    end if
 
     !-----------------------------------------------------------------------
     !	... initialize ion production
@@ -245,6 +222,7 @@ contains
     if (masterproc) write(iulog,*) 'chemini: after wetdep_init'
 
 !rpf_CESM2_SLH
+!   call clybry_fam_init()
     call clybryiy_fam_init()
 !rpf_CESM2_SLH
 

@@ -871,7 +871,7 @@ contains
 !updates for TS1.2
     real(r8), parameter :: gamma_n2o5 = 0.02_r8         ! JPL19
     real(r8), parameter :: gamma_ho2  = 0.10_r8         ! Gaubert et al., https://doi.org/10.5194/acp-20-14617-2020
-    real(r8), parameter :: gamma_no2  = 8.0e-6_r8       ! Liu et al., Environ.Sci.&Tech, 53, 3517, 2019
+    real(r8), parameter :: gamma_no2  = 8.0e-6_r8       ! Liu et al., Environ.Sci.&Tech, 53, 3517, 2019 doi:10.1021/acs.est.8b06367
     real(r8), parameter :: gamma_no3  = 0.002_r8        ! JPL19
     real(r8), parameter :: gamma_glyoxal  = 2.0e-4_r8   !  Washenfelder et al, JGR, 2011
 !TS1 species
@@ -1123,6 +1123,8 @@ contains
 !rpf_CESM2_SLH
 
     if( usr_NO2_aer_ndx > 0 .or. usr_NO3_aer_ndx > 0 .or. usr_N2O5_aer_ndx > 0 .or. usr_HO2_aer_ndx > 0 ) then
+
+! sad_trop should be set outside of usrrxt ??
        if( carma_hetchem_feedback ) then
           sad_trop(:ncol,:pver)=strato_sad(:ncol,:pver)
        else
@@ -1317,7 +1319,7 @@ contains
        if( usr_CO_OH_ndx > 0 ) then
          ko  (:)  = 6.9e-33_r8 * ( 298._r8 / temp(:ncol,k) )**(2.1_r8)
          kinf(:)  = 1.1e-12_r8 * ( 298._r8 / temp(:ncol,k) )**(-1.3_r8)
-         
+
          term2(:) = (1 + (log10( ko(:)*m(:,k) / kinf(:) ))**2)**(-1)
 
          term1(:) = (kinf(:) * ko(:)*m(:,k)) / (kinf(:) + ko(:)*m(:,k)) * (0.6_r8)**term2(:)
@@ -1326,8 +1328,8 @@ contains
 
        end if
 !-----------------------------------------------------------------
-!           co + oh --> co2 + ho2     (combined branches - do not use with CO_OH_b)
-! OBSOLETE - for mechanisms prior to Dec 2022
+!       ... co + oh --> co2 + ho2     (combined branches - do not use with CO_OH_b)
+!       note: for mechanisms prior to Dec 2022
 !-----------------------------------------------------------------
        if( usr_CO_OH_a_ndx > 0 ) then
           rxt(:,k,usr_CO_OH_a_ndx) = 1.5e-13_r8 * &
@@ -1335,7 +1337,7 @@ contains
        end if
 !-----------------------------------------------------------------
 ! 	... co + oh --> co2 + h (second branch JPL15-10, with CO+OH+M)
-! OBSOLETE - for mechanisms prior to Dec 2022
+!       note: for mechanisms prior to Dec 2022
 !-----------------------------------------------------------------
        if( usr_CO_OH_b_ndx > 0 ) then
          kinf(:)  = 2.1e+09_r8 * (temp(:ncol,k)/ t0)**(6.1_r8)
@@ -1490,6 +1492,7 @@ contains
           call comp_exp( exp_fac, 5376._r8*tinv, ncol )
           rxt(:,k,usr_DMS_OH_ndx) = 8.2e-39_r8 * exp_fac * m(:,k) * 0.21_r8 / ko(:)
        end if
+
 !-----------------------------------------------------------------
 !       ... SO2 + OH  --> SO4  (REFERENCE?? - not Liao)
 !-----------------------------------------------------------------
@@ -2952,138 +2955,141 @@ contains
 !-----------------------------------------------------------------
 !      ... CO tags
 !-----------------------------------------------------------------
-      if( usr_CO_OH_b_ndx > 0 ) then
+      if( usr_CO_OH_b_ndx > 0 .and. usr_CO_OH_ndx < 0 ) then
+         usr_CO_OH_ndx = usr_CO_OH_b_ndx
+      end if 
+      if( usr_CO_OH_ndx > 0 ) then
          if( usr_COhc_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_COhc_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_COhc_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_COme_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_COme_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_COme_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO01_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO01_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO01_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO02_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO02_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO02_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO03_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO03_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO03_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO04_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO04_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO04_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO05_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO05_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO05_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO06_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO06_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO06_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO07_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO07_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO07_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO08_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO08_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO08_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO09_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO09_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO09_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO10_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO10_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO10_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO11_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO11_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO11_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO12_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO12_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO12_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO13_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO13_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO13_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO14_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO14_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO14_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO15_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO15_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO15_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO16_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO16_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO16_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO17_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO17_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO17_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO18_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO18_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO18_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO19_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO19_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO19_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO20_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO20_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO20_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO21_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO21_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO21_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO22_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO22_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO22_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO23_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO23_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO23_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO24_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO24_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO24_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO25_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO25_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO25_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO26_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO26_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO26_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO27_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO27_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO27_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO28_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO28_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO28_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO29_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO29_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO29_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO30_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO30_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO30_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO31_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO31_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO31_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO32_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO32_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO32_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO33_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO33_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO33_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO34_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO34_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO34_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO35_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO35_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO35_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO36_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO36_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO36_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO37_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO37_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO37_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO38_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO38_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO38_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO39_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO39_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO39_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO40_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO40_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO40_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO41_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO41_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO41_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
          if( usr_CO42_OH_ndx > 0 ) then
-            rxt(:ncol,:,usr_CO42_OH_ndx) = rxt(:ncol,:,usr_CO_OH_b_ndx)
+            rxt(:ncol,:,usr_CO42_OH_ndx) = rxt(:ncol,:,usr_CO_OH_ndx)
          end if
       end if
 !lke--
