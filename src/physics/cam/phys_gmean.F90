@@ -15,6 +15,9 @@ module phys_gmean
 
 CONTAINS
 
+!rpf_CESM3_SLH: This routine is identical to the last one we used for for CESM2_SLH
+!rpf_CESM3_SLH: This routine is identical to the last one we used for for CESM2_SLH
+
 !
 !========================================================================
 !

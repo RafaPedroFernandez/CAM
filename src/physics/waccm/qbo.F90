@@ -939,7 +939,9 @@ has_qbo_forcing : &
 !------------------------------------------------------------------------
 !       ... local variables
 !------------------------------------------------------------------------
-    real(r8), parameter   :: factor = 1._r8/(2._r8*0.174532925_r8*0.174532925_r8)
+! DEK: 5-degree 1/2 width with extent 11degrees
+!   real(r8), parameter   :: factor = 1._r8/(2._r8*0.174532925_r8*0.174532925_r8)
+    real(r8), parameter   :: factor = 1._r8/(2._r8*0.087266463_r8*0.087266463_r8)
     real(r8)              :: alat    ! abs rlat
 
 !------------------------------------------------------------------------
@@ -954,7 +956,8 @@ has_qbo_forcing : &
 ! rlat=0.035 (latitude in radians): rlat*180/pi=2 degrees, around equator full relaxation
 !------------------------------------------------------------------------
        taux = 1._r8
-    else if( alat <= .384_r8)  then
+!     else if( alat <= .384_r8)  then
+    else if( alat <= .192_r8)  then
 !------------------------------------------------------------------------
 ! from 6 to 22 degrees latitude weakening of relaxation with Gaussian distribution
 ! half width=10° =>  in radians: 0.174532925
