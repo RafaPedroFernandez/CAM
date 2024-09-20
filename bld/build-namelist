@@ -575,12 +575,26 @@ if ( ($chem ne 'none') or ( $prog_species ) ){
     my $chem_src_dir = $cfg->get('chem_src_dir');
 
     my ( $gas_wetdep_list, $aer_wetdep_list, $aer_sol_facti, $aer_sol_factb, $aer_scav_coef,
-         $aer_drydep_list, $gas_drydep_list ) =
+         $aer_drydep_list, $gas_drydep_list, $gas_wetdep_ice_uptake_list ) =
            set_dep_lists( $chem, $cfgdir, $chem_proc_src, $chem_src_dir, $nl, $print );
 
+# RPF: WETDEP List is longer for SLH ... this implementation should be improved in master_gas_wetdep_list.xml
     if (length($gas_wetdep_list)>2){
       add_default($nl, 'gas_wetdep_method' );
-      add_default($nl, 'gas_wetdep_list', 'val'=>$gas_wetdep_list );
+#       add_default($nl, 'gas_wetdep_list', 'val'=>$gas_wetdep_list );
+#       if ($chem =~ /trop_strat_mam4_slh/ or $chem =~ /waccm_tsmlt_mam4_slh/) {
+      if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+         $gas_wetdep_list .= ", 'CLNO2', 'BRNO2', 'BR2', 'BRCL', "
+      . "'IONO2',  'INO2',  'HI',  'IO',   'OIO', 'ICL',  'IBR', "
+      . "'I2O2', 'I2O3', 'I2O4', "
+      . "'CHCL2O2', 'COCL2'";
+         add_default($nl, 'gas_wetdep_list', 'val'=>$gas_wetdep_list );
+         $gas_wetdep_ice_uptake_list = "'HNO3','CLONO2','HCL','HOCL','BRNO2','CLNO2','I2O2','I2O3','I2O4'";
+         add_default($nl, 'gas_wetdep_ice_uptake_list', 'val'=>$gas_wetdep_ice_uptake_list );
+      } else {
+         add_default($nl, 'gas_wetdep_list', 'val'=>$gas_wetdep_list );
+         add_default($nl, 'gas_wetdep_ice_uptake_list', 'val'=>$gas_wetdep_ice_uptake_list );
+      }
     }
 
     if (length($aer_wetdep_list)>2){
@@ -606,8 +620,19 @@ if ( ($chem ne 'none') or ( $prog_species ) ){
             }
         }
     }
+# RPF: DRYDEP List is longer for SLH ... this implementation should be improved in master_gas_drydep_list.xml
     if (length($gas_drydep_list)>2){
-        add_default($nl, 'drydep_list', 'val'=>$gas_drydep_list );
+#         add_default($nl, 'drydep_list', 'val'=>$gas_drydep_list );
+#           if ($chem =~ /trop_strat_mam4_slh/ or $chem =~ /waccm_tsmlt_mam4_slh/) {
+          if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+         $gas_drydep_list .= ", 'CLONO2', 'HCL', 'HOCL', 'CLNO2', "
+      . "'BRONO2', 'HBR', 'HOBR', 'BRNO2', 'BR2', "
+      . "'IONO2',  'HI',  'HOI',  'INO2',  'I2O2', 'I2O3', 'I2O4', "
+      . "'CHCL2O2', 'COCL2'";
+          add_default($nl, 'drydep_list', 'val'=>$gas_drydep_list );
+        } else {
+          add_default($nl, 'drydep_list', 'val'=>$gas_drydep_list );
+        }
         add_default($nl, 'depvel_lnd_file' );
     }
     if (length($aer_drydep_list)>2){
@@ -882,6 +907,7 @@ my @aerosources = ();
 my $radval = "'A:Q:H2O'";
 
 if (($chem =~ /waccm_ma/ or $chem =~ /waccm_tsmlt/) and !$chem_rad_passive) {
+# if (($chem =~ /waccm_ma/ or $chem =~ /waccm_tsmlt/ or $chem =~ /waccm_tsmlt_mam4_slh/) and !$chem_rad_passive) {
     $radval .= ",'A:O2:O2','A:CO2:CO2'";
 }
 elsif (($chem =~ /trop_strat/ or $chem =~ /geoschem/) and !$chem_rad_passive) {
@@ -914,6 +940,7 @@ if ($rad_prog_ozone) {
 }
 
 if ((($chem =~ /ghg_mam4/) or ($chem =~ /waccm_ma/) or ($chem =~ /waccm_sc_mam/) or ($chem =~ /waccm_tsmlt/) or ($chem =~ /trop_strat/)) and !$chem_rad_passive ) {
+# if ((($chem =~ /ghg_mam4/) or ($chem =~ /waccm_ma/) or ($chem =~ /waccm_sc_mam/) or ($chem =~ /waccm_tsmlt/) or ($chem =~ /waccm_tsmlt_mam4_slh/) or ($chem =~ /trop_strat/)) and !$chem_rad_passive ) {
     $radval .= ",'A:N2O:N2O','A:CH4:CH4','N:CFC11STAR:CFC11','A:CFC12:CFC12'";
 } elsif ($prog_ghg1 and $prog_ghg2 and !$chem_rad_passive ) {
     $radval .= ",'A:N2O:N2O','A:CH4:CH4','A:CFC11:CFC11','A:CFC12:CFC12'";
@@ -1855,6 +1882,7 @@ if ( $megan_emis ) { add_default($nl, 'megan_factors_file'); }
 
 # Tropospheric full chemistry options
 if (($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) and ($phys !~ /cam6/) and ($phys !~ /cam7/)) {
+# if (($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) or $chem =~ /waccm_tsmlt_mam4_slh/) and ($phys !~ /cam6/) and ($phys !~ /cam7/)) {
 
     # Surface emission datasets:
     my %verhash;
@@ -2085,6 +2113,7 @@ if ($chem =~ /geoschem/) {
 }
 
 if ($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) {
+# if ($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/ or $chem =~ /waccm_tsmlt_mam4_slh/) {
 
     my $val;
 
@@ -2097,8 +2126,21 @@ if ($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) {
 
     # Species with fixed lower boundary
     if ($chem =~ /_tsmlt_mam/ or $chem =~ /trop_strat/) {
-      $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
-            .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','CH2BR2','CHBR3','H2402'";
+
+#       $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
+#             .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','CH2BR2','CHBR3','H2402'";
+      # RPF: CH4 is included as a surface emissions for CESM2-SLH
+      if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+#       $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CO2'"
+        $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
+              .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','H2402','CHCL3','C2H4CL2'";     
+      } else {
+        $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
+              .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','CH2BR2','CHBR3','H2402'";      
+      }
+      # RPF: CH4 is included as a surface emissions for CESM2-SLH
+      
+
     } else {
       $val = "'CH4','H2','N2O','CO2','CFC11','CFC12'";
     }
@@ -2117,8 +2159,18 @@ if ($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) {
     my @files;
     # Datasets
     if ($chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) {
-       @files = ( 'soil_erod_file', 'flbc_file',
-                  'xs_coef_file','xs_short_file','xs_long_file', 'rsf_file' );
+#        @files = ( 'soil_erod_file', 'flbc_file',
+#                   'xs_coef_file','xs_short_file','xs_long_file', 'rsf_file' );
+#     if ($chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/ or $chem =~ /waccm_tsmlt_mam4_slh/) {
+      # RPF: CESM2-SLH needs additional photolysis and LBCs than default
+      if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+        @files = ( 'soil_erod_file','xs_coef_file','rsf_file' );
+      } else {
+        @files = ( 'soil_erod_file', 'flbc_file',
+                   'xs_coef_file','xs_short_file','xs_long_file', 'rsf_file' );
+      }
+      # RPF: CESM2-SLH needs additional photolysis and LBCs than default
+
     } else {
        @files = ( 'soil_erod_file', 'flbc_file',
                   'xs_coef_file','xs_short_file','xs_long_file', 'rsf_file', 'exo_coldens_file', 'sulf_file' );
@@ -2337,6 +2389,24 @@ if (($chem =~ /_mam4/ or $chem =~ /_mam5/) and ($phys =~ /cam6/ or $phys =~ /cam
                     'NH3_bb_srf_file' => 'NH3',
                     'NH3_ot_srf_file' => 'NH3',
                     'E90_srf_file' => 'E90' );
+        # Added for SLH (rpf)
+        if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+        %species = (%species,
+#                   'CH4_slh_srf_file' => 'CH4',
+                    'CHBR3_slh_srf_file' => 'CHBR3',
+                    'CH2BR2_slh_srf_file' => 'CH2BR2',
+                    'CH2BRCL_slh_srf_file' => 'CH2BRCL',
+                    'CHBR2CL_slh_srf_file' => 'CHBR2CL',
+                    'CHBRCL2_slh_srf_file' => 'CHBRCL2',
+                    'CH3I_slh_srf_file' => 'CH3I',
+                    'CH2I2_slh_srf_file' => 'CH2I2',
+                    'CH2IBR_slh_srf_file' => 'CH2IBR',
+                    'CH2ICL_slh_srf_file' => 'CH2ICL',
+                    'CH2CL2_slh_srf_file' => 'CH2CL2',
+                    'C2CL4_slh_srf_file' => 'C2CL4',
+                    'I2_slh_srf_file' => 'I2',
+                    'HOI_slh_srf_file' => 'HOI') ;
+        }
         if ($chem !~ /_ts4/) {
 	    %species = (%species,
                     'BENZENE_an_srf_file' => 'BENZENE',
@@ -2533,6 +2603,7 @@ if (($chem =~ /_mam4/ or $chem =~ /_mam5/) and ($phys =~ /cam6/ or $phys =~ /cam
         add_default($nl, 'megan_mapped_emisfctrs', 'val'=>'.false.');
     }
     if ($chem =~ /trop_strat_mam4_vbsext/ or $chem =~ /waccm_tsmlt/) {
+#     if ($chem =~ /trop_strat_mam4_vbsext/ or $chem =~ /waccm_tsmlt/ or $chem =~ /waccm_tsmlt_mam4_slh/) {
         my $val = "'ISOP = isoprene',"
                 . "'MTERP = pinene_a + carene_3 + thujene_a + 2met_styrene + cymene_p + cymene_o + terpinolene + bornene +'"
                 . "' fenchene_a + ocimene_al + pinene_b + sabinene + camphene + limonene + phellandrene_a + terpinene_g +'"
@@ -2582,7 +2653,11 @@ if (($chem =~ /_mam4/ or $chem =~ /_mam5/) and ($phys =~ /cam6/ or $phys =~ /cam
         add_default($nl, 'megan_factors_file');
         add_default($nl, 'megan_mapped_emisfctrs', 'val'=>'.false.');
     }
-    if ($chem =~ /trop_strat_mam4_vbs/ or $chem =~ /trop_strat_mam5_vbs/) {
+#     if ($chem =~ /trop_strat_mam4_vbs/ or $chem =~ /trop_strat_mam5_vbs/) {
+# RPF_WARNING: need to check if chem="trop_strat_mam4_slh/vbs" and/or chem="waccm_tsmlt_mam4_slh/vbs" should be included here
+#     if ($chem =~ /trop_strat_mam4_vbs/) {
+#     if ($chem =~ /trop_strat_mam4_vbs/ or $chem =~ /trop_strat_mam4_slh/) {
+    if ($chem =~ /trop_strat_mam4_vbs/ or $chem =~ /trop_strat_mam5_vbs/ or $chem =~ /trop_strat_mam4_slh/ or $chem =~ /trop_strat_mam5_slh/ or $chem =~ /waccm_tsmlt_mam4_slh/ or $chem =~ /waccm_tsmlt_mam5_slh/) {
         my $val = "'ISOP = isoprene',"
                 . "'MTERP = carene_3 + pinene_a + thujene_a + bornene + terpineol_4 + terpineol_a + terpinyl_ACT_a "
                 . "+ myrtenal + sabinene + pinene_b + camphene + fenchene_a + limonene + phellandrene_a + terpinene_a "
@@ -2698,6 +2773,21 @@ if (($chem =~ /_mam4/ or $chem =~ /_mam5/) and ($phys =~ /cam6/ or $phys =~ /cam
         add_default($nl, 'megan_mapped_emisfctrs', 'val'=>'.false.');
     }
 }
+
+    # RPF: New Short-Lived Halogen (SLH) Namelist Definitions
+if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+    # Prescribed species
+    add_default($nl, 'SSAdehal_ScalingFactor'     );
+#     add_default($nl, 'SLHemiss_ScalingFactor'     );
+#     add_default($nl, 'ICEfraprx_ScalingFactor'    );
+#     add_default($nl, 'LIQfraprx_ScalingFactor'    );
+    add_default($nl, 'SSAhno3_ScalingFactor'      );
+    add_default($nl, 'SSAn2o5_ScalingFactor'      );
+    add_default($nl, 'LIQfraprx_ScalingFactor_I'  );
+    add_default($nl, 'ICEfraprx_ScalingFactor_I'  );
+    add_default($nl, 'ICEfraprx_ScalingFactor_Br' );
+}
+    # RPF: SLH Namelist Definitions
 
 if (($chem eq 'trop_mam4') or ($chem eq 'waccm_sc_mam4') or ($chem eq 'ghg_mam4')) {
 
@@ -2824,6 +2914,13 @@ if ($chem eq 'trop_mam7') {
 my $waccmx = $cfg->get('waccmx');
 
 # set maximum solar zenith angle for photolysis
+
+#!rpf_CESM2_SLH
+#!Just to be sure this is equivalent what DEK suggested to modify in mo_photo.F90 in CESM2_SLH, now moved to bld/build-namelist !!!
+#!      max_zen_angle = 88.85_r8 ! degrees
+#       max_zen_angle = 97.01_r8 ! degrees   !rpf : Doug's SLH code suggests using this value for CAM-Chem. Which one should be used??
+#!rpf_CESM2_SLH
+
 my $maxzen = 0.0;
 if ($waccmx){
     $maxzen = 116.;
@@ -2849,10 +2946,22 @@ if (defined $ubc_ver) {
 
 # WACCM options.
 if ($chem =~ /waccm_ma/ or $chem =~ /waccm_tsmlt/) {
+# if ($chem =~ /waccm_ma/ or $chem =~ /waccm_tsmlt/ or $chem =~ /waccm_tsmlt_mam4_slh/) {
 
     # Species with fixed lower boundary
     my $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
              .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','CH2BR2','CHBR3','H2402'";
+    # RPF: CH4 is included as a surface emissions for CESM2-SLH
+    if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+#     $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CO2'"
+      $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
+            .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','H2402','CHCL3','C2H4CL2'";   
+    } else {
+      $val = "'CCL4','CF2CLBR','CF3BR','CFC11','CFC113','CFC12','CH3BR','CH3CCL3','CH3CL','CH4','CO2'"
+            .",'H2','HCFC22','N2O','CFC114','CFC115','HCFC141B','HCFC142B','CH2BR2','CHBR3','H2402'";
+    }
+    # RPF: CH4 is included as a surface emissions for CESM2-SLH
+    
     if (chem_has_species($cfg, 'H1202')) {
       $val .= ",'H1202'";
     }
@@ -2963,25 +3072,69 @@ if (defined  $lbc_file) {
 
     # If any individual GHG values are set then remove them and issue info message
     # that they will be ignored.
-    foreach my $ghg_vmr ('co2vmr','ch4vmr','n2ovmr','f11vmr','f12vmr') {
-        my $val = $nl->get_value($ghg_vmr);
-        if (defined $val) {
-            print "$ProgName - INFO: Chem flbc_file in use. $ghg_vmr = $val removed from namelist.\n";
 
-            if ($nl->delete_variable('chem_surfvals_nl', $ghg_vmr) != 0) {
-                die "$ProgName - ERROR: not able to delete $ghg_vmr from group chem_surfvals_nl.\n";
+#     foreach my $ghg_vmr ('co2vmr','ch4vmr','n2ovmr','f11vmr','f12vmr') {
+#         my $val = $nl->get_value($ghg_vmr);
+#         if (defined $val) {
+#             print "$ProgName - INFO: Chem flbc_file in use. $ghg_vmr = $val removed from namelist.\n";
+# 
+#             if ($nl->delete_variable('chem_surfvals_nl', $ghg_vmr) != 0) {
+#                 die "$ProgName - ERROR: not able to delete $ghg_vmr from group chem_surfvals_nl.\n";
+#             }
+#         }
+#     }
+
+# RPF: CH4 is included as a surface emissions for CESM2-SLH
+    if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+#       foreach my $ghg_vmr ('co2vmr','ch4vmr','n2ovmr','f11vmr','f12vmr') {
+        foreach my $ghg_vmr ('co2vmr',         'n2ovmr','f11vmr','f12vmr') {
+            print "$ProgName - WARNING!!! ch4vmr = NOT USING LBC any longer (rpf).\n";
+            my $val = $nl->get_value($ghg_vmr);
+            if (defined $val) {
+                print "$ProgName - INFO: Chem flbc_file in use. $ghg_vmr = $val removed from namelist.\n";
+
+                if ($nl->delete_variable('chem_surfvals_nl', $ghg_vmr) != 0) {
+                    die "$ProgName - ERROR: not able to delete $ghg_vmr from group chem_surfvals_nl.\n";
+                }
             }
         }
-    }
+    } else {
+        foreach my $ghg_vmr ('co2vmr','ch4vmr','n2ovmr','f11vmr','f12vmr') {
+            print "$ProgName - WARNING!!! ch4vmr = NOT USING LBC any longer (rpf).\n";
+            my $val = $nl->get_value($ghg_vmr);
+            if (defined $val) {
+                print "$ProgName - INFO: Chem flbc_file in use. $ghg_vmr = $val removed from namelist.\n";
+
+                if ($nl->delete_variable('chem_surfvals_nl', $ghg_vmr) != 0) {
+                    die "$ProgName - ERROR: not able to delete $ghg_vmr from group chem_surfvals_nl.\n";
+                }
 
     # Make sure the flbc_list specifies all the GHGs needed for radiation.
     my $flbc_list = $nl->get_value('flbc_list');
     if (defined $flbc_list) {
         # If flbc_list has already been defined, check that it contains all
         # the GHGs needed by the radiation code.
-        foreach my $ghg ('CO2','CH4','N2O','CFC11','CFC12') {
-            if ($flbc_list !~ /$ghg/) {
-                die "$ProgName - ERROR: $ghg is missing from flbc_list \n";
+
+#         foreach my $ghg ('CO2','CH4','N2O','CFC11','CFC12') {
+#             if ($flbc_list !~ /$ghg/) {
+#                 die "$ProgName - ERROR: $ghg is missing from flbc_list \n";
+
+# RPF: CH4 is included as a surface emissions for CESM2-SLH
+        if ($chem eq 'trop_strat_mam4_slh' or $chem eq 'waccm_tsmlt_mam4_slh' or $chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+#           foreach my $ghg ('CO2','CH4','N2O','CFC11','CFC12') {
+            foreach my $ghg ('CO2',      'N2O','CFC11','CFC12') {
+                print "$ProgName - CESM2-SLH DOES NOT use LBC but Surface Emissions.\n";
+                if ($flbc_list !~ /$ghg/) {
+                    die "$ProgName - ERROR: $ghg is missing from flbc_list \n";
+                }
+            }
+        } else {
+            foreach my $ghg ('CO2','CH4','N2O','CFC11','CFC12') {
+                print "$ProgName - WARNING!!! ch4vmr = NOT USING LBC any longer (rpf).\n";
+                if ($flbc_list !~ /$ghg/) {
+                    die "$ProgName - ERROR: $ghg is missing from flbc_list \n";
+                }
+                
             }
         }
     }
@@ -3721,6 +3874,7 @@ if ( length($nl->get_value('soil_erod_file'))>0 ) {
     }
     else {
         if ($chem =~ /trop_strat/ or $chem =~ /geoschem/ or $chem =~ /waccm_ma/ or $chem =~ /waccm_tsmlt/ or $chem =~ /trop_mozart/) {
+#         if ($chem =~ /trop_strat/ or $chem =~ /geoschem/ or $chem =~ /waccm_ma/ or $chem =~ /waccm_tsmlt/ or $chem =~ /waccm_tsmlt_mam4_slh/ or $chem =~ /trop_mozart/) {
             add_default($nl, 'dust_emis_fact', 'ver'=>'chem');
         }
         else {
@@ -4717,6 +4871,10 @@ sub fv_decomp_set{
         die "$ProgName - ERROR: fv_decomp_set failed to find a decomposition.\n" .
             "  npr_yz needs to be set by the user.";
     }
+#     if ($waccmx and $nmaglon/$nz < 4) {
+# 	die "$ProgName - ERROR: fv_decomp_set failed to find a decomposition.\n"
+# 	 . "  Too many MPI tasks to properly decompose WACCMX magnetic grid.";
+#     }
 
     return "$ny,$nz,$nz,$ny";
 }

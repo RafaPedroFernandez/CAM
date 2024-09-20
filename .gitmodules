@@ -35,10 +35,10 @@
 
 [submodule "atmos_phys"]
 	path = src/atmos_phys
-	url = https://github.com/ESCOMP/atmospheric_physics
-        fxtag = atmos_phys0_03_000
+	url = https://github.com/RafaPedroFernandez/atmospheric_physics
+        fxtag = atmos_phys0_03_000_slh
         fxrequired = AlwaysRequired
-	fxDONOTUSEurl = https://github.com/ESCOMP/atmospheric_physics
+	fxDONOTUSEurl = https://github.com/RafaPedroFernandez/atmospheric_physics
 
 [submodule "fv3"]
 	path = src/dynamics/fv3
@@ -143,10 +143,10 @@ fxDONOTUSEurl = https://github.com/ESMCI/cime
 
 [submodule "cmeps"]
 path = components/cmeps
-url = https://github.com/ESCOMP/CMEPS.git
-fxtag = cmeps1.0.2
+url = https://github.com/RafaPedroFernandez/CMEPS.git
+fxtag = cmeps1.0.2_slh
 fxrequired = ToplevelRequired
-fxDONOTUSEurl = https://github.com/ESCOMP/CMEPS.git
+fxDONOTUSEurl = https://github.com/RafaPedroFernandez/CMEPS.git
 
 [submodule "cdeps"]
 path = components/cdeps
