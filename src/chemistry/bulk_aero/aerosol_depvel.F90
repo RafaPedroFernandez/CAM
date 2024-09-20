@@ -103,7 +103,13 @@ subroutine aerosol_depvel_compute( ncol, nlev, naero, t, pmid, ram1, fv, diam, s
         rss_lmn(m) = 1.0_r8 / (tmp*fv(i)) ![s m-1] SeP97 p.972,965
 
         rss_trb = ram1(i) + rss_lmn(m) + ram1(i)*rss_lmn(m)*vlc_grv(i,k,m) ![s m-1]
+!rpf_CESM2_SLH
+! ordc (May 09, 2012): 1e-6 is added in the denominator, in case of very small values of rss_trb.
+!                      This change was previously introduced by JFL in CAM 3.6.x. ... but is not implemented in CESM2 any longer
+!                      Does it need to be included again?
         vlc_trb(i,m) = 1.0_r8 / rss_trb                            ![m s-1]
+!       vlc_trb(i,m) = 1.0_r8 / (rss_trb + 1.0e-6)                 ![m s-1]
+!rpf_CESM2_SLH
         vlc_dry(i,k,m) = vlc_trb(i,m)  +vlc_grv(i,k,m)
      end do !ncol
   end do

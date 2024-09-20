@@ -84,6 +84,9 @@ module aero_model
   integer,allocatable :: num_idx(:)
   integer,allocatable :: index_tot_mass(:,:)
   integer,allocatable :: index_chm_mass(:,:)
+!rpf_CESM2_SLH
+  integer,allocatable :: index_ssa_mass(:,:)
+!rpf_CESM2_SLH
 
   integer :: ndx_h2so4
   character(len=fieldname_len), allocatable :: dgnum_name(:), dgnumwet_name(:)
@@ -623,10 +626,15 @@ contains
        endif
     end do
 
+!rpf_CESM2_SLH
+!DEK addition
     allocate(index_tot_mass(nmodes,nspec_max))
     allocate(index_chm_mass(nmodes,nspec_max))
+    allocate(index_ssa_mass(nmodes,nspec_max))
     index_tot_mass = -1
     index_chm_mass = -1
+    index_ssa_mass = -1    
+!rpf_CESM2_SLH
 
     ! for surf_area_dens
     ! define indices associated with the various aerosol types
@@ -643,6 +651,11 @@ contains
                   trim(spec_type) == 'ammonium') then
                 index_chm_mass(n,l) = get_spc_ndx(spec_name)
              endif
+!rpf_CESM2_SLH
+             if ( trim(spec_type) == 'seasalt')  then 
+                index_ssa_mass(n,l) = get_spc_ndx(spec_name)
+             endif
+!rpf_CESM2_SLH
           enddo
        endif
     enddo
@@ -1644,9 +1657,13 @@ contains
   ! provides wet tropospheric aerosol surface area info for modal aerosols
   ! called from mo_usrrxt
   !-------------------------------------------------------------------------
+!rpf_CESM2_SLH
+!DEK addition
   subroutine aero_model_surfarea( &
                   mmr, radmean, relhum, pmid, temp, strato_sad, sulfate, rho, ltrop, &
-                  dlat, het1_ndx, pbuf, ncol, sfc, dm_aer, sad_trop, reff_trop )
+!                 dlat, het1_ndx, pbuf, ncol, sfc, dm_aer, sad_trop, reff_trop )
+                  dlat, het1_ndx, pbuf, ncol, sfc, dm_aer, sad_trop, reff_trop, sad_ssa )
+!rpf_CESM2_SLH
 
     ! dummy args
     real(r8), intent(in)    :: pmid(:,:)
@@ -1667,6 +1684,9 @@ contains
     real(r8), intent(inout) :: dm_aer(:,:,:)
     real(r8), intent(inout) :: sad_trop(:,:)
     real(r8), intent(out)   :: reff_trop(:,:)
+!rpf_CESM2_SLH
+    real(r8), intent(inout) :: sad_ssa(:,:)
+!rpf_CESM2_SLH
 
     ! local vars
     real(r8), pointer, dimension(:,:,:) :: dgnumwet
@@ -1678,7 +1698,11 @@ contains
 
     beglev(:ncol)=ltrop(:ncol)+1
     endlev(:ncol)=pver
-    call surf_area_dens( ncol, mmr, pmid, temp, dgnumwet, beglev, endlev, sad_trop, reff_trop, sfc=sfc )
+
+!rpf_CESM2_SLH
+!   call surf_area_dens( ncol, mmr, pmid, temp, dgnumwet, beglev, endlev, sad_trop, reff_trop, sfc=sfc )
+    call surf_area_dens( ncol, mmr, pmid, temp, dgnumwet, beglev, endlev, sad_trop, reff_trop, sfc=sfc, sad_ssa=sad_ssa )
+!rpf_CESM2_SLH
 
     do i = 1,ncol
        do k = ltrop(i)+1,pver
@@ -2041,7 +2065,10 @@ contains
 
   !=============================================================================
   !=============================================================================
-  subroutine surf_area_dens( ncol, mmr, pmid, temp, diam, beglev, endlev, sad, reff, sfc )
+!rpf_CESM2_SLH
+! subroutine surf_area_dens( ncol, mmr, pmid, temp, diam, beglev, endlev, sad, reff, sfc )
+  subroutine surf_area_dens( ncol, mmr, pmid, temp, diam, beglev, endlev, sad, reff, sfc, sad_ssa )
+!rpf_CESM2_SLH
     use mo_constants,    only : pi
     use modal_aero_data, only : nspec_amode, alnsg_amode
 
@@ -2056,6 +2083,9 @@ contains
     real(r8), intent(out) :: sad(:,:)
     real(r8), intent(out) :: reff(:,:)
     real(r8),optional, intent(out) :: sfc(:,:,:)
+!rpf_CESM2_SLH
+    real(r8),optional, intent(out) :: sad_ssa(:,:)
+!rpf_CESM2_SLH
 
     ! local vars
     real(r8) :: sad_mode(pcols,pver,ntot_amode),radeff(pcols,pver)
@@ -2063,6 +2093,11 @@ contains
     real(r8) :: rho_air
     integer  :: i,k,l,m
     real(r8) :: chm_mass, tot_mass
+!rpf_CESM2_SLH
+!DEK addition
+    real(r8) :: ssa_mass
+    real(r8) :: sad_mode_ssa(pcols,pver,ntot_amode)
+!rpf_CESM2_SLH
 
     !
     ! Compute surface aero for each mode.
@@ -2074,6 +2109,12 @@ contains
     vol = 0._r8
     vol_mode = 0._r8
     reff = 0._r8
+!rpf_CESM2_SLH
+    if (present(sad_ssa)) then
+      sad_ssa = 0._r8
+      sad_mode_ssa = 0._r8
+    end if
+!rpf_CESM2_SLH
 
     do i = 1,ncol
        do k = beglev(i),endlev(i)
@@ -2084,18 +2125,42 @@ contains
              !
              tot_mass = 0._r8
              chm_mass = 0._r8
+!rpf_CESM2_SLH
+             ssa_mass = 0._r8
+!rpf_CESM2_SLH
              do m=1,nspec_amode(l)
                if ( index_tot_mass(l,m) > 0 ) &
                     tot_mass = tot_mass + mmr(i,k,index_tot_mass(l,m))
                if ( index_chm_mass(l,m) > 0 ) &
                     chm_mass = chm_mass + mmr(i,k,index_chm_mass(l,m))
+!rpf_CESM2_SLH
+               if (present(sad_ssa)) then
+                 if ( index_ssa_mass(l,m) > 0 ) &
+                      ssa_mass = ssa_mass + mmr(i,k,index_ssa_mass(l,m))
+               end if
+!rpf_CESM2_SLH
              end do
              if ( tot_mass > 0._r8 ) then
               ! surface area density
+!rpf_CESM2_SLH
+!DEK addition
+!rpf This line was included in ported version by WSY and DEK ... 
+!rpf I believe removing **(2._r8/3._r8) does not apply here, only for sad_ssa below
+!rpf CONFIRMED by Mike Mills ... **(2._r8/3._r8) DOES NOT APPLY here. E-mail Dic 12, 2020
+!              sad_mode(i,k,l) = chm_mass/tot_mass**(2._r8/3._r8) &
                sad_mode(i,k,l) = chm_mass/tot_mass &
                                * mmr(i,k,num_idx(l))*rho_air*pi*diam(i,k,l)**2._r8 &
                                * exp(2._r8*alnsg_amode(l)**2._r8)  ! m^2/m^3
                sad_mode(i,k,l) = 1.e-2_r8 * sad_mode(i,k,l) ! cm^2/cm^3
+!rpf --- now use the same expression for SSA following DEK and WYS implementation in cam6_0_010
+!              sad_mode_ssa(i,k,l) = ssa_mass/tot_mass**(2._r8/3._r8) &
+               if (present(sad_ssa)) then
+                 sad_mode_ssa(i,k,l) = ssa_mass/tot_mass &
+                               * mmr(i,k,num_idx(l))*rho_air*pi*diam(i,k,l)**2._r8 &
+                               * exp(2._r8*alnsg_amode(l)**2._r8)  ! m^2/m^3
+                 sad_mode_ssa(i,k,l) = 1.e-2_r8 * sad_mode_ssa(i,k,l) ! cm^2/cm^3
+               end if
+!rpf_CESM2_SLH
 
               ! volume calculation, for use in effective radius calculation
                vol_mode(i,k,l) = chm_mass/tot_mass &
@@ -2104,11 +2169,21 @@ contains
              else
                sad_mode(i,k,l) = 0._r8
                vol_mode(i,k,l) = 0._r8
+!rpf_CESM2_SLH
+               if (present(sad_ssa)) then
+                 sad_mode_ssa(i,k,l) = 0._r8
+               end if
+!rpf_CESM2_SLH
              end if
           end do
           sad(i,k) = sum(sad_mode(i,k,:))
           vol(i,k) = sum(vol_mode(i,k,:))
           reff(i,k) = 3._r8*vol(i,k)/sad(i,k)
+!rpf_CESM2_SLH
+          if (present(sad_ssa)) then
+            sad_ssa(i,k) = sum(sad_mode_ssa(i,k,:))
+          end if
+!rpf_CESM2_SLH
 
        enddo
     enddo
