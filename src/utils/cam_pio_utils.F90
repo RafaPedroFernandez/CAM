@@ -1095,6 +1095,7 @@ contains
     end if
   end subroutine clean_iodesc_list
 
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
   subroutine cam_pio_createfile(file, fname, mode_in)
     use pio, only : pio_createfile, file_desc_t, pio_noerr, pio_clobber, pio_iotask_rank
     use cam_abortutils, only : endrun
@@ -1122,6 +1123,7 @@ contains
     end if
 
   end subroutine cam_pio_createfile
+!rpf_CESM3_SLH: make sure it is updated following Jim's Edward e-mail for CESM2_SLH
 
   subroutine cam_pio_openfile(file, fname, mode)
     use pio,            only: pio_openfile, file_desc_t, pio_noerr, pio_iotask_rank
