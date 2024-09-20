@@ -20,11 +20,17 @@ module mo_gas_phase_chemdr
 
   integer :: map2chm(pcnst) = 0           ! index map to/from chemistry/constituents list
 
-  integer :: so4_ndx, h2o_ndx, o2_ndx, o_ndx, hno3_ndx, hcl_ndx, cldice_ndx, snow_ndx
+!rpf_CESM2_SLH
+! integer :: so4_ndx, h2o_ndx, o2_ndx, o_ndx, hno3_ndx, hcl_ndx, cldice_ndx, snow_ndx
+  integer :: so4_ndx, h2o_ndx, o2_ndx, o_ndx, hno3_ndx, hcl_ndx, cldice_ndx, snow_ndx, cldliq_ndx
   integer :: o3_ndx, o3s_ndx, o3_inv_ndx, srf_ozone_pbf_ndx=-1
   integer :: het1_ndx
-  integer :: ndx_cldfr, ndx_cmfdqr, ndx_nevapr, ndx_cldtop, ndx_prain
+! integer :: ndx_cldfr, ndx_cmfdqr, ndx_nevapr, ndx_cldtop, ndx_prain
+  integer :: ndx_cldfr, ndx_cmfdqr, ndx_nevapr, ndx_cldtop, ndx_prain, ndx_pblh
   integer :: ndx_h2so4
+!   integer :: io_ndx, bro_ndx
+!rpf_CESM2_SLH
+
 !
 ! CCMI
 !
@@ -127,6 +133,9 @@ contains
     h2o_ndx = get_spc_ndx('H2O')
     hno3_ndx = get_spc_ndx('HNO3')
     hcl_ndx  = get_spc_ndx('HCL')
+!rpf_CESM2_SLH
+    call cnst_get_ind( 'CLDLIQ', cldliq_ndx ) ! WSY
+!rpf_CESM2_SLH
     call cnst_get_ind( 'CLDICE', cldice_ndx )
     call cnst_get_ind( 'SNOWQM', snow_ndx, abort=.false. )
 
@@ -193,6 +202,35 @@ contains
     call addfld( 'HCL_GAS',    (/ 'lev' /), 'I', 'mol/mol', 'gas-phase hcl' )
     call addfld( 'HCL_STS',    (/ 'lev' /), 'I', 'mol/mol', 'STS condensed HCL' )
 
+!rpf_CESM2_SLH   
+    call addfld( 'SAD_ICETROP',     (/ 'lev' /), 'I', 'cm2/cm3', 'Developing Tropospheric ICE SAD' )
+    call addfld( 'SAD_ICEORIG',     (/ 'lev' /), 'I', 'cm2/cm3', 'Developing ICE SAD without abovetropopause mask' )
+    call addfld( 'SAD_LIQTROP',     (/ 'lev' /), 'I', 'cm2/cm3', 'Developing Tropospheric LIQ SAD' )                                                                    
+    call addfld( 'SAD_SSLT',        (/ 'lev' /), 'I', 'cm2/cm3', 'surface area density for seasalt' )
+    call addfld( 'SAD_SSLT_EFF',    (/ 'lev' /), 'I', 'cm2/cm3', 'effective surface area density for seasalt' )
+    call addfld( 'SAD_TOTAL',       (/ 'lev' /), 'I', 'cm2/cm3', 'surface area density for sulf + nit + oc + soa + bc' )
+    call addfld( 'CLNO2_YIELD',     (/ 'lev' /), 'I', 'unitless', 'CLNO2 yield for N2O5 on aerosols' )
+    call addfld( 'CLNO2_YIELD_SRF',  horiz_only, 'I', 'unitless', 'CLNO2 yield for N2O5 on aerosols at Surface' )
+    call addfld( 'TROPLEV',          horiz_only, 'I', 'index',    'Tropopause level vertical index' )
+!rpf_CESM2_SLH   
+
+! !rpf_CESM2_SLH   
+!     bro_ndx  = get_spc_ndx('BRO')
+!     io_ndx   = get_spc_ndx('IO')
+!     call addfld( 'BRO_VCD_total',    horiz_only, 'I', 'molec/cm2', 'BRO Total VCD'         )
+!     call addfld( 'BRO_VCD_tropo',    horiz_only, 'I', 'molec/cm2', 'BRO Tropospheric VCD'  )
+!     call addfld( 'BRO_VCD_strat',    horiz_only, 'I', 'molec/cm2', 'BRO Stratospheric VCD' )
+!     call addfld( 'IO_VCD_total',     horiz_only, 'I', 'molec/cm2',  'IO Total VCD'         )
+!     call addfld( 'IO_VCD_tropo',     horiz_only, 'I', 'molec/cm2',  'IO Tropospheric VCD'  )
+!     call addfld( 'IO_VCD_strat',     horiz_only, 'I', 'molec/cm2',  'IO Stratospheric VCD' )
+!     call addfld( 'O3_VCD_total',     horiz_only, 'I', 'DU',         'O3 Total VCD'         )
+!     call addfld( 'O3_VCD_tropo',     horiz_only, 'I', 'DU',         'O3 Tropospheric VCD'  )
+!     call addfld( 'O3_VCD_strat',     horiz_only, 'I', 'DU',         'O3 Stratospheric VCD' )
+!     call addfld( 'BRO_LT',          (/ 'lev' /), 'I', 'molec/cm2', 'BRO Partial VCD Layer Thicknes' )
+!     call addfld( 'IO_LT',           (/ 'lev' /), 'I', 'molec/cm2',  'IO Partial VCD Layer Thicknes' )
+!     call addfld( 'O3_LT',           (/ 'lev' /), 'I', 'DU',         'O3 Partial VCD Layer Thicknes' )
+! !rpf_CESM2_SLH
+
     if (het1_ndx>0) then
        call addfld( 'het1_total', (/ 'lev' /), 'I', '/s', 'total N2O5 + H2O het rate constant' )
     endif
@@ -251,6 +289,8 @@ contains
 
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
+!rpf_CESM2_SLH
+!rpf Now all the online iodine emissions is directly called in ocean_emissions routine
   subroutine gas_phase_chemdr(lchnk, ncol, imozart, q, &
                               phis, zm, zi, calday, &
                               tfld, pmid, pdel, pint, rpdel, rpdeldry, &
@@ -261,6 +301,7 @@ contains
                               precc, precl, snowhland, ghg_chem, latmapback, &
                               drydepflx, wetdepflx, cflx, fire_sflx, fire_ztop, nhx_nitrogen_flx, noy_nitrogen_flx, &
                               use_hemco, qtend, pbuf)
+!rpf_CESM2_SLH
 
     !-----------------------------------------------------------------------
     !     ... Chem_solver advances the volumetric mixing ratio
@@ -294,6 +335,10 @@ contains
     use constituents,      only : cnst_mw, cnst_type
     use mo_ghg_chem,       only : ghg_chem_set_rates, ghg_chem_set_flbc
     use mo_sad,            only : sad_strat_calc
+!rpf_CESM3_SLH - merging SLH halogen routines in a single module
+!   use mo_sadtrop,        only : icesad_trop_calc
+    use mo_sad,            only : icesad_trop_calc
+!rpf_CESM3_SLH - merging SLH halogen routines in a single module
     use charge_neutrality, only : charge_balance
     use mo_strato_rates,   only : ratecon_sfstrat
     use mo_aero_settling,  only : strat_aer_settling
@@ -415,7 +460,9 @@ contains
     integer                   ::  ltrop_sol(pcols)         ! tropopause vertical index used in chem solvers
     real(r8), pointer         ::  strato_sad(:,:)          ! stratospheric sad (1/cm)
 
-    real(r8)                  ::  sad_trop(pcols,pver)    ! total tropospheric sad (cm^2/cm^3)
+!   real(r8)                  ::  sad_trop(pcols,pver)    ! total tropospheric sad (cm^2/cm^3)
+    real(r8)                  ::  sad_trop(pcols,pver)    ! total tropospheric sad (cm^2/cm^3) ... called sad_total in previous versions
+
     real(r8)                  ::  reff(pcols,pver)        ! aerosol effective radius (cm)
     real(r8)                  ::  reff_strat(pcols,pver)  ! stratospheric aerosol effective radius (cm)
 
@@ -447,6 +494,45 @@ contains
 
   ! for HEMCO-CESM ... passing J-values to ParaNOx ship plume extension
     real(r8), pointer :: hco_j_tmp_fld(:)    ! J-value pointer (sfc only) [1/s]
+
+!rpf_CESM2_SLH
+    real(r8) :: radius_trop(ncol,pver)         ! radius of sulfate, nat, & ice ( cm )
+    real(r8) :: sad_ice_trop(ncol,pver)         ! surf area density of sulfate, nat, & ice ( cm^2/cm^3 )
+    real(r8) :: sad_ice_trop_orig(ncol,pver)    ! surf area density of sulfate, nat, & ice ( cm^2/cm^3 )
+
+    real(r8) :: h2o_liq(ncol,pver)              ! h2o condensed phase concentration (mol/mol) (only liquid)
+    real(r8) :: sad_liq_trop(ncol,pver)         ! surf area density of sulfate, nat, & ice ( cm^2/cm^3 ) (only liquid)
+    real(r8) :: cldliq(ncol,pver)               ! cloud water "liquid" (kg/kg)
+
+    real(r8) :: sad_sslt(ncol,pver)             ! surf area density of sea-salt ( cm^2/cm^3 )
+    real(r8) :: sad_sslt_eff(ncol,pver)         ! surf area density of sea-salt ( cm^2/cm^3 )
+    real(r8) :: clno2_yield (ncol,pver)         ! originally implemented by jfl
+
+    real(r8), dimension(ncol)  :: troplev_id
+!rpf_CESM2_SLH
+    
+! !rpf_CESM2_SLH
+!     real(r8) :: bro_VCD_total (pcols)
+!     real(r8) :: bro_VCD_tropo (pcols)
+!     real(r8) :: bro_VCD_strat (pcols)
+!     real(r8) :: io_VCD_total  (pcols)
+!     real(r8) :: io_VCD_tropo  (pcols)
+!     real(r8) :: io_VCD_strat  (pcols)
+!     real(r8) :: o3_VCD_total  (pcols)
+!     real(r8) :: o3_VCD_tropo  (pcols)
+!     real(r8) :: o3_VCD_strat  (pcols)
+! 
+!     real(r8) :: bro_LT        (pcols,pver)
+!     real(r8) :: io_LT         (pcols,pver)
+!     real(r8) :: o3_LT         (pcols,pver)
+! 
+!     real(r8) :: LT_bro, LT_io, LT_o3
+!     real(r8) :: dz_lev, dp_lev, rho_lev, nmolec_lev
+!     real(r8) :: t_virtual
+!     
+!     real(r8) :: gravity, N_avog, R_gas, MW_dryair, N_avo_memori, Dobson_units
+!     integer  :: kk_tropo
+! !rpf_CESM2_SLH
 
 !
 ! CCMI
@@ -547,6 +633,12 @@ contains
     !-----------------------------------------------------------------------
     call mmr2vmr( mmr(:ncol,:,:), vmr(:ncol,:,:), mbar(:ncol,:), ncol )
 
+!rpf_CESM2_SLH
+    do i = 1, ncol
+      troplev_id (i) = 1._r8 * troplev(i) !vertical index of tropopause level
+    end do
+!rpf_CESM2_SLH
+
 !
 ! CCMI
 !
@@ -640,16 +732,25 @@ contains
        !-----------------------------------------------------------------------
        hcl_cond(:,:)      = 0.0_r8
        hcl_gas (:,:)      = 0.0_r8
+!rpf_CESM2_SLH
+       cldice  (:,:)      = 0.0_r8
+       cldliq  (:,:)      = 0.0_r8
+!rpf_CESM2_SLH
        do k = 1,pver
           hno3_gas(:,k)   = vmr(:,k,hno3_ndx)
           h2o_gas(:,k)    = h2ovmr(:,k)
           hcl_gas(:,k)    = vmr(:,k,hcl_ndx)
           wrk(:,k)        = h2ovmr(:,k)
-          if (snow_ndx>0) then
-             cldice(:ncol,k) = q(:ncol,k,cldice_ndx) + q(:ncol,k,snow_ndx)
-          else
-             cldice(:ncol,k) = q(:ncol,k,cldice_ndx)
-          endif
+!rpf_CESM2_SLH
+!           if (snow_ndx>0) then
+!              cldice(:ncol,k) = q(:ncol,k,cldice_ndx) + q(:ncol,k,snow_ndx)
+!           else
+!              cldice(:ncol,k) = q(:ncol,k,cldice_ndx)
+!           endif
+          ! snow_ndx condition included and commented by WSY
+          cldice(:ncol,k) = q(:ncol,k,cldice_ndx)
+          cldliq(:ncol,k) = q(:ncol,k,cldliq_ndx)
+!rpf_CESM2_SLH
        end do
        do m = 1,2
           do k = 1,pver
@@ -658,6 +759,9 @@ contains
        end do
 
        call mmr2vmri( cldice(:ncol,:), h2o_cond(:ncol,:), mbar(:ncol,:), cnst_mw(cldice_ndx), ncol )
+!rpf_CESM2_SLH
+       call mmr2vmri( cldliq(:ncol,:), h2o_liq(:ncol,:),  mbar(:ncol,:), cnst_mw(cldliq_ndx), ncol )
+!rpf_CESM2_SLH
 
        !-----------------------------------------------------------------------
        !        ... call SAD routine
@@ -715,6 +819,27 @@ contains
 
     endif stratochem
 
+!rpf_CESM2_SLH
+      call icesad_trop_calc( lchnk, invariants(:ncol,:,indexm), pmb, tfld, h2o_cond, strato_sad(:ncol,:), &
+                             radius_trop, sad_ice_trop, ncol, troplev, pbuf )
+      call icesad_trop_calc( lchnk, invariants(:ncol,:,indexm), pmb, tfld, h2o_liq,  strato_sad(:ncol,:), &
+                             radius_trop, sad_liq_trop, ncol, troplev, pbuf )
+
+      sad_ice_trop_orig(:,:) = sad_ice_trop(:,:)
+      do k = 1,pver
+         do i = 1,ncol
+            !Check that we will not duplicate het reactions in the stratosphere and troposphere.
+            if( sad_strat(i,k,3) > 0._r8 .and. sad_ice_trop(i,k) > 0._r8 ) then
+               sad_ice_trop(i,k) = 0._r8
+            end if
+         end do
+      end do
+
+      call outfld( 'SAD_ICETROP',  sad_ice_trop(:,:),      ncol, lchnk )
+      call outfld( 'SAD_ICEORIG',  sad_ice_trop_orig(:,:), ncol, lchnk )
+      call outfld( 'SAD_LIQTROP',  sad_liq_trop(:,:),      ncol, lchnk )
+!rpf_CESM2_SLH
+
 !      NOTE: For gas-phase solver only.
 !            ratecon_sfstrat needs total hcl.
     if (hcl_ndx>0) then
@@ -767,9 +892,21 @@ contains
 
     cwat(:ncol,:pver) = cldw(:ncol,:pver)
 
-    call usrrxt( reaction_rates, tfld, ion_temp_fld, ele_temp_fld, invariants, h2ovmr, &
-                 pmid, invariants(:,:,indexm), sulfate, mmr, relhum, strato_sad, &
-                 troplevchem, dlats, ncol, sad_trop, reff, cwat, mbar, pbuf )
+!*******************************************************************************************
+!     call usrrxt( reaction_rates, tfld, ion_temp_fld, ele_temp_fld, invariants, h2ovmr, &
+!                  pmid, invariants(:,:,indexm), sulfate, mmr, relhum, strato_sad, &
+!                  troplevchem, dlats, ncol, sad_trop, reff, cwat, mbar, pbuf )
+    call usrrxt( reaction_rates, tfld, ion_temp_fld, ele_temp_fld, invariants, h2ovmr, ps, &
+                 pmid, invariants(:,:,indexm), sulfate, mmr, relhum, strato_sad,           &
+                 troplevchem, dlats, ncol, sad_trop, reff, cwat, mbar, pbuf,               &
+!rpf_CESM2_SLH
+                 sad_sslt, sad_sslt_eff,                                                   &
+                 clno2_yield,                                                              &
+                 vmr, lchnk, ocnfrac, icefrac,                                             &
+                 sad_ice_trop, sad_liq_trop, sad_ice_trop_orig )                            
+!rpf_CESM2_SLH
+!*******************************************************************************************
+
 
     call outfld( 'SAD_TROP', sad_trop(:ncol,:), ncol, lchnk )
 
@@ -780,6 +917,14 @@ contains
     ! Add trop/strat components of effective radius for output
     reff(:ncol,:)=reff(:ncol,:)+reff_strat(:ncol,:)
     call outfld( 'REFF_AERO', reff(:ncol,:), ncol, lchnk )
+
+!rpf_CESM2_SLH
+      call outfld('SAD_SSLT'    ,    sad_sslt(:ncol,:)    ,        ncol,lchnk)
+      call outfld('SAD_SSLT_EFF',    sad_sslt_eff(:ncol,:),        ncol,lchnk)
+      call outfld('SAD_TOTAL'   ,    sad_trop (:ncol,:)   ,        ncol,lchnk)
+      call outfld('CLNO2_YIELD',     clno2_yield(:ncol,:),         ncol,lchnk)
+      call outfld('CLNO2_YIELD_SRF', clno2_yield(:ncol,pver),      ncol,lchnk)      
+!rpf_CESM2_SLH
 
     if (het1_ndx>0) then
        call outfld( 'het1_total', reaction_rates(:,:,het1_ndx), ncol, lchnk )
@@ -1103,6 +1248,87 @@ contains
                     nhx_nitrogen_flx(:ncol), noy_nitrogen_flx(:ncol) )
 
     call rate_diags_calc( reaction_rates(:,:,:), vmr(:,:,:), invariants(:,:,indexm), ncol, lchnk )
+
+! !rpf_CESM2_SLH
+!    !Constant Values copied from other routines
+!     MW_dryair = 28.97_r8      !molecular mass of dry air g mol-1
+!     R_gas     = 286.99_r8     !gas constant (J/kg.K) .... R = Rg / MW_dryair = 8.314 [J/(K*mol)] / 28.97 [g/mol] = 286.987 [J/(kg*K)]
+!     N_avog    = 6.022e23_r8   !Avogadro nr           ;changed from 6.023 to 6.022 on 8th Sept 2010
+!     gravity   = 9.806_r8      ! m s-2
+!     Dobson_units = 2.687e16   ! DU / (molec cm-2)
+!     
+!    !Initialize arrays counter/adding variables
+!     bro_VCD_total (:) = 0._r8
+!     bro_VCD_tropo (:) = 0._r8
+!     bro_VCD_strat (:) = 0._r8
+!     io_VCD_total  (:) = 0._r8
+!     io_VCD_tropo  (:) = 0._r8
+!     io_VCD_strat  (:) = 0._r8
+!     o3_VCD_total  (:) = 0._r8
+!     o3_VCD_tropo  (:) = 0._r8
+!     o3_VCD_strat  (:) = 0._r8
+! 
+!     bro_LT        (:,:) = 0._r8
+!     io_LT         (:,:) = 0._r8
+!     o3_LT         (:,:) = 0._r8
+! 
+!     chunk_loop : do i = 1, ncol
+!       kk_tropo = troplev(i) ! Tropopause level: originally called ltrop in CAM-Chem
+! 
+!       level_loop : do k = pver, 1, -1
+! 
+!         t_virtual  = tfld(i,k) * ( 1._r8 + 0.61_r8 * qh2o(i,k) )        ! Temperature as if the atmosphere had only dry air
+!         dp_lev     = pint(i,k+1) - pint(i,k)                            ! Pa
+!         rho_lev    = pmid (i,k) / ( R_gas * t_virtual )                 ! kg m-3  ---  error corrected after polar_18 --- pmid (i,k+1) changed to pmid (i,k)
+!         nmolec_lev = ( rho_lev * 1.e-3_r8 ) * N_avog / MW_dryair        ! molec cm-3. Units conversions: rho_lev (kg m-3) * 1e-3 (convert from kg m-3 to g cm-3) / MW_dryair (g mol-1)
+!         dz_lev     = dp_lev / ( gravity * rho_lev )                     ! dz in m. Thicknes of the level
+! 
+!         LT_bro     = vmr(i,k,bro_ndx) * nmolec_lev * ( dz_lev * 1.e2_r8 ) ! molec cm-2. LT = Layer Thickness. Units conversions: nmolec_lev (molec cm-3) * dz_lev (m) * 1.e2  (cm m-1)
+!         LT_io      = vmr(i,k, io_ndx) * nmolec_lev * ( dz_lev * 1.e2_r8 )
+!         LT_o3      = vmr(i,k, o3_ndx) * nmolec_lev * ( dz_lev * 1.e2_r8 ) / Dobson_units
+! 
+!         ! Assign integrated VCD values to the correspondent arrays
+!         bro_LT(i,k) = LT_bro
+!         io_LT (i,k) = LT_io
+!         o3_LT (i,k) = LT_o3
+!         
+!         bro_VCD_total (i) = bro_VCD_total (i) + LT_bro    ! total VCD for all levels
+!         io_VCD_total  (i) = io_VCD_total  (i) + LT_io
+!         o3_VCD_total  (i) = o3_VCD_total  (i) + LT_o3
+!         if ( k >= kk_tropo ) then                         ! tropo VCD for levels bellow (greater k) tropopause 
+!           bro_VCD_tropo (i) = bro_VCD_tropo (i) + LT_bro
+!           io_VCD_tropo  (i) = io_VCD_tropo  (i) + LT_io
+!           o3_VCD_tropo  (i) = o3_VCD_tropo  (i) + LT_o3
+!         else                                              ! strat VCD for levels above (smaller k) tropopause 
+!           bro_VCD_strat (i) = bro_VCD_strat (i) + LT_bro
+!           io_VCD_strat  (i) = io_VCD_strat  (i) + LT_io
+!           o3_VCD_strat  (i) = o3_VCD_strat  (i) + LT_o3
+!         endif
+!       end do level_loop
+! 
+!     end do chunk_loop
+! 
+!     !worth mentioning that altitude of tropopause in km es called 'TROPLEV' instead of TROPHGT because idl geov
+!     !requires the variable to be called TROPLEV to compute vertical VCD integrations of other species
+!     if ( bro_ndx > 0 ) call outfld('BRO_VCD_total', bro_VCD_total(:ncol),       ncol, lchnk )
+!     if ( bro_ndx > 0 ) call outfld('BRO_VCD_tropo', bro_VCD_tropo(:ncol),       ncol, lchnk )
+!     if ( bro_ndx > 0 ) call outfld('BRO_VCD_strat', bro_VCD_strat(:ncol),       ncol, lchnk )
+!     if ( io_ndx  > 0 ) call outfld('IO_VCD_total',  io_VCD_total (:ncol),       ncol, lchnk )
+!     if ( io_ndx  > 0 ) call outfld('IO_VCD_tropo',  io_VCD_tropo (:ncol),       ncol, lchnk )
+!     if ( io_ndx  > 0 ) call outfld('IO_VCD_strat',  io_VCD_strat (:ncol),       ncol, lchnk )
+!     if ( o3_ndx  > 0 ) call outfld('O3_VCD_total',  o3_VCD_total (:ncol),       ncol, lchnk )
+!     if ( o3_ndx  > 0 ) call outfld('O3_VCD_tropo',  o3_VCD_tropo (:ncol),       ncol, lchnk )
+!     if ( o3_ndx  > 0 ) call outfld('O3_VCD_strat',  o3_VCD_strat (:ncol),       ncol, lchnk )
+!     if ( bro_ndx > 0 ) call outfld('BRO_LT',        bro_LT       (:ncol,:pver), ncol, lchnk )
+!     if ( io_ndx  > 0 ) call outfld('IO_LT',         io_LT        (:ncol,:pver), ncol, lchnk )
+!     if ( o3_ndx  > 0 ) call outfld('O3_LT',         o3_LT        (:ncol,:pver), ncol, lchnk )
+! !rpf_CESM2_SLH
+
+
+! !rpf_CESM2_SLH
+                         call outfld('TROPLEV',       troplev_id   (:ncol),       ncol, lchnk )
+! !rpf_CESM2_SLH
+
 !
 ! jfl
 !
