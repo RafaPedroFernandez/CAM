@@ -11,7 +11,7 @@ module mo_slh_routines
 
 
 !rpf_CESM3_SLH - merging SLH halogen routines in a single module
-  use shr_kind_mod, only : r8 => shr_kind_r8
+! use shr_kind_mod, only : r8 => shr_kind_r8
   use constituents, only : cnst_mw, cnst_get_ind
 !rpf_CESM2_SLH
   use chem_mods,    only : gas_pcnst
