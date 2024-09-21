@@ -3108,6 +3108,9 @@ if (defined  $lbc_file) {
                 if ($nl->delete_variable('chem_surfvals_nl', $ghg_vmr) != 0) {
                     die "$ProgName - ERROR: not able to delete $ghg_vmr from group chem_surfvals_nl.\n";
                 }
+            }
+        }
+    }
 
     # Make sure the flbc_list specifies all the GHGs needed for radiation.
     my $flbc_list = $nl->get_value('flbc_list');
