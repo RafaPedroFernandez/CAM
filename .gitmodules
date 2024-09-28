@@ -47,12 +47,12 @@
         fxtag = fv3_cesm.04
 	fxDONOTUSEurl = https://github.com/ESCOMP/FV3_CESM.git
 
-[submodule "fv3"]
-	path = src/dynamics/fv3
-	url = https://github.com/ESCOMP/CAM_FV3_interface.git
-        fxrequired = AlwaysRequired
-        fxtag = fv3_cesm.04
-	fxDONOTUSEurl = https://github.com/ESCOMP/CAM_FV3_interface.git
+#[submodule "fv3"]
+#	path = src/dynamics/fv3
+#	url = https://github.com/ESCOMP/CAM_FV3_interface.git
+#        fxrequired = AlwaysRequired
+#        fxtag = fv3_cesm.04
+#	fxDONOTUSEurl = https://github.com/ESCOMP/CAM_FV3_interface.git
 
 #[submodule "geoschem"]
 #	path = src/chemistry/geoschem/geoschem_src
@@ -100,11 +100,11 @@
 
 [submodule "clubb"]
 	path = src/physics/clubb
-	url = https://github.com/larson-group/clubb_release
+	url = https://github.com/ESCOMP/CLUBB_CESM
         fxrequired = AlwaysRequired
-        fxsparse = ../.clubb_sparse_checkout
+#        fxsparse = ../.clubb_sparse_checkout
         fxtag = clubb_release_b76a124_20200220_c20200320
-        fxDONOTUSEurl = https://github.com/larson-group/clubb_release
+        fxDONOTUSEurl = https://github.com/ESCOMP/CLUBB_CESM
 
 [submodule "silhs"]
 	path = src/physics/silhs
