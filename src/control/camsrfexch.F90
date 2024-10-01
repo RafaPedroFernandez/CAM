@@ -131,7 +131,13 @@ CONTAINS
     ! Allocate space for the surface to atmosphere data type. And initialize
     ! the values.
 
-    use seq_drydep_mod,  only: lnd_drydep, n_drydep
+
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!     use seq_drydep_mod,  only: lnd_drydep, n_drydep
+    use seq_drydep_mod,  only: lnd_drydep
+    use shr_drydep_mod,  only : nddvels =>  n_drydep
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+
     use shr_megan_mod,   only: shr_megan_mechcomps_n
     use shr_fire_emis_mod,only: shr_fire_emis_mechcomps_n
 
