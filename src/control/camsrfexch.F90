@@ -252,9 +252,14 @@ CONTAINS
        cam_in(c)%ustar    (:) = 0._r8
        cam_in(c)%re       (:) = 0._r8
        cam_in(c)%ssq      (:) = 0._r8
-       if (lnd_drydep .and. n_drydep>0) then
+
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!        if (lnd_drydep .and. n_drydep>0) then
+       if (n_drydep>0) then
           cam_in(c)%depvel (:,:) = 0._r8
        endif
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+
        if (active_Fall_flxfire .and. shr_fire_emis_mechcomps_n>0) then
           cam_in(c)%fireflx(:,:) = 0._r8
           cam_in(c)%fireztop(:) = 0._r8
