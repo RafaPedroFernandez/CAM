@@ -572,6 +572,9 @@ contains
          initial_run_in=initial_run, &
          restart_run_in=restart_run, &
          branch_run_in=branch_run, &
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+         post_assim_in=dart_mode, &
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
          calendar=calendar, &
          brnch_retain_casename=brnch_retain_casename, &
          aqua_planet=aqua_planet, &
