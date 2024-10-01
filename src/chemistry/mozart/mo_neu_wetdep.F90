@@ -104,7 +104,7 @@ subroutine neu_wetdep_init
 
 !rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 !   if ( .not. cam_chempkg_is('geoschem_mam4') ) then
-!     select case( trim(test_name) )
+    select case( trim(test_name) )
 !rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 
 !
