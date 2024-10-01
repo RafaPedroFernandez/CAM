@@ -70,7 +70,13 @@ contains
   subroutine advertise_fields(gcomp, flds_scalar_name, rc)
 
     use spmd_utils        , only : masterproc
-    use seq_drydep_mod    , only : seq_drydep_readnl, seq_drydep_init
+
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!     use seq_drydep_mod    , only : seq_drydep_readnl, seq_drydep_init
+    use seq_drydep_mod    , only : seq_drydep_readnl
+    use shr_drydep_mod    , only : seq_drydep_init
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+
     use shr_megan_mod     , only : shr_megan_readnl
     use shr_fire_emis_mod , only : shr_fire_emis_readnl
     use shr_carma_mod     , only : shr_carma_readnl
