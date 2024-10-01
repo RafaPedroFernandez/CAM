@@ -311,8 +311,11 @@ contains
     use mo_setext,         only : setext
     use fire_emissions,    only : fire_emissions_vrt
     use mo_sethet,         only : sethet
-    use mo_drydep,         only : drydep, set_soilw
-    use seq_drydep_mod,    only : DD_XLND, DD_XATM, DD_TABL, drydep_method
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!     use mo_drydep,         only : drydep, set_soilw
+!     use seq_drydep_mod,    only : DD_XLND, DD_XATM, DD_TABL, drydep_method
+    use mo_drydep,         only : drydep
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
     use mo_fstrat,         only : set_fstrat_vals, set_fstrat_h2o
     use noy_ubc,           only : noy_ubc_set
     use mo_flbc,           only : flbc_set
@@ -1229,26 +1232,35 @@ contains
     wind_speed(:ncol) = sqrt( ufld(:ncol,pver)*ufld(:ncol,pver) + vfld(:ncol,pver)*vfld(:ncol,pver) )
     prect(:ncol) = precc(:ncol) + precl(:ncol)
 
-    if ( drydep_method == DD_XLND ) then
-       soilw = -99
-       call drydep( ocnfrac, icefrac, ncdate, ts, ps,  &
-            wind_speed, qh2o(:,pver), tfld(:,pver), pmid(:,pver), prect, &
-            snowhland, fsds, depvel, sflx, mmr, &
-            tvs, soilw, relhum(:,pver:pver), ncol, lonndx, latndx, lchnk )
-    else if ( drydep_method == DD_XATM ) then
-       table_soilw = has_drydep( 'H2' ) .or. has_drydep( 'CO' )
-       if( .not. dyn_soilw .and. table_soilw ) then
-          call set_soilw( soilw, lchnk, calday )
-       end if
-       call drydep( ncdate, ts, ps,  &
-            wind_speed, qh2o(:,pver), tfld(:,pver), pmid(:,pver), prect, &
-            snowhland, fsds, depvel, sflx, mmr, &
-            tvs, soilw, relhum(:,pver:pver), ncol, lonndx, latndx, lchnk )
-    else if ( drydep_method == DD_TABL ) then
-       call drydep( calday, ts, zen_angle, &
-            depvel, sflx, mmr, pmid(:,pver), &
-            tvs, ncol, icefrac, ocnfrac, lchnk )
-    endif
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!     if ( drydep_method == DD_XLND ) then
+!        soilw = -99
+!        call drydep( ocnfrac, icefrac, ncdate, ts, ps,  &
+!             wind_speed, qh2o(:,pver), tfld(:,pver), pmid(:,pver), prect, &
+!             snowhland, fsds, depvel, sflx, mmr, &
+!             tvs, soilw, relhum(:,pver:pver), ncol, lonndx, latndx, lchnk )
+!     else if ( drydep_method == DD_XATM ) then
+!        table_soilw = has_drydep( 'H2' ) .or. has_drydep( 'CO' )
+!        if( .not. dyn_soilw .and. table_soilw ) then
+!           call set_soilw( soilw, lchnk, calday )
+!        end if
+!        call drydep( ncdate, ts, ps,  &
+!             wind_speed, qh2o(:,pver), tfld(:,pver), pmid(:,pver), prect, &
+!             snowhland, fsds, depvel, sflx, mmr, &
+!             tvs, soilw, relhum(:,pver:pver), ncol, lonndx, latndx, lchnk )
+!     else if ( drydep_method == DD_TABL ) then
+!        call drydep( calday, ts, zen_angle, &
+!             depvel, sflx, mmr, pmid(:,pver), &
+!             tvs, ncol, icefrac, ocnfrac, lchnk )
+!     endif
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+    call drydep( ocnfrac, icefrac, ts, ps,  &
+                 wind_speed, qh2o(:,pver), tfld(:,pver), pmid(:,pver), prect, &
+                 snowhland, fsds, depvel, sflx, mmr, &
+                 tvs, ncol, lchnk )
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 
     drydepflx(:,:) = 0._r8
     wetdepflx_diag(:,:) = 0._r8

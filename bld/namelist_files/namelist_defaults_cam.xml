@@ -1684,7 +1684,9 @@
 <gas_wetdep_ice_uptake_list>'HNO3'</gas_wetdep_ice_uptake_list>
 
 <!-- dry deposition method for gas-phase species -->
-<drydep_method>xactive_lnd</drydep_method>
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
+<!-- <drydep_method>xactive_lnd</drydep_method> -->
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
 
 
 <!-- SLH scaling factors for different compsets -->

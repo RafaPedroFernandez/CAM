@@ -6680,7 +6680,8 @@ List of species that undergo dry deposition.
 Default: set by build-namelist.
 </entry>
 
-<entry id="drydep_method" type="char*16" category="dry_deposition"
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
+<!--<entry id="drydep_method" type="char*16" category="dry_deposition"
        group="drydep_inparm" valid_values="xactive_atm,xactive_lnd,table" >
 Dry deposition method used.  This specifies the method used to calculate dry
 deposition velocities of gas-phase chemical species.  The available methods
@@ -6689,7 +6690,17 @@ are:
  'xactive_atm' - interactive method in CAM
  'xactive_lnd' - interactive method in CLM
 Default: set by build-namelist
+</entry>-->
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
+
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
+<entry id="dep_data_file" type="char*500" input_pathname="abs" category="dry_deposition"
+       group="drydep_inparm" valid_values="" >
+Full pathname of file containing gas phase deposition data including effective
+Henry's law coefficients.
+Default: set by build-namelist.
 </entry>
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
 
 <entry id="rxn_rate_sums" type="char*256(200)" category="cam_chem"
        group="rxn_rate_diags_nl" valid_values="" >

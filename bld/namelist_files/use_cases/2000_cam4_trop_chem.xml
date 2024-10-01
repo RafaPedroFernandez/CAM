@@ -33,7 +33,9 @@
 <prescribed_ozone_cycle_yr> 2000                                  </prescribed_ozone_cycle_yr>
 
 <chem_rad_passive>.true.</chem_rad_passive>
-<drydep_method>'xactive_lnd'</drydep_method>
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
+<!-- <drydep_method>'xactive_lnd'</drydep_method> -->
+<!-- rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh -->
 
 <!-- sim_year used for CLM datasets -->
 <sim_year>2000</sim_year>
