@@ -73,8 +73,8 @@ contains
 
 !rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 !     use seq_drydep_mod    , only : seq_drydep_readnl, seq_drydep_init
+!     use shr_drydep_mod    , only : seq_drydep_init
     use seq_drydep_mod    , only : seq_drydep_readnl
-    use shr_drydep_mod    , only : seq_drydep_init
 !rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 
     use shr_megan_mod     , only : shr_megan_readnl
@@ -247,7 +247,10 @@ contains
     if (drydep_nflds > 0) then
        call fldlist_add(fldsToAtm_num, fldsToAtm, 'Sl_ddvel', ungridded_lbound=1, ungridded_ubound=drydep_nflds)
     end if
-    call seq_drydep_init( )
+
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!     call seq_drydep_init( )
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 
     ! MEGAN VOC emissions fluxes from land
     call shr_megan_readnl('drv_flds_in', megan_nflds)
