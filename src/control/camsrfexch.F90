@@ -134,7 +134,7 @@ CONTAINS
 
 !rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
 !     use seq_drydep_mod,  only: lnd_drydep, n_drydep
-    use seq_drydep_mod,  only: lnd_drydep
+! !     use seq_drydep_mod,  only: lnd_drydep
 !     use shr_drydep_mod,  only : nddvels =>  n_drydep
     use shr_drydep_mod,  only : n_drydep
 !rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
@@ -192,7 +192,10 @@ CONTAINS
        endif
     end do
 
-    if (lnd_drydep .and. n_drydep>0) then
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
+!     if (lnd_drydep .and. n_drydep>0) then
+    if (n_drydep>0) then
+!rpf_CESM3_SLH testing cam_cesm2_2_rel_09_slh
        do c = begchunk,endchunk 
           allocate (cam_in(c)%depvel(pcols,n_drydep), stat=ierror)
           if ( ierror /= 0 ) call endrun(sub//': allocation error depvel')
