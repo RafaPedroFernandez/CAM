@@ -191,7 +191,7 @@ contains
           iodide_aq(i) = 1.46e6_r8 * exp( -9134._r8 / sst(i) )
        end if
 
-       if (ws_mask(i) > 3.0_r8) then !rpf oceanic iodine emissions were extremely large for very small windspeeds. Now using the 3.0 m/s mask
+       if (ws_mask(i) > 0.0_r8) then !rpf oceanic iodine emissions were extremely large for very small windspeeds. ws_mask = 3.0 m/s for low wind-speeds imposed above
           flx_i2(i) = o3_surf(i) * ( iodide_aq(i) ) ** (1.3_r8) * ( 1.74e9_r8 - ( 6.54e8_r8 * log ( ws_mask(i) ) ) )
           flx_i2(i) = flx_i2(i) * ocnfrac(i)
        else
@@ -200,7 +200,7 @@ contains
 
        if ( flx_i2(i) < 0._r8 ) flx_i2(i) = 0._r8
 
-       if (ws_mask(i) > 3.0_r8) then !rpf oceanic iodine emissions were extremely large for very small windspeeds. Now using the 3.0 m/s mask
+       if (ws_mask(i) > 0.0_r8) then !rpf oceanic iodine emissions were extremely large for very small windspeeds. ws_mask = 3.0 m/s for low wind-speeds imposed above
           flx_hoi(i) = o3_surf(i) * ( 4.15e5_r8 * ( sqrt( iodide_aq(i) ) / ws_mask(i) ) &
                - ( 20.6_r8 / ws_mask(i) ) - 23600._r8 * sqrt ( iodide_aq(i) ) ) 
           flx_hoi(i) = flx_hoi(i) * ocnfrac(i)
