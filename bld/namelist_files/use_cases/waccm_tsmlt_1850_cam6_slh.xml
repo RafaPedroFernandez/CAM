@@ -51,12 +51,13 @@
 <xs_short_file>atm/waccm/phot/xs_short_c221005mm.nc</xs_short_file>
 
 <!--<!-- slh_nl -->
-<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
+<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.70D0  </SSAdehal_ScalingFactor>
 <SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
 <SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
 <LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
-<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  2.00D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  2.80D0  </ICEfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  3.00D0  </ICEfraprx_ScalingFactor_Br>
+
 
 <!-- emissions -->
 

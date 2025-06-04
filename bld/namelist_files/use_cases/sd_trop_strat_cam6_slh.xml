@@ -62,12 +62,20 @@
 <lght_no_prd_factor>4.50D0</lght_no_prd_factor>
 
 <!--<!-- slh_nl -->
-<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.00D0  </SSAdehal_ScalingFactor>
+<SSAdehal_ScalingFactor     hgrid="1.9x2.5">  1.40D0  </SSAdehal_ScalingFactor>
 <SSAhno3_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAhno3_ScalingFactor>
 <SSAn2o5_ScalingFactor      hgrid="1.9x2.5">  1.00D0  </SSAn2o5_ScalingFactor>
-<LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
-<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  0.85D0  </ICEfraprx_ScalingFactor_I>
+<LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.50D0  </LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.30D0  </ICEfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  1.00D0  </ICEfraprx_ScalingFactor_Br>
+
+<SSAdehal_ScalingFactor     hgrid="0.9x1.25"> 1.50D0  </SSAdehal_ScalingFactor>
+<SSAhno3_ScalingFactor      hgrid="0.9x1.25"> 1.00D0  </SSAhno3_ScalingFactor>
+<SSAn2o5_ScalingFactor      hgrid="0.9x1.25"> 1.00D0  </SSAn2o5_ScalingFactor>
+<LIQfraprx_ScalingFactor_I  hgrid="0.9x1.25"> 1.50D0  </LIQfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_I  hgrid="0.9x1.25"> 0.90D0  </ICEfraprx_ScalingFactor_I>
+<ICEfraprx_ScalingFactor_Br hgrid="0.9x1.25"> 1.00D0  </ICEfraprx_ScalingFactor_Br>
+
 
 <!-- History Files -->
 
