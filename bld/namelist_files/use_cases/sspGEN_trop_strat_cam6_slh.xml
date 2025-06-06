@@ -24,9 +24,6 @@
            'N2O', 'CFC114', 'CFC115', 'HCFC141B', 'HCFC142B', 'H2402', 'OCS', 'SF6', 'CHCL3', 'C2H4CL2'</flbc_list>
 
 <prescribed_strataero_type>SERIAL</prescribed_strataero_type>
-<!-- <prescribed_strataero_datapath>/glade/campaign/cesm/inputdata/atm/waccm/sulf</prescribed_strataero_datapath> -->
-<prescribed_strataero_datapath>atm/waccm/sulf</prescribed_strataero_datapath>
-<prescribed_strataero_file>CESM_1949_2100_sad_V2_c130627.nc</prescribed_strataero_file>
 
 <!-- Photolysis of SLH -->
 <!-- <xs_long_file>/glade/campaign/cesm/inputdata/atm/waccm/phot/temp_prs_GT200nm_c221005mm.nc</xs_long_file> -->
