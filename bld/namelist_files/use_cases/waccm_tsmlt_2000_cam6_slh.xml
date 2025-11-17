@@ -22,7 +22,10 @@
 <ncdata dyn="fv"  hgrid="0.9x1.25">cesm2_init/f.e21.FW1850.f09_f09_mg17.cesm2.1-exp011.001/0003-01-01/f.e21.FW1850.f09_f09_mg17.cesm2.1-exp011.001.cam.i.0003-01-01-00000.nc</ncdata>
 <ncdata dyn="fv"  hgrid="1.9x2.5" >atm/waccm/ic/b1850.waccm-mam3_1.9x2.5_L70.cam2.i.0156-01-01.c120523.nc</ncdata>
 <ncdata dyn="fv"  hgrid="4x5"     >atm/waccm/ic/f2000.waccm-mam3_4x5_L70.cam2.i.0017-01-01.c121113.nc</ncdata>
-<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">atm/waccm/ic/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test7_gI_sc1_lghtNO4.5.FWnudged_slh.cam.i.1998-01-01-00000_c240618.nc</ncdata>
+<!-- <ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">atm/waccm/ic/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test7_gI_sc1_lghtNO4.5.FWnudged_slh.cam.i.1998-01-01-00000_c240618.nc</ncdata> -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_WACCM_2x2/BW.f19_g16.L70.cesm2.2-asdbranch_slh_released.BWSSPGENcmip6_slh.NoHAL5_ssp370_spin.cam.i.1999-01-01-00000.nc' -->
+<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">atm/waccm/ic/ncdata_SLH/ncdata_WACCM_2x2/BW.f19_g16.L70.cesm2.2-asdbranch_slh_released.BWSSPGENcmip6_slh.NoHAL5_ssp370_spin.cam.i.1999-01-01-00000.nc</ncdata>
+
 
 <!-- LBC, UBC Files -->
 <flbc_type>CYCLICAL</flbc_type>
@@ -41,7 +44,7 @@
 <qbo_use_forcing hgrid="1.9x2.5" >.true.</qbo_use_forcing>
 <qbo_use_forcing>.false.</qbo_use_forcing>
 
-<lght_no_prd_factor hgrid="0.9x1.25">2.70D0</lght_no_prd_factor>
+<!-- <lght_no_prd_factor hgrid="0.9x1.25">2.70D0</lght_no_prd_factor> -->
 <lght_no_prd_factor hgrid="1.9x2.5">4.50D0</lght_no_prd_factor>
 
 <!-- slh_nl -->
@@ -51,6 +54,13 @@
 <LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  2.80D0  </ICEfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  3.00D0  </ICEfraprx_ScalingFactor_Br>
+
+
+<xs_short_file>atm/waccm/phot/xs_short_c221005mm_slh.nc</xs_short_file>
+<xs_long_file >atm/waccm/phot/temp_prs_GT200nm_c221005mm_slh.nc</xs_long_file>
+<!-- /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/XS_SLH/xs_short_c221005mm_slh.nc -->
+<!-- /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/XS_SLH/temp_prs_GT200nm_c221005mm_slh.nc -->
+
 
 <!-- emissions -->
 <csw_time_type>CYCLICAL</csw_time_type>

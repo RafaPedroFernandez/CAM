@@ -5,7 +5,10 @@
 <start_ymd>00010101</start_ymd>
 
 <!-- Initial conditions -->
-<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_vsl03_CSIC.Testing_USR_v2jv1.FCHISTslhvbs.cam.i.2000-01-01-00000_c240525.nc</ncdata>
+<!-- <ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_vsl03_CSIC.Testing_USR_v2jv1.FCHISTslhvbs.cam.i.2000-01-01-00000_c240525.nc</ncdata> -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1980-01-01-00000.nc' -->
+<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1980-01-01-00000.nc</ncdata>
+
 
 <!-- Solar data -->
 <solar_irrad_data_file>atm/cam/solar/SolarForcingCMIP6_18491230-23000102_c20200615.nc</solar_irrad_data_file>
@@ -29,9 +32,17 @@
 
 <!-- emissions -->
 
-<lght_no_prd_factor hgrid="0.9x1.25">2.70D0</lght_no_prd_factor>
+<!-- <lght_no_prd_factor hgrid="0.9x1.25">2.70D0</lght_no_prd_factor> -->
+<lght_no_prd_factor hgrid="0.9x1.25">1.00D0</lght_no_prd_factor>
 <lght_no_prd_factor hgrid="1.9x2.5">4.50D0</lght_no_prd_factor>
 <dust_emis_fact hgrid="0.9x1.25"> 0.38D0</dust_emis_fact>
+
+
+<xs_short_file>atm/waccm/phot/xs_short_c221005mm_slh.nc</xs_short_file>
+<xs_long_file >atm/waccm/phot/temp_prs_GT200nm_c221005mm_slh.nc</xs_long_file>
+<!-- /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/XS_SLH/xs_short_c221005mm_slh.nc -->
+<!-- /glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/XS_SLH/temp_prs_GT200nm_c221005mm_slh.nc -->
+
 
 <!-- emissions -->
 
