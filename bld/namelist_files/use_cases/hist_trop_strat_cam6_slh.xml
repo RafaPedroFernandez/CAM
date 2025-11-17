@@ -6,10 +6,15 @@
 
 <!-- Initial conditions -->
 <!--<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_vsl03_CSIC.Testing_USR_v2jv1.FCHISTslhvbs.cam.i.2000-01-01-00000_c240525.nc</ncdata>-->
-<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1980-01-01-00000.nc' -->
 <!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_1x1_32L/FC.f09_f09_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Setup_SLH_HistorLNOx.cam.i.2000-01-01-00000.nc' -->
-<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1980-01-01-00000.nc</ncdata>
 <ncdata dyn="fv" hgrid="0.9x1.25">atm/cam/inic/fv/ncdata_SLH/ncdata_1x1_32L/FC.f09_f09_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Setup_SLH_HistorLNOx.cam.i.2000-01-01-00000.nc</ncdata>
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1950-01-01-00000.nc' -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1980-01-01-00000.nc' -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.1990-01-01-00000.nc' -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.2000-01-01-00000.nc' -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.2010-01-01-00000.nc' -->
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.2020-01-01-00000.nc' -->
+<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/ncdata_SLH/ncdata_2x2_32L/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.2000-01-01-00000.nc</ncdata>
 
 
 <!-- Solar data -->

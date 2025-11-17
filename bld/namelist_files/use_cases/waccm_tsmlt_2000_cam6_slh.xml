@@ -23,8 +23,8 @@
 <ncdata dyn="fv"  hgrid="1.9x2.5" >atm/waccm/ic/b1850.waccm-mam3_1.9x2.5_L70.cam2.i.0156-01-01.c120523.nc</ncdata>
 <ncdata dyn="fv"  hgrid="4x5"     >atm/waccm/ic/f2000.waccm-mam3_4x5_L70.cam2.i.0017-01-01.c121113.nc</ncdata>
 <!-- <ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">atm/waccm/ic/FW.f19_f19_mg17.L70.cesm2.2-asdbranch_vsl03_CSIC_mdz.FW_nudged_test7_gI_sc1_lghtNO4.5.FWnudged_slh.cam.i.1998-01-01-00000_c240618.nc</ncdata> -->
-<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_WACCM_2x2/BW.f19_g16.L70.cesm2.2-asdbranch_slh_released.BWSSPGENcmip6_slh.NoHAL5_ssp370_spin.cam.i.1999-01-01-00000.nc' -->
-<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">atm/waccm/ic/ncdata_SLH/ncdata_WACCM_2x2/BW.f19_g16.L70.cesm2.2-asdbranch_slh_released.BWSSPGENcmip6_slh.NoHAL5_ssp370_spin.cam.i.1999-01-01-00000.nc</ncdata>
+<!--  ncdata		= '/glade/work/rpfernan/setup_cesm2/Setup_CESM2-SLH_v2/ncdata_SLH/ncdata_WACCM_2x2/BW.f19_g16.L70.cesm2.2-asdbranch_slh_released.BWSSPGENcmip6_slh.AllHAL5_ssp370.cam.i.2000-01-01-00000.nc' -->
+<ncdata dyn="fv"  hgrid="1.9x2.5"  nlev="70">atm/waccm/ic/ncdata_SLH/ncdata_WACCM_2x2/BW.f19_g16.L70.cesm2.2-asdbranch_slh_released.BWSSPGENcmip6_slh.AllHAL5_ssp370.cam.i.2000-01-01-00000.nc</ncdata>
 
 
 <!-- LBC, UBC Files -->
