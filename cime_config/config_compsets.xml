@@ -420,7 +420,7 @@
     <lname>HIST_CAM60%GEOSCHEM%HEMCO_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_CISM2%NOEVOLVE_SWAV</lname>
   </compset>
   <compset>
-    <alias>FCHIST_slh</alias>
+    <alias>FCHIST_SLH</alias>
     <lname>HIST_CAM60%CSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
 
@@ -547,10 +547,16 @@
     <alias>FWHIST_SLH</alias>
     <lname>HIST_CAM60%WSLH_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
-  <compset>
+  <!-- RPF: What would be the difference between CAM60%WSLH%NUDG and CAM60%WCTS%SDYN? -->
+  <!-- RPF: What is the default for nudging WACCM in CESM -->
+   <compset>
     <alias>FWnudged_SLH</alias>
     <lname>HIST_CAM60%WSLH%NUDG_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
   </compset>
+  <!--<compset>
+    <alias>FWSD</alias>
+    <lname>HIST_CAM60%WCTS%SDYN_CLM50%SP_CICE%PRES_DOCN%DOM_MOSART_SGLC_SWAV</lname>
+  </compset>-->
 
   <compset>
     <alias>FWHIST_BGC</alias>
