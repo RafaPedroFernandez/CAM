@@ -1952,6 +1952,7 @@ if (($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) 
                    'num_a2   -> ' => 'num_a2_emis_file',
                    );
         %verhash = ('ver'=>'mam');
+    #RPF: Do we need to add _slh here?
     } elsif ($chem =~ /_tsmlt_mam4/ or $chem =~ /_tsmlt_mam5/ or $chem =~ /mam4_vbs/) {
         %species = (%species,
                    'BENZENE  -> ' => 'soa_benzene_emis_file',
@@ -2038,6 +2039,7 @@ if (($chem =~ /trop_mozart/ or $chem =~ /trop_strat/ or $chem =~ /waccm_tsmlt/) 
                    'num_a1 -> ' => 'num_a1_ext_file',
                    'num_a2 -> ' => 'num_a2_ext_file', );
       $cyc_yr = '2000';
+    #RPF: Do we need to add _slh here?
     } elsif ($chem =~ /_tsmlt_mam4/ or $chem =~ /_tsmlt_mam5/ or $chem =~ /mam4_vbs/) {
       %species = ( 'NO2    -> ' => 'no2_aircraft_emis_file',
                    'SO2    -> ' => 'so2_ext_file',

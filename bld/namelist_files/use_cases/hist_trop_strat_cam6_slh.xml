@@ -5,7 +5,7 @@
 <start_ymd>00010101</start_ymd>
 
 <!-- Initial conditions -->
-<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.2020-01-01-00000_c241216.nc</ncdata>
+<ncdata dyn="fv" hgrid="1.9x2.5">atm/cam/inic/fv/FC.f19_f19_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Historical_SLH.cam.i.2000-01-01-00000_c241214.nc</ncdata>
 <ncdata dyn="fv" hgrid="0.9x1.25">atm/cam/inic/fv/FC.f09_f09_mg17.L32.cesm2.2-asdbranch_slh_released.FCHIST_slh.Setup_SLH_HistorLNOx.cam.i.2000-01-01-00000_c250626.nc</ncdata>
 
 <!-- Solar data -->
@@ -27,6 +27,9 @@
 
 <!-- emissions -->
 
+<!-- <lght_no_prd_factor hgrid="0.9x1.25">2.70D0</lght_no_prd_factor> -->
+<!-- RPF: We need to run simulations with CAM6dev to be sure about the -->
+<!-- RPF: best valur for lght_no_prd_factor for 1deg and 2deg -->
 <lght_no_prd_factor hgrid="0.9x1.25">1.00D0</lght_no_prd_factor>
 <lght_no_prd_factor hgrid="1.9x2.5">4.50D0</lght_no_prd_factor>
 <dust_emis_fact hgrid="0.9x1.25"> 0.38D0</dust_emis_fact>
@@ -45,7 +48,8 @@
 <LIQfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.00D0  </LIQfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_I  hgrid="1.9x2.5">  1.70D0  </ICEfraprx_ScalingFactor_I>
 <ICEfraprx_ScalingFactor_Br hgrid="1.9x2.5">  2.00D0  </ICEfraprx_ScalingFactor_Br>
-
+<!-- RPF: Similar to Lightning NOx, We need to run simulations with CAM6dev -->
+<!-- RPF: to obtain the best ScalingFactors for SLH species using 1deg and 2deg -->
 <SSAdehal_ScalingFactor     hgrid="0.9x1.25"> 1.50D0  </SSAdehal_ScalingFactor>
 <SSAhno3_ScalingFactor      hgrid="0.9x1.25"> 1.00D0  </SSAhno3_ScalingFactor>
 <SSAn2o5_ScalingFactor      hgrid="0.9x1.25"> 1.00D0  </SSAn2o5_ScalingFactor>
