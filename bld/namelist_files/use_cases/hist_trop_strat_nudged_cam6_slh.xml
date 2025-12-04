@@ -68,6 +68,7 @@
          'C2H2     -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_C2H2_anthro_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'C2H2     -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_C2H2_bb_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'C2H4     -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_C2H4_anthro_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
+         'C2H4     -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_C2H4_bb_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'C2H4     -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-SSP_C2H4_other_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'C2H5OH   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_C2H5OH_anthro_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'C2H5OH   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_C2H5OH_bb_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
