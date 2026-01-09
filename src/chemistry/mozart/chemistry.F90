@@ -109,7 +109,11 @@ module chemistry
 
   character(len=fieldname_len) :: srcnam(gas_pcnst) ! names of source/sink tendencies
 
+!rpf_CESM2_SLH
   integer :: ixcldliq                ! index of liquid cloud water
+! integer :: ixcldliq, ixcldice                     ! indicies of liquid and ice cloud water
+!rpf_CESM2_SLH
+
   integer :: ndx_cld
   integer :: ndx_cmfdqr
   integer :: ndx_nevapr
@@ -690,7 +694,12 @@ end function chem_is_active
 !-----------------------------------------------------------------------
 ! Get liq and ice cloud water indicies
 !-----------------------------------------------------------------------
+
+!rpf_CESM2_SLH
     call cnst_get_ind( 'CLDLIQ', ixcldliq )
+!   call cnst_get_ind( 'CLDICE', ixcldice )
+!rpf_CESM2_SLH
+
     call cnst_get_ind( 'NUMLIQ', ixndrop, abort=.false.  )
 
 !-----------------------------------------------------------------------
@@ -920,8 +929,18 @@ end function chem_is_active
        !        ... Set surface emissions
        !-----------------------------------------------------------------------
        call set_srf_emissions( lchnk, ncol, sflx(:,:) )
+
+!rpf_CESM2_SLH
+!rpf   ! Iodine emissions must be called here before the outfld loop is called below
+       ! SFI2 and SFHOI surface emissions are computed and assigned to cam_in%cflx(:,:) here
+       call iodine_emissions_srf( state, cam_in )
+!rpf_CESM2_SLH
+
     endif
 
+!rpf_CESM2_SLH
+!rpf: Why is thid loop of re-assignment performed before callinf fire_emissions_srf and ocean_emis_getflux ??
+!rpf: Shouln't this be called at the end of the routine??
     do m = 1,pcnst
        n = map2chm(m)
        if ( n /= h2o_ndx .and. n > 0 ) then
@@ -931,6 +950,8 @@ end function chem_is_active
           endif
        endif
     enddo
+!rpf: It seems that calling iodine emissions before or after this loop makes a big difference and should be checked and understood !!!
+!rpf_CESM2_SLH
 
     ! fire surface emissions if not elevated forcing
     call fire_emissions_srf( lchnk, ncol, cam_in%fireflx, cam_in%cflx )
@@ -938,8 +959,11 @@ end function chem_is_active
     ! air-sea exchange of trace gases
     call ocean_emis_getflux(lchnk, ncol, state, cam_in%u10, cam_in%sst, cam_in%ocnfrac, cam_in%icefrac, cam_in%cflx)
 
-    ! I2 and HOI surface emissions
-    call iodine_emissions_srf( state, cam_in )
+!rpf_CESM2_SLH
+!rpf    ! When the call to iodine emissions is performed here, the model does not crash but SFHOI and SFI2 emissions are zero in output file
+!rpf    ! I2 and HOI surface emissions
+!rpf    call iodine_emissions_srf( state, cam_in )
+!rpf_CESM2_SLH
 
   end subroutine chem_emissions
 
@@ -1265,7 +1289,12 @@ end function chem_is_active
 !-----------------------------------------------------------------------
     call t_startf( 'chemdr' )
     do k = 1,pver
+
+!rpf_CESM2_SLH
        cldw(:ncol,k) = state%q(:ncol,k,ixcldliq)
+!      cldw(:ncol,k) = state%q(:ncol,k,ixcldliq) + state%q(:ncol,k,ixcldice)
+!rpf_CESM2_SLH
+
        if (ixndrop>0) &
             ncldwtr(:ncol,k) = state%q(:ncol,k,ixndrop)
     end do
