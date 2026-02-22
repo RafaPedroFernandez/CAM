@@ -39,7 +39,10 @@
 <!-- RPF: Following hist_trop_strat_nudged_cam6.xml for 1deg we should use SSPs -->
 <!-- RPF: This condition should be valid not only for trop_strat_mam4_slh -->
 <!-- RPF: but also for trop_strat_mam5_slh -->
-<ext_frc_specifier chem="trop_strat_mam4_slh" hgrid="0.9x1.25">
+<!-- <ext_frc_specifier chem="trop_strat_mam4_slh" hgrid="0.9x1.25"> -->
+<!-- RPF: Is it possible to add an .OR. condition in XML files? How? -->
+<!--<srf_emis_specifier chem="trop_strat_mam4_slh" .or. chem="trop_strat_mam5_slh" hgrid="0.9x1.25">-->
+<ext_frc_specifier hgrid="0.9x1.25">
          'bc_a4  -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_bc_a4_aircraft_vertical_mol_175001-210101_0.9x1.25_c20190224.nc',
          'NO2    -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_NO2_aircraft_vertical_mol_175001-210101_0.9x1.25_c20190224.nc',
          'num_a1 -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_num_so4_a1_anthro-ene_vertical_mol_175001-210101_0.9x1.25_c20190224.nc',
@@ -58,7 +61,10 @@
 <!-- RPF: Following hist_trop_strat_nudged_cam6.xml for 1deg we should use SSPs -->
 <!-- RPF: This condition should be valid not only for trop_strat_mam4_slh -->
 <!-- RPF: but also for trop_strat_mam5_slh -->
-<srf_emis_specifier chem="trop_strat_mam4_slh" hgrid="0.9x1.25">
+<!-- <ext_frc_specifier chem="trop_strat_mam4_slh" hgrid="0.9x1.25"> -->
+<!-- RPF: Is it possible to add an .OR. condition in XML files? How? -->
+<!--<srf_emis_specifier chem="trop_strat_mam4_slh" .or. chem="trop_strat_mam5_slh" hgrid="0.9x1.25">-->
+<ext_frc_specifier hgrid="0.9x1.25">
          'BENZENE  -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_BENZENE_anthro_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'BENZENE  -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_BENZENE_bb_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'BIGALK   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_BIGALK_anthro_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
@@ -134,7 +140,7 @@
          'CHBR2CL  -> $INPUTDATA_ROOT/atm/cam/chem/emis/EMIS_SLH/flxSLH1p15/emissions_CHBr2Cl_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1750-2100_1.9x2.5_c251204.nc',
          'CHBR3    -> $INPUTDATA_ROOT/atm/cam/chem/emis/EMIS_SLH/flxSLH1p15/emissions_CHBr3_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1750-2100_1.9x2.5_c251204.nc',
          'CHBRCL2  -> $INPUTDATA_ROOT/atm/cam/chem/emis/EMIS_SLH/flxSLH1p15/emissions_CHBrCl2_chlorophyll_surface_Ordonez2012_flx1p15_cyclical_1750-2100_1.9x2.5_c251204.nc',
-         'DMS      -> $INPUTDATA_ROOT/atm/cam/chem/emis/CMIP6_emissions_2000climo/emissions-cmip6_DMS_bb_surface_2000climo_0.9x1.25_c20170322.nc',
+         'DMS      -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_DMS_bb_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
          'HOI      -> $INPUTDATA_ROOT/atm/cam/chem/emis/EMIS_SLH/emissions_HOI_ocean_surface_PradosRoman2015_online_1750-2100_1.9x2.5_c251204.nc',
          'I2       -> $INPUTDATA_ROOT/atm/cam/chem/emis/EMIS_SLH/emissions_I2_ocean_surface_PradosRoman2015_online_1750-2100_1.9x2.5_c251204.nc',
          'num_a1   -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_num_so4_a1_bb_surface_mol_175001-210101_0.9x1.25_c20190224.nc',
