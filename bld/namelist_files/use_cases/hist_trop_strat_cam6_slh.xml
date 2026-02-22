@@ -41,7 +41,7 @@
 <!-- RPF: but also for trop_strat_mam5_slh -->
 <!-- <ext_frc_specifier chem="trop_strat_mam4_slh" hgrid="0.9x1.25"> -->
 <!-- RPF: Is it possible to add an .OR. condition in XML files? How? -->
-<!--<srf_emis_specifier chem="trop_strat_mam4_slh" .or. chem="trop_strat_mam5_slh" hgrid="0.9x1.25">-->
+<!--<ext_frc_specifier chem="trop_strat_mam4_slh" .or. chem="trop_strat_mam5_slh" hgrid="0.9x1.25">-->
 <ext_frc_specifier hgrid="0.9x1.25">
          'bc_a4  -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_bc_a4_aircraft_vertical_mol_175001-210101_0.9x1.25_c20190224.nc',
          'NO2    -> $INPUTDATA_ROOT/atm/cam/chem/emis/emissions_ssp585/emissions-cmip6-ScenarioMIP_IAMC-REMIND-MAGPIE-ssp585-1-1_NO2_aircraft_vertical_mol_175001-210101_0.9x1.25_c20190224.nc',
