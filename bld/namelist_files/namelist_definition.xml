@@ -6380,6 +6380,24 @@ aerosol property input files.
 Default: FALSE
 </entry>
 
+<entry id="do_cman_iodine_npf" type="logical" category="cam_chem"
+       group="aerosol_nl" valid_values="" >
+Turns on the additive CMAN HIO3 new-particle-formation branch.  The existing
+MAM sulfate/ammonium nucleation remains unchanged.  The ion-induced branch is
+used only when a gcr_ionization dataset has been configured.
+Default: FALSE
+</entry>
+
+<entry id="iop_property_mapping" type="char*32" category="cam_chem"
+       group="aerosol_nl" valid_values="sulfate,nitrate_ammonium" >
+Selects the temporary density, hygroscopicity and optical-property proxy for
+particulate iodine (IOP).  "sulfate" uses the standard CESM sulfate properties.
+"nitrate_ammonium" uses nitrate_rrtmg_c210412.nc, as employed by nitrate-enabled
+MAM developments; the user must install that optional file under
+atm/cam/physprops.  Both are placeholders for future iodine laboratory data.
+Default: 'sulfate'
+</entry>
+
 <entry id="modal_strat_sulfate" type="logical" category="cam_chem"
        group="aerosol_nl" valid_values="" >
 Turns on prognostic modal sulfate aerosols in the stratosphere.

@@ -50,7 +50,8 @@ module mo_drydep
   ! WSY: reactive halogen species added
   ! ----------------------------------------------------------------------------------------
   integer :: hcl_ndx,  hocl_ndx, clono2_ndx, hbr_ndx,  hobr_ndx, brono2_ndx,           &
-             hi_ndx,   hoi_ndx,  iono2_ndx,  ino2_ndx, i2o2_ndx, i2o3_ndx, i2o4_ndx, br2_ndx
+             hi_ndx,   hoi_ndx,  hio3_ndx, iono2_ndx,  ino2_ndx, i2o2_ndx, i2o3_ndx, i2o4_ndx, &
+             i2o5_ndx, br2_ndx
   integer :: brcl_ndx,ibr_ndx,icl_ndx,brno2_ndx,clno2_ndx
   integer :: chcl2o2_ndx, cocl2_ndx
   ! ========================================================================================
@@ -75,6 +76,11 @@ module mo_drydep
   real(r8), parameter    :: ph          = 1.e-5_r8
   real(r8), parameter    :: ph_inv      = 1._r8/ph
   real(r8), parameter    :: rovcp = r/cp
+  ! Temporary CMAN mapping pending species-specific laboratory constraints.
+  ! I2O5 follows the existing I2O4 fixed-velocity treatment. HIO3 is not
+  ! overridden here: its resistance parameters come from the HNO3-mapped row
+  ! in dep_data_file.
+  real(r8), parameter    :: dvel_i2o5_mapped_to_i2o4_cm_s = 1.00_r8
 
   logical, public :: has_dvel(gas_pcnst) = .false.
   integer         :: map_dvel(gas_pcnst) = 0
@@ -291,6 +297,9 @@ contains
     if( i2o4_ndx>0 ) then
        dvelocity(:ncol,i2o4_ndx) = 1.00_r8
     endif
+    if( i2o5_ndx>0 ) then
+       dvelocity(:ncol,i2o5_ndx) = dvel_i2o5_mapped_to_i2o4_cm_s
+    endif
     if( hi_ndx>0 ) then
        dvelocity(:ncol,hi_ndx) = 1.00_r8
     endif
@@ -456,11 +465,13 @@ contains
     brono2_ndx = get_spc_ndx('BRONO2')
     hi_ndx     = get_spc_ndx('HI')
     hoi_ndx    = get_spc_ndx('HOI')
+    hio3_ndx   = get_spc_ndx('HIO3')
     ino2_ndx   = get_spc_ndx('INO2')
     iono2_ndx  = get_spc_ndx('IONO2')
     i2o2_ndx   = get_spc_ndx('I2O2')
     i2o3_ndx   = get_spc_ndx('I2O3')
     i2o4_ndx   = get_spc_ndx('I2O4')
+    i2o5_ndx   = get_spc_ndx('I2O5')
     br2_ndx    = get_spc_ndx('BR2' )
     chcl2o2_ndx= get_spc_ndx('CHCL2O2')
     cocl2_ndx  = get_spc_ndx('COCL2')
@@ -1568,6 +1579,8 @@ contains
              wrk(:ncol) = 0.50e-2_r8
           case( 'I2O2', 'I2O3', 'I2O4' )
              wrk(:ncol) = 1.00e-2_r8
+          case( 'I2O5' )
+             wrk(:ncol) = 1.0e-2_r8*dvel_i2o5_mapped_to_i2o4_cm_s
           case( 'HI' )
              wrk(:ncol) = 1.00e-2_r8
           case( 'HOI', 'IONO2', 'INO2' )

@@ -962,6 +962,17 @@ if ($prescribed_aero_model eq 'modal' or $chem =~ /_mam/) {$aer_model = 'mam';}
 
 if ($aer_model eq 'mam' ) {
 
+  # Select the temporary physical-property proxy used for CMAN particulate
+  # iodine.  This controls the complete modal property file (density,
+  # hygroscopicity and optics), not the iodine mass-conservation bookkeeping.
+  add_default($nl, 'iop_property_mapping');
+  my $iop_property_mapping = $nl->get_value('iop_property_mapping');
+  $iop_property_mapping =~ s/['"]//g;
+  if ($iop_property_mapping ne 'sulfate' and
+      $iop_property_mapping ne 'nitrate_ammonium') {
+      die "CAM Namelist ERROR: iop_property_mapping must be sulfate or nitrate_ammonium\n";
+  }
+
   my $aero_modes = '3mode';
   if ($chem =~ /_mam7/) {$aero_modes = '7mode';}
   if ($chem =~ /_mam4/) {$aero_modes = '4mode';}
@@ -978,6 +989,7 @@ if ($aer_model eq 'mam' ) {
   my @mode_spec_src;
   my %modal_groups;
   my %modal_species = ( 'so4'=>'sulfate',
+                        'iop'=>'iodine',
                         'nh4'=>'ammonium',
                         'pom'=>'p-organic',
                         'soa'=>'s-organic',
@@ -1050,6 +1062,14 @@ if ($aer_model eq 'mam' ) {
                       'primary_carbon' => [qw(pom bc)],
                       'coarse_strat' => [qw(so4)] );
 
+    # IOP is additive only for the two SLH mechanisms that contain HIO3/IOIO4.
+    # Keep every other MAM5 configuration byte-for-byte equivalent in its
+    # constituent list when CMAN is not part of the selected chemistry.
+    if ($chem eq 'trop_strat_mam5_slh' or $chem eq 'waccm_tsmlt_mam5_slh') {
+        splice(@{$modal_groups{'accum'}},  1, 0, 'iop');
+        splice(@{$modal_groups{'aitken'}}, 1, 0, 'iop');
+    }
+
     @mode_num_src  = qw(A A A A A);
 
   } elsif($aero_modes eq '7mode') {
@@ -1083,7 +1103,8 @@ if ($aer_model eq 'mam' ) {
                        \@mode_spec_type, \@mode_spec, \@mode_spec_cw, \@mode_spec_src);
 
   my $mode_defs = create_mode_defs(\@mode_names, \@mode_types, \@mode_num, \@mode_num_cw, \@mode_num_src,
-                                     \@mode_spec, \@mode_spec_type, \@mode_spec_cw, \@mode_spec_src);
+                                     \@mode_spec, \@mode_spec_type, \@mode_spec_cw, \@mode_spec_src,
+                                     $iop_property_mapping);
 
   add_default($nl, 'mode_defs', 'val'=>$mode_defs);
 
@@ -4636,6 +4657,7 @@ sub create_mode_defs {
     my $spec_type = shift;  # $spec_type->[$m][$i] - type of species $i in mode $m
     my $spec_cw   = shift;  # $spec_cw->[$m][$i]   - name of cloud borne species $i in mode $m
     my $spec_src  = shift;  # $spec_src->[$m][$i]  - source of interstitial species $i in mode $m
+    my $iop_property_mapping = shift;
 
     my $mode_def;
 
@@ -4671,7 +4693,11 @@ sub create_mode_defs {
             my %aero_modes_hash = ('mam'=>$aero_modes);
            (my $constituent = $spec_name) =~ s/_.*//;
             $constituent = substr( $constituent, 0, 3 );
-            my $rel_filepath = get_default_value("mam_${constituent}",\%aero_modes_hash);
+            my $property_key = "mam_${constituent}";
+            if ($constituent eq 'iop') {
+                $property_key = "mam_iop_${iop_property_mapping}";
+            }
+            my $rel_filepath = get_default_value($property_key,\%aero_modes_hash);
             my $abs_filepath = set_abs_filepath($rel_filepath, $inputdata_rootdir);
 
             # add species info. the source of the mixing ratio

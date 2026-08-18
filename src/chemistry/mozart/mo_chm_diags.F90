@@ -33,6 +33,7 @@ module mo_chm_diags
   integer :: id_ndep,id_nhdep
   integer :: id_clno2,id_brno2,id_br2
   integer :: id_i,id_i2,id_io,id_oio,id_hi,id_hoi,id_ino,id_ino2,id_iono2,id_ibr,id_icl,id_i2o2,id_i2o3,id_i2o4
+  integer :: id_hio3,id_i2o5
   integer :: id_chbr2cl,id_chbrcl2,id_ch2brcl
   integer :: id_ch3i,id_ch2icl,id_ch2ibr,id_ch2i2
   integer :: id_ch2cl2, id_chcl3, id_c2cl4, id_c2h4cl2, id_chcl2o2, id_cocl2, id_c2hcl3
@@ -55,7 +56,7 @@ module mo_chm_diags
   integer :: nox_specvsl(3),  noy_specvsl(61)
   integer :: clox_specvsl(6), cloy_specvsl(14), tcly_specvsl(35) ! RPF-->WSY: 2 new ClOy species added, 6 new tCly species added; 2 new CLOy and 5 new TCly for Athro_VSL_Cl
   integer :: brox_specvsl(2), broy_specvsl(9),  tbry_specvsl(20) ! RPF-->WSY: 3 new BrOy species added, 7 new tBry species added. Not considering HOBr nor BrCl in BrOx
-  integer :: ioy_specvsl(14), tiy_specvsl(18)                    ! RPF-->WSY: newly added
+  integer :: ioy_specvsl(16), tiy_specvsl(20)                    ! Includes gas-phase HIO3 and I2O5
 
   character(len=fieldname_len) :: dtchem_name(gas_pcnst)
   character(len=fieldname_len) :: depvel_name(gas_pcnst)
@@ -220,6 +221,8 @@ contains
     id_i2o2    = get_spc_ndx( 'I2O2' )
     id_i2o3    = get_spc_ndx( 'I2O3' )
     id_i2o4    = get_spc_ndx( 'I2O4' )
+    id_hio3    = get_spc_ndx( 'HIO3' )
+    id_i2o5    = get_spc_ndx( 'I2O5' )
     id_ch2brcl = get_spc_ndx( 'CH2BRCL' )
     id_chbrcl2 = get_spc_ndx( 'CHBRCL2' )
     id_chbr2cl = get_spc_ndx( 'CHBR2CL' )
@@ -389,9 +392,12 @@ contains
 
 !... IOY species
     if ( id_io>0 .and. id_ch3i>0 ) then
-       ioy_specvsl  = (/ id_i, id_i2, id_io, id_oio, id_hi, id_hoi, id_ino, id_ino2, id_iono2, id_icl, id_ibr, id_i2o2, id_i2o3, id_i2o4 /)
-       tiy_specvsl  = (/ id_i, id_i2, id_io, id_oio, id_hi, id_hoi, id_ino, id_ino2, id_iono2, id_icl, id_ibr, id_i2o2, id_i2o3, id_i2o4, &
-                         id_ch3i, id_ch2icl, id_ch2ibr, id_ch2i2 /)
+       ioy_specvsl  = (/ id_i, id_i2, id_io, id_oio, id_hi, id_hoi, id_ino, &
+                         id_ino2, id_iono2, id_icl, id_ibr, id_i2o2, id_i2o3, id_i2o4, &
+                         id_hio3, id_i2o5 /)
+       tiy_specvsl  = (/ id_i, id_i2, id_io, id_oio, id_hi, id_hoi, id_ino, &
+                         id_ino2, id_iono2, id_icl, id_ibr, id_i2o2, id_i2o3, id_i2o4, &
+                         id_hio3, id_i2o5, id_ch3i, id_ch2icl, id_ch2ibr, id_ch2i2 /)
     endif
 
     sox_species = (/ id_so2, id_so4, id_h2so4 /)
@@ -455,8 +461,16 @@ contains
     call addfld( 'TFY',     (/ 'lev' /), 'A', 'mol/mol', 'total F (ORG+INORG) volume mixing ratio' )
 
     if ( id_io>0 .and. id_ch3i>0 ) then
-       call addfld( 'IOY',     (/ 'lev' /), 'A', 'mol/mol', 'total inorganic iodine (I+2I2+IO+OIO+HI+HOI+INO+INO2+IONO2+IBr+ICl+2I2O2+2I2O3+2I2O4)')
-       call addfld( 'TIY',     (/ 'lev' /), 'A', 'mol/mol', 'total I volume mixing ratio')
+       call addfld( 'IOY',     (/ 'lev' /), 'A', 'mol/mol', &
+                    'gas-phase inorganic iodine including HIO3 and 2I2O5; particulate iodine is IOP')
+       call addfld( 'TIY',     (/ 'lev' /), 'A', 'mol/mol', &
+                    'total gas-phase I volume mixing ratio; particulate iodine is IOP')
+       if (id_hio3 > 0) then
+          ! IOY/TIY plus total IOP provide the gas-particle iodine budget
+          ! without counting interstitial particulate iodine twice.
+          call add_default('IOY', 1, ' ')
+          call add_default('TIY', 1, ' ')
+       end if
     endif
 
     call addfld( 'TOTH',    (/ 'lev' /), 'A', 'mol/mol', 'total H2 volume mixing ratio' )
@@ -751,7 +765,8 @@ contains
           wgt = 2._r8
        elseif (m == id_cfc114 .or. m == id_hcfc141b .or. m == id_h1202 .or. m == id_h2402 .or. m == id_ch2br2 ) then
           wgt = 2._r8
-       elseif (m == id_br2    .or. m == id_i2    .or. m == id_i2o2  .or. m == id_i2o3 .or. m == id_i2o4 ) then
+       elseif (m == id_br2 .or. m == id_i2 .or. m == id_i2o2 .or. m == id_i2o3 .or. &
+               m == id_i2o4 .or. m == id_i2o5) then
           wgt = 2._r8
        elseif (m == id_ch2i2 ) then
           wgt = 2._r8

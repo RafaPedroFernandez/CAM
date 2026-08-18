@@ -17,6 +17,7 @@ module gcr_ionization
   public :: gcr_ionization_init
   public :: gcr_ionization_adv
   public :: gcr_ionization_ionpairs
+  public :: gcr_ionization_is_active
 
   type(trfld), pointer :: fields(:)
   type(trfile), save :: file
@@ -113,8 +114,10 @@ contains
     fixed_ymd = gcr_ionization_fixed_ymd
     fixed_tod = gcr_ionization_fixed_tod
 
-    ! Turn on galactic cosmic rays if user has specified an input dataset.
-    if (len_trim(filename) > 0 .and. filename.ne.'NONE') has_gcr_ionization = .true.
+    ! Turn on galactic cosmic rays only when the user has supplied a dataset,
+    ! either directly or through the time-varying file-list interface.
+    has_gcr_ionization = (len_trim(filename) > 0 .and. trim(filename) /= 'NONE') .or. &
+                         (len_trim(filelist) > 0 .and. trim(filelist) /= 'NONE')
 
   end subroutine gcr_ionization_readnl
 
@@ -158,6 +161,13 @@ contains
     ionpairs(:ncol,:) = fields(1)%data(:ncol,:,lchnk)
 
   end subroutine gcr_ionization_ionpairs
+
+  !-------------------------------------------------------------------
+  logical function gcr_ionization_is_active()
+    ! The CMAN ion-induced branch uses this accessor so that it is enabled
+    ! only by an explicitly configured cosmic-ray ionization dataset.
+    gcr_ionization_is_active = has_gcr_ionization
+  end function gcr_ionization_is_active
 
 
 end module gcr_ionization

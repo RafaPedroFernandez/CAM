@@ -40,6 +40,7 @@ module clybryiy_fam
   integer :: id_cl,id_clo,id_hocl,id_cl2,id_cl2o2,id_oclo,id_hcl,id_clono2,id_clno2,id_cocl2,id_chcl2o2,id_cofcl
   integer :: id_br,id_bro,id_hbr,id_brono2,id_brcl,id_hobr,id_br2,id_brno2
   integer :: id_i,id_i2,id_io,id_oio,id_hi,id_hoi,id_ino,id_ino2,id_iono2,id_ibr,id_icl,id_i2o2,id_i2o3,id_i2o4
+  integer :: id_hio3,id_i2o5
 
   logical :: has_clybryiy
 
@@ -91,6 +92,8 @@ contains
     id_i2o2   = get_spc_ndx('I2O2')
     id_i2o3   = get_spc_ndx('I2O3')
     id_i2o4   = get_spc_ndx('I2O4')
+    id_hio3   = get_spc_ndx('HIO3')
+    id_i2o5   = get_spc_ndx('I2O5')
 
     ids_clybry   = (/ id_cly,id_bry, &
              id_cl,id_clo,id_hocl,id_cl2,id_cl2o2,id_oclo,id_hcl,id_clono2, &
@@ -291,6 +294,8 @@ contains
        mmr(:ncol,:,id_i2o2)   = factor(:ncol,:)*mmr(:ncol,:,id_i2o2)
        mmr(:ncol,:,id_i2o3)   = factor(:ncol,:)*mmr(:ncol,:,id_i2o3)
        mmr(:ncol,:,id_i2o4)   = factor(:ncol,:)*mmr(:ncol,:,id_i2o4)
+       if (id_hio3 > 0) mmr(:ncol,:,id_hio3) = factor(:ncol,:)*mmr(:ncol,:,id_hio3)
+       if (id_i2o5 > 0) mmr(:ncol,:,id_i2o5) = factor(:ncol,:)*mmr(:ncol,:,id_i2o5)
     endif
 
     call set_short_lived_species( mmr, lchnk, ncol, pbuf )
@@ -445,6 +450,11 @@ contains
               + 2._r8*( q(:ncol,k,id_i2o2)  /adv_mass(id_i2o2)   &
                       + q(:ncol,k,id_i2o3)  /adv_mass(id_i2o3)   &
                       + q(:ncol,k,id_i2o4)  /adv_mass(id_i2o4) )
+
+       ! HIO3 carries one I atom and I2O5 carries two.  IOP is transported
+       ! separately and is therefore intentionally not folded into the IY family.
+       if (id_hio3 > 0) wrk(:) = wrk(:) + q(:ncol,k,id_hio3)/adv_mass(id_hio3)
+       if (id_i2o5 > 0) wrk(:) = wrk(:) + 2._r8*q(:ncol,k,id_i2o5)/adv_mass(id_i2o5)
 
        ioy(:,k) = adv_mass(id_i) * wrk(:)
     end do

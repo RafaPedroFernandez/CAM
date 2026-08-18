@@ -25,12 +25,19 @@ module modal_aero_newnuc
 ! !PUBLIC DATA MEMBERS:
   integer, parameter  :: pcnstxx = gas_pcnst
   integer  :: l_h2so4_sv, l_nh3_sv, lnumait_sv, lnh4ait_sv, lso4ait_sv
+  integer  :: l_hio3_sv, l_hoi_sv, liopait_sv, liopacc_sv
+  logical  :: do_cman_iodine_npf = .false.
 
 ! min h2so4 vapor for nuc calcs = 4.0e-16 mol/mol-air ~= 1.0e4 molecules/cm3, 
   real(r8), parameter :: qh2so4_cutoff = 4.0e-16_r8
 
   real(r8) :: dens_so4a_host
   real(r8) :: mw_nh4a_host, mw_so4a_host
+  ! CMAN proxy properties are selected by iop_property_mapping.  These values
+  ! come from either sulfate or nitrate/ammonium until IOP laboratory data exist.
+  real(r8) :: dens_iop_selected_proxy
+  real(r8) :: hygro_iop_selected_proxy
+  real(r8) :: mw_iop_hio3
 
 ! !DESCRIPTION: This module implements ...
 !
@@ -62,7 +69,7 @@ module modal_aero_newnuc
                         t,        pmid,     pdel,                &
                         zm,       pblh,                          &
                         qv,       cld,                           &
-                        q,                                       &
+                        q0,       q,        dgnum,               &
                         del_h2so4_gasprod,  del_h2so4_aeruptk    )
 
 
@@ -99,6 +106,10 @@ module modal_aero_newnuc
                                             ! tracer mixing ratio (TMR) array
                                             ! *** MUST BE mol/mol-air or #/mol-air
                                             ! *** NOTE ncol & pcnstxx dimensions
+   real(r8), intent(in) :: q0(ncol,pver,pcnstxx)
+                                            ! TMR before gas-phase chemistry
+   real(r8), intent(in) :: dgnum(pcols,pver,ntot_amode)
+                                            ! current modal dry diameters (m)
    real(r8), intent(in) :: del_h2so4_gasprod(ncol,pver) 
                                             ! h2so4 gas-phase production
                                             ! change over deltat (mol/mol)
@@ -175,6 +186,12 @@ module modal_aero_newnuc
 
 ! begin
 	lun = 6
+
+! The iodine branch is deliberately separate from the legacy H2SO4/NH3
+! calculation below.  It therefore cannot alter the existing MAM NPF result.
+        if (do_cman_iodine_npf) then
+           call cman_iodine_npf_sub(lchnk, ncol, loffset, deltat, t, pmid, cld, q0, q, dgnum)
+        end if
 
 !--------------------------------------------------------------------------------
 !!$   if (ldiag1 > 0) then
@@ -560,6 +577,288 @@ main_i:	do i = 1, ncol
 	return
 !EOC
 	end subroutine modal_aero_newnuc_sub
+
+
+!----------------------------------------------------------------------
+! Additive CMAN iodine new-particle formation.  This routine updates only
+! HIO3, HOI, IOP in the Aitken mode, and Aitken number.  It does not share
+! tendencies or control flow with the pre-existing sulfate/ammonium NPF.
+!
+! CMAN Global V1.0 iodine parameterization adapted from Zhao et al. (2024),
+! doi:10.1038/s41586-024-07547-1.
+!
+! Copyright (c) 2023, Tsinghua University, Pacific Northwest National
+! Laboratory, Carnegie Mellon University.  All rights reserved.
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+! 1. Redistributions of source code must retain the above copyright notice,
+!    this list of conditions and the following disclaimer.
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+! 3. Neither the names of the copyright holders, CMAN, nor its contributors may
+!    be used to endorse or promote products derived from this software without
+!    specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+! ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+! LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+! POSSIBILITY OF SUCH DAMAGE.
+!----------------------------------------------------------------------
+subroutine cman_iodine_npf_sub(lchnk, ncol, loffset, deltat, t, pmid, cld, q0, q, dgnum)
+
+   use cam_history,       only: outfld
+   use gcr_ionization,    only: gcr_ionization_ionpairs, gcr_ionization_is_active
+   use modal_aero_data
+   use physconst,         only: r_universal
+   use ppgrid,            only: pcols, pver
+   use ref_pres,          only: top_lev => clim_modal_aero_top_lev
+
+   implicit none
+
+   integer, intent(in) :: lchnk, ncol, loffset
+   real(r8), intent(in) :: deltat
+   real(r8), intent(in) :: t(pcols,pver), pmid(pcols,pver)
+   real(r8), intent(in) :: cld(ncol,pver)
+   real(r8), intent(in) :: q0(ncol,pver,pcnstxx)
+   real(r8), intent(inout) :: q(ncol,pver,pcnstxx)
+   real(r8), intent(in) :: dgnum(pcols,pver,ntot_amode)
+
+   real(r8), parameter :: avogad = 6.02214076e23_r8
+   real(r8), parameter :: accom_hio3 = 0.20_r8
+   real(r8), parameter :: boltzmann = 1.380649e-23_r8
+   real(r8), parameter :: elementary_charge = 1.602176634e-19_r8
+   real(r8), parameter :: ion_mobility = 1.2e-4_r8
+   real(r8), parameter :: vapor_availability_limit = 0.9999_r8
+
+   integer :: i, k, m, lnum, l_hio3, l_hoi, liopait
+   real(r8) :: aircon, air_number_cm3
+   real(r8) :: aerosol_number_cm3, aerosol_number_m3, particle_diameter
+   real(r8) :: alpha_recomb, clear_fraction
+   real(r8) :: condensation_sink_hio3, ion_sink, ion_sink_coefficient
+   real(r8) :: diffusivity_iop_growth_selected_proxy
+   real(r8) :: hio3_before_uptake, hio3_after_uptake, hio3_average
+   real(r8) :: hio3_number_cm3, uptake_amount, uptake_fraction
+   real(r8) :: ion_concentration, ion_denominator
+   real(r8) :: j_neutral, j_ion, j_1p7, j_aitken
+   real(r8) :: survival_fraction, target_aitken_diameter
+   real(r8) :: mass_one_aitken_iop, qmol_iop, qmol_iop_max, vapor_scale
+   real(r8) :: qnum_aitken
+   logical :: gcr_dataset_active
+
+   real(r8) :: ionpairs(ncol,pver)
+   real(r8) :: d_j_neutral(pcols,pver), d_j_ion(pcols,pver)
+   real(r8) :: d_j_1p7(pcols,pver), d_j_aitken(pcols,pver)
+   real(r8) :: d_j_mapping_loss(pcols,pver), d_survival(pcols,pver)
+   real(r8) :: d_hio3_npf_loss(pcols,pver), d_iop_form(pcols,pver)
+   real(r8) :: d_hio3_uptake_loss(pcols,pver), d_hoi_recycle(pcols,pver)
+   real(r8) :: d_ion_concentration(pcols,pver), d_ion_sink(pcols,pver)
+   real(r8) :: d_gcr_ionpairs(pcols,pver)
+
+   l_hio3 = l_hio3_sv - loffset
+   l_hoi = l_hoi_sv - loffset
+   liopait = liopait_sv - loffset
+   lnum = lnumait_sv - loffset
+
+   if (min(l_hio3,l_hoi,liopait,lnum) <= 0) return
+   if (max(l_hio3,l_hoi,liopait,lnum) > pcnstxx) return
+
+   ionpairs(:,:) = 0._r8
+   gcr_dataset_active = gcr_ionization_is_active()
+   if (gcr_dataset_active) call gcr_ionization_ionpairs(ncol, lchnk, ionpairs)
+
+   d_j_neutral(:,:) = 0._r8
+   d_j_ion(:,:) = 0._r8
+   d_j_1p7(:,:) = 0._r8
+   d_j_aitken(:,:) = 0._r8
+   d_j_mapping_loss(:,:) = 0._r8
+   d_survival(:,:) = 0._r8
+   d_hio3_npf_loss(:,:) = 0._r8
+   d_iop_form(:,:) = 0._r8
+   d_hio3_uptake_loss(:,:) = 0._r8
+   d_hoi_recycle(:,:) = 0._r8
+   d_ion_concentration(:,:) = 0._r8
+   d_ion_sink(:,:) = 0._r8
+   d_gcr_ionpairs(:,:) = 0._r8
+
+   target_aitken_diameter = exp(0.67_r8*log(dgnumlo_amode(modeptr_aitken)) + &
+                                    0.33_r8*log(dgnum_amode(modeptr_aitken)))
+   mass_one_aitken_iop = dens_iop_selected_proxy*pi/6._r8 * target_aitken_diameter**3
+
+   do k = top_lev, pver
+      do i = 1, ncol
+         aircon = 1.e3_r8*pmid(i,k)/(r_universal*t(i,k)) ! mol-air/m3
+         if (aircon <= 0._r8) cycle
+         air_number_cm3 = aircon*avogad*1.e-6_r8
+
+         diffusivity_iop_growth_selected_proxy = &
+              6.7037e-6_r8*t(i,k)**0.75_r8/aircon
+         ion_sink_coefficient = 4._r8*pi*boltzmann*t(i,k)*ion_mobility/elementary_charge
+         condensation_sink_hio3 = 0._r8
+         ion_sink = 0._r8
+
+         do m = 1, ntot_amode
+            lnum = numptr_amode(m) - loffset
+            if (lnum <= 0 .or. lnum > pcnstxx) cycle
+            aerosol_number_cm3 = max(q(i,k,lnum),0._r8)*aircon*1.e-9_r8
+            particle_diameter = max(dgnum(i,k,m),dgnumlo_amode(m))
+            aerosol_number_m3 = aerosol_number_cm3*1.e6_r8
+            condensation_sink_hio3 = condensation_sink_hio3 + &
+                 2._r8*pi*diffusivity_iop_growth_selected_proxy*accom_hio3 * &
+                 particle_diameter*aerosol_number_m3
+            ion_sink = ion_sink + ion_sink_coefficient*0.5_r8 * &
+                 particle_diameter*aerosol_number_m3
+         end do
+
+         ! CMAN assumes that HIO3 taken up by pre-existing aerosol is promptly
+         ! recycled to HOI.  One HIO3 molecule makes one HOI molecule, conserving I.
+         hio3_before_uptake = max(q(i,k,l_hio3),0._r8)
+         uptake_fraction = 1._r8 - exp(-min(condensation_sink_hio3*deltat,50._r8))
+         uptake_amount = min(hio3_before_uptake, hio3_before_uptake*uptake_fraction)
+         q(i,k,l_hio3) = hio3_before_uptake - uptake_amount
+         q(i,k,l_hoi) = max(q(i,k,l_hoi),0._r8) + uptake_amount
+         hio3_after_uptake = q(i,k,l_hio3)
+         hio3_average = max(0._r8,0.5_r8*(max(q0(i,k,l_hio3),0._r8) + hio3_after_uptake))
+         hio3_number_cm3 = hio3_average*air_number_cm3
+
+         ! FUTURE OPTIONAL CONCENTRATION GATES (intentionally disabled):
+         ! if (hio3_number_cm3 < hio3_npf_threshold_future) cycle
+         ! if (h2so4_number_cm3 < h2so4_npf_threshold_future) cycle
+         ! The present implementation always evaluates the HIO3 parameterization.
+
+         alpha_recomb = 6.e-8_r8*sqrt(300._r8/t(i,k)) + &
+              6.e-26_r8*air_number_cm3*(300._r8/t(i,k))**4
+         ion_concentration = 0._r8
+         if (gcr_dataset_active .and. ionpairs(i,k) > 0._r8 .and. alpha_recomb > 0._r8) then
+            ion_denominator = sqrt(ion_sink**2 + 4._r8*alpha_recomb*ionpairs(i,k)) + ion_sink
+            if (ion_denominator > 0._r8) ion_concentration = 2._r8*ionpairs(i,k)/ion_denominator
+         end if
+
+         ! Preserve the upper HIO3 bound in CMAN Global V1.0 for the neutral
+         ! fit; this is a validity/numerical bound, not an on/off threshold.
+         j_neutral = 2.57e-32_r8*min(hio3_number_cm3,1.e8_r8)**4.23_r8 * &
+              (1.40e-46_r8*exp(2.99e4_r8/max(t(i,k),263._r8)))
+         j_ion = 0._r8
+         if (gcr_dataset_active) then
+            j_ion = 1.28e-18_r8*hio3_number_cm3**2.48_r8*(ion_concentration/700._r8) * &
+                 (1.40e-46_r8*exp(2.99e4_r8/max(t(i,k),283._r8)))
+         end if
+
+         clear_fraction = max(0._r8,min(1._r8,1._r8-cld(i,k)))
+         j_neutral = max(j_neutral,0._r8)*clear_fraction
+         j_ion = max(j_ion,0._r8)*clear_fraction
+         j_1p7 = j_neutral + j_ion
+
+         survival_fraction = cman_hio3_survival_to_aitken(t(i,k),aircon, &
+              hio3_number_cm3,condensation_sink_hio3,target_aitken_diameter)
+         j_aitken = j_1p7*survival_fraction
+
+         ! ------------------------------------------------------------------
+         ! CONTROL POINT: 1.7 nm -> Aitken approximation
+         ! Each surviving 1.7 nm particle is grown to the lower Aitken size
+         ! with HIO3 before insertion into MAM5.  If unexpected model behavior
+         ! appears, this is the approximation to revise or replace with an
+         ! explicit nucleation mode.  The legacy MAM nucleation is untouched.
+         ! ------------------------------------------------------------------
+         qmol_iop = j_aitken*1.e6_r8*deltat*mass_one_aitken_iop / &
+              ((mw_iop_hio3*1.e-3_r8)*aircon)
+         qmol_iop_max = vapor_availability_limit*hio3_after_uptake
+         vapor_scale = 1._r8
+         if (qmol_iop > qmol_iop_max .and. qmol_iop > 0._r8) then
+            vapor_scale = qmol_iop_max/qmol_iop
+            qmol_iop = qmol_iop_max
+            j_aitken = j_aitken*vapor_scale
+         end if
+
+         qnum_aitken = j_aitken*1.e9_r8*deltat/aircon
+         q(i,k,l_hio3) = max(0._r8,q(i,k,l_hio3)-qmol_iop)
+         q(i,k,liopait) = max(q(i,k,liopait),0._r8) + qmol_iop
+         lnum = lnumait_sv-loffset
+         q(i,k,lnum) = max(q(i,k,lnum),0._r8) + qnum_aitken
+
+         d_j_neutral(i,k) = j_neutral
+         d_j_ion(i,k) = j_ion
+         d_j_1p7(i,k) = j_1p7
+         d_j_aitken(i,k) = j_aitken
+         d_j_mapping_loss(i,k) = max(j_1p7-j_aitken,0._r8)
+         ! Report the effective 1.7 nm -> Aitken transfer, including any
+         ! additional reduction imposed by finite HIO3 availability.
+         if (j_1p7 > 0._r8) d_survival(i,k) = j_aitken/j_1p7
+         d_hio3_npf_loss(i,k) = qmol_iop/deltat
+         d_iop_form(i,k) = qmol_iop/deltat
+         d_hio3_uptake_loss(i,k) = uptake_amount/deltat
+         d_hoi_recycle(i,k) = uptake_amount/deltat
+         d_ion_concentration(i,k) = ion_concentration
+         d_ion_sink(i,k) = ion_sink
+         if (gcr_dataset_active) d_gcr_ionpairs(i,k) = ionpairs(i,k)
+      end do
+   end do
+
+   call outfld('JHIO3_NPF_1P7_NEUT', d_j_neutral, ncol, lchnk)
+   call outfld('JHIO3_NPF_1P7_ION', d_j_ion, ncol, lchnk)
+   call outfld('JHIO3_NPF_1P7', d_j_1p7, ncol, lchnk)
+   call outfld('JHIO3_NPF_AIT', d_j_aitken, ncol, lchnk)
+   call outfld('JHIO3_NPF_1P7LOSS', d_j_mapping_loss, ncol, lchnk)
+   call outfld('HIO3_NPF_SURV', d_survival, ncol, lchnk)
+   call outfld('HIO3_NPF_LOSS', d_hio3_npf_loss, ncol, lchnk)
+   call outfld('IOP_NPF_FORM', d_iop_form, ncol, lchnk)
+   call outfld('HIO3_UPTK_LOSS', d_hio3_uptake_loss, ncol, lchnk)
+   call outfld('HOI_RECYCLE_FORM', d_hoi_recycle, ncol, lchnk)
+   call outfld('ION_NPF_CONC', d_ion_concentration, ncol, lchnk)
+   call outfld('ION_NPF_SINK', d_ion_sink, ncol, lchnk)
+   call outfld('GCR_NPF_IONPAIR', d_gcr_ionpairs, ncol, lchnk)
+
+end subroutine cman_iodine_npf_sub
+
+
+real(r8) function cman_hio3_survival_to_aitken(temp, aircon, hio3_number_cm3, &
+                                                condensation_sink, target_diameter)
+   ! Kerminen-Kulmala-style survival correction adapted to HIO3 growth.  Gas
+   ! diffusivity uses the same namelist-selected proxy as the IOP properties.
+   implicit none
+   real(r8), intent(in) :: temp, aircon, hio3_number_cm3
+   real(r8), intent(in) :: condensation_sink, target_diameter
+   real(r8), parameter :: accom_hio3 = 0.20_r8
+   real(r8), parameter :: gas_constant = 8.314462618_r8
+   real(r8), parameter :: diameter_npf_1p7_nm = 1.7_r8
+   real(r8) :: molecular_speed_hio3, growth_rate_nm_h
+   real(r8) :: diffusivity_iop_growth_selected_proxy
+   real(r8) :: cs_prime, gamma_kk, nu_kk, target_diameter_nm, exponent_kk
+
+   cman_hio3_survival_to_aitken = 0._r8
+   if (hio3_number_cm3 <= 0._r8 .or. aircon <= 0._r8) return
+
+   molecular_speed_hio3 = sqrt(8._r8*gas_constant*temp / &
+        (pi*mw_iop_hio3*1.e-3_r8))
+   growth_rate_nm_h = 3.e-9_r8*molecular_speed_hio3*mw_iop_hio3 * &
+        hio3_number_cm3/dens_iop_selected_proxy
+   if (growth_rate_nm_h <= tiny(1._r8)) return
+
+   target_diameter_nm = target_diameter*1.e9_r8
+   if (target_diameter_nm <= diameter_npf_1p7_nm) then
+      cman_hio3_survival_to_aitken = 1._r8
+      return
+   end if
+
+   diffusivity_iop_growth_selected_proxy = 6.7037e-6_r8*temp**0.75_r8/aircon
+   cs_prime = max(condensation_sink,0._r8) / &
+        (4._r8*pi*diffusivity_iop_growth_selected_proxy*accom_hio3)
+   gamma_kk = 0.23_r8*diameter_npf_1p7_nm**0.2_r8 * &
+        (target_diameter_nm/3._r8)**0.075_r8 * &
+        (dens_iop_selected_proxy*1.e-3_r8)**(-0.33_r8) * &
+        (temp/293._r8)**(-0.75_r8)
+   nu_kk = gamma_kk*cs_prime/growth_rate_nm_h
+   exponent_kk = nu_kk/target_diameter_nm - nu_kk/diameter_npf_1p7_nm
+   cman_hio3_survival_to_aitken = exp(max(-700._r8,min(0._r8,exponent_kk)))
+end function cman_hio3_survival_to_aitken
 
 
 
@@ -1412,7 +1711,7 @@ main_i:	do i = 1, ncol
 
 !----------------------------------------------------------------------
 !----------------------------------------------------------------------
-subroutine modal_aero_newnuc_init
+subroutine modal_aero_newnuc_init( do_cman_iodine_npf_in )
 
 !-----------------------------------------------------------------------
 !
@@ -1439,11 +1738,12 @@ implicit none
 
 !-----------------------------------------------------------------------
 ! arguments
+   logical, intent(in) :: do_cman_iodine_npf_in
 
 !-----------------------------------------------------------------------
 ! local
-   integer  :: l_h2so4, l_nh3
-   integer  :: lnumait, lnh4ait, lso4ait
+   integer  :: l_h2so4, l_nh3, l_hio3, l_hoi
+   integer  :: lnumait, lnh4ait, lso4ait, liopait, liopacc
    integer  :: l, l1, l2
    integer  :: m, mait
 
@@ -1459,6 +1759,8 @@ implicit none
    
         call phys_getopts( history_aerosol_out        = history_aerosol   )
 
+        do_cman_iodine_npf = do_cman_iodine_npf_in
+
 
 !   set these indices
 !   skip if no h2so4 species
@@ -1473,11 +1775,97 @@ implicit none
 	call cnst_get_ind( 'NH3', l_nh3, .false. )
 
 	mait = modeptr_aitken
+	lnumait = 0
+	lso4ait = 0
+	lnh4ait = 0
 	if (mait > 0) then
 	    lnumait = numptr_amode(mait)
 	    lso4ait = lptr_so4_a_amode(mait)
 	    lnh4ait = lptr_nh4_a_amode(mait)
 	end if
+
+!   Initialize the optional CMAN iodine NPF branch before any early return
+!   associated with the pre-existing sulfate NPF scheme.
+        l_hio3_sv = 0
+        l_hoi_sv = 0
+        liopait_sv = 0
+        liopacc_sv = 0
+        if (do_cman_iodine_npf) then
+           call cnst_get_ind('HIO3', l_hio3, .false.)
+           call cnst_get_ind('HOI', l_hoi, .false.)
+           liopait = -1
+           liopacc = -1
+           if (mait > 0) liopait = lptr_iop_a_amode(mait)
+           if (modeptr_accum > 0) liopacc = lptr_iop_a_amode(modeptr_accum)
+
+           if (l_hio3 <= 0 .or. l_hoi <= 0 .or. liopait <= 0 .or. &
+               liopacc <= 0 .or. lnumait <= 0) then
+              call endrun('modal_aero_newnuc_init: CMAN iodine NPF requires HIO3, HOI, iop_a1, iop_a2 and num_a2')
+           end if
+
+           l_hio3_sv = l_hio3
+           l_hoi_sv = l_hoi
+           liopait_sv = liopait
+           liopacc_sv = liopacc
+           lnumait_sv = lnumait
+
+           l2 = -1
+           do l1 = 1, nspec_amode(mait)
+              if (lmassptr_amode(l1,mait) == liopait) then
+                 l2 = l1
+                 mw_iop_hio3 = specmw_amode(l1,mait)
+                 dens_iop_selected_proxy = specdens_amode(l1,mait)
+                 hygro_iop_selected_proxy = spechygro(l1,mait)
+              end if
+           end do
+           if (l2 <= 0) call endrun('modal_aero_newnuc_init: cannot find selected proxy IOP properties')
+
+           call addfld('JHIO3_NPF_1P7_NEUT', (/ 'lev' /), 'A', '#/cm3/s', &
+                       'CMAN neutral HIO3 NPF rate at 1.7 nm')
+           call addfld('JHIO3_NPF_1P7_ION', (/ 'lev' /), 'A', '#/cm3/s', &
+                       'CMAN ion-induced HIO3 NPF rate at 1.7 nm')
+           call addfld('JHIO3_NPF_1P7', (/ 'lev' /), 'A', '#/cm3/s', &
+                       'total CMAN HIO3 NPF rate at 1.7 nm')
+           call addfld('JHIO3_NPF_AIT', (/ 'lev' /), 'A', '#/cm3/s', &
+                       'CMAN HIO3 particles entering the MAM Aitken mode')
+           call addfld('JHIO3_NPF_1P7LOSS', (/ 'lev' /), 'A', '#/cm3/s', &
+                       '1.7 nm particles removed by survival and Aitken mapping approximation')
+           call addfld('HIO3_NPF_SURV', (/ 'lev' /), 'A', '1', &
+                       'survival fraction in the CMAN 1.7 nm to Aitken approximation')
+           call addfld('HIO3_NPF_LOSS', (/ 'lev' /), 'A', 'mol/mol/s', &
+                       'HIO3 loss tendency to particulate IOP by NPF and growth')
+           call addfld('IOP_NPF_FORM', (/ 'lev' /), 'A', 'mol/mol/s', &
+                       'IOP formation tendency from HIO3 NPF and growth')
+           call addfld('HIO3_UPTK_LOSS', (/ 'lev' /), 'A', 'mol/mol/s', &
+                       'HIO3 loss tendency by uptake on existing aerosol')
+           call addfld('HOI_RECYCLE_FORM', (/ 'lev' /), 'A', 'mol/mol/s', &
+                       'HOI formation tendency from recycled aerosol HIO3 uptake')
+           call addfld('ION_NPF_CONC', (/ 'lev' /), 'A', '#/cm3', &
+                       'small-ion concentration used by CMAN iodine NPF')
+           call addfld('ION_NPF_SINK', (/ 'lev' /), 'A', '1/s', &
+                       'small-ion condensation sink used by CMAN iodine NPF')
+           call addfld('GCR_NPF_IONPAIR', (/ 'lev' /), 'A', '#/cm3/s', &
+                       'cosmic-ray ion-pair production used by CMAN iodine NPF')
+
+           call add_default('JHIO3_NPF_1P7_NEUT', 1, ' ')
+           call add_default('JHIO3_NPF_1P7_ION', 1, ' ')
+           call add_default('JHIO3_NPF_1P7', 1, ' ')
+           call add_default('JHIO3_NPF_AIT', 1, ' ')
+           call add_default('JHIO3_NPF_1P7LOSS', 1, ' ')
+           call add_default('HIO3_NPF_SURV', 1, ' ')
+           call add_default('HIO3_NPF_LOSS', 1, ' ')
+           call add_default('IOP_NPF_FORM', 1, ' ')
+           call add_default('HIO3_UPTK_LOSS', 1, ' ')
+           call add_default('HOI_RECYCLE_FORM', 1, ' ')
+           call add_default('ION_NPF_CONC', 1, ' ')
+           call add_default('ION_NPF_SINK', 1, ' ')
+           call add_default('GCR_NPF_IONPAIR', 1, ' ')
+
+           if (masterproc) then
+              write(*,'(a,3(1x,es12.4))') 'CMAN IOP selected proxy properties (MW,density,hygro):', &
+                   mw_iop_hio3, dens_iop_selected_proxy, hygro_iop_selected_proxy
+           end if
+        end if
 	if ((l_h2so4  <= 0) .or. (l_h2so4 > pcnst)) then
 	    write(*,'(/a/)')   &
 		'*** modal_aero_newnuc bypass -- l_h2so4 <= 0'
@@ -1721,6 +2109,3 @@ end  subroutine ternary_nuc_merik2007
 
 !----------------------------------------------------------------------
 end module modal_aero_newnuc
-
-
-

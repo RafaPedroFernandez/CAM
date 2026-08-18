@@ -475,6 +475,9 @@
 <!-- Optics for RRTMG -->
 <!-- modal aerosol properties files -->
 <mam_so4  rad="rrtmg">atm/cam/physprops/sulfate_rrtmg_c080918.nc</mam_so4>
+<!-- CMAN IOP selectable proxy properties pending iodine-specific laboratory data. -->
+<mam_iop_sulfate rad="rrtmg">atm/cam/physprops/sulfate_rrtmg_c080918.nc</mam_iop_sulfate>
+<mam_iop_nitrate_ammonium rad="rrtmg">atm/cam/physprops/nitrate_rrtmg_c210412.nc</mam_iop_nitrate_ammonium>
 <mam_pom  rad="rrtmg" mam="3mode">atm/cam/physprops/ocpho_rrtmg_c101112.nc</mam_pom>
 <mam_pom  rad="rrtmg">atm/cam/physprops/ocpho_rrtmg_c130709.nc</mam_pom>
 <mam_soa  rad="rrtmg">atm/cam/physprops/ocphi_rrtmg_c100508.nc</mam_soa>
@@ -485,6 +488,8 @@
 
 <!-- Modal aerosol properties for RRTMGP -->
 <mam_so4  rad="rrtmgp">atm/cam/physprops/sulfate_rrtmg_c080918.nc</mam_so4>
+<mam_iop_sulfate rad="rrtmgp">atm/cam/physprops/sulfate_rrtmg_c080918.nc</mam_iop_sulfate>
+<mam_iop_nitrate_ammonium rad="rrtmgp">atm/cam/physprops/nitrate_rrtmg_c210412.nc</mam_iop_nitrate_ammonium>
 <mam_pom  rad="rrtmgp" mam="3mode">atm/cam/physprops/ocpho_rrtmg_c101112.nc</mam_pom>
 <mam_pom  rad="rrtmgp">atm/cam/physprops/ocpho_rrtmg_c130709.nc</mam_pom>
 <mam_soa  rad="rrtmgp">atm/cam/physprops/ocphi_rrtmg_c100508.nc</mam_soa>
@@ -570,6 +575,8 @@
 <water_refindex_file>atm/cam/physprops/water_refindex_rrtmg_c080910.nc</water_refindex_file>
 
 <modal_accum_coarse_exch               >.false.</modal_accum_coarse_exch>
+<do_cman_iodine_npf                    >.false.</do_cman_iodine_npf>
+<iop_property_mapping                  >'sulfate'</iop_property_mapping>
 <modal_accum_coarse_exch phys="cam6"   >.true.</modal_accum_coarse_exch>
 <modal_accum_coarse_exch phys="cam7"   >.true.</modal_accum_coarse_exch>
 

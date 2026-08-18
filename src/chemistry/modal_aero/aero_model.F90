@@ -23,6 +23,7 @@ module aero_model
   use mo_tracname,    only: solsym
 
   use modal_aero_data,only: cnst_name_cw, lptr_so4_cw_amode
+  use modal_aero_data,only: lptr_iop_a_amode, lptr_iop_cw_amode
   use modal_aero_data,only: ntot_amode, modename_amode, nspec_max
 
   use ref_pres,       only: top_lev => clim_modal_aero_top_lev
@@ -73,6 +74,17 @@ module aero_model
 
   integer :: nh3_ndx    = 0
   integer :: nh4_ndx    = 0
+  integer :: hio3_ndx   = 0
+  integer, parameter :: num_iodine_gas_species = 20
+  character(len=8), parameter :: iodine_gas_names(num_iodine_gas_species) = (/ &
+       'I       ', 'I2      ', 'IO      ', 'OIO     ', 'HI      ', 'HOI     ', &
+       'INO     ', 'INO2    ', 'IONO2   ', 'ICL     ', 'IBR     ', 'I2O2    ', &
+       'I2O3    ', 'I2O4    ', 'HIO3    ', 'I2O5    ', 'CH3I    ', 'CH2ICL  ', &
+       'CH2IBR  ', 'CH2I2   ' /)
+  real(r8), parameter :: iodine_atom_weights(num_iodine_gas_species) = (/ &
+       1._r8, 2._r8, 1._r8, 1._r8, 1._r8, 1._r8, 1._r8, 1._r8, 1._r8, 1._r8, &
+       1._r8, 2._r8, 2._r8, 2._r8, 1._r8, 2._r8, 1._r8, 1._r8, 1._r8, 2._r8 /)
+  integer :: iodine_gas_ndx(num_iodine_gas_species) = -1
 
   ! variables for table lookup of aerosol impaction/interception scavenging rates
   integer, parameter :: nimptblgrow_mind=-7, nimptblgrow_maxd=12
@@ -84,6 +96,7 @@ module aero_model
   integer,allocatable :: num_idx(:)
   integer,allocatable :: index_tot_mass(:,:)
   integer,allocatable :: index_chm_mass(:,:)
+  integer,allocatable :: index_iop_mass(:,:)
   integer,allocatable :: index_ssa_mass(:,:)
 
   integer :: ndx_h2so4
@@ -98,6 +111,8 @@ module aero_model
   logical :: drydep_lq(pcnst)
 
   logical :: modal_accum_coarse_exch = .false.
+  logical :: do_cman_iodine_npf = .false.
+  character(len=32) :: iop_property_mapping = 'sulfate'
 
   type(modal_aerosol_properties), pointer :: aero_props=>null()
 
@@ -126,7 +141,8 @@ contains
     ! Namelist variables
     character(len=16) :: aer_drydep_list(pcnst) = ' '
 
-    namelist /aerosol_nl/ aer_drydep_list, modal_strat_sulfate, modal_accum_coarse_exch, seasalt_emis_scale
+    namelist /aerosol_nl/ aer_drydep_list, modal_strat_sulfate, modal_accum_coarse_exch, &
+                          seasalt_emis_scale, do_cman_iodine_npf, iop_property_mapping
 
     !-----------------------------------------------------------------------------
 
@@ -151,7 +167,14 @@ contains
     call mpibcast(modal_strat_sulfate,     1,                       mpilog,  0, mpicom)
     call mpibcast(seasalt_emis_scale, 1,                            mpir8,   0, mpicom)
     call mpibcast(modal_accum_coarse_exch, 1,                       mpilog,  0, mpicom)
+    call mpibcast(do_cman_iodine_npf,      1,                       mpilog,  0, mpicom)
+    call mpibcast(iop_property_mapping,    len(iop_property_mapping), mpichar, 0, mpicom)
 #endif
+
+    if (trim(iop_property_mapping) /= 'sulfate' .and. &
+        trim(iop_property_mapping) /= 'nitrate_ammonium') then
+       call endrun('aero_model_readnl: invalid iop_property_mapping')
+    end if
 
     drydep_list = aer_drydep_list
 
@@ -245,7 +268,45 @@ contains
     call modal_aero_gasaerexch_init
     !   coag call must follow gasaerexch call
     call modal_aero_coag_init
-    call modal_aero_newnuc_init
+    call modal_aero_newnuc_init( do_cman_iodine_npf )
+
+    if (do_cman_iodine_npf) then
+       call cnst_get_ind('HIO3', hio3_ndx, abort=.true.)
+       do n = 1, num_iodine_gas_species
+          call cnst_get_ind(trim(iodine_gas_names(n)), iodine_gas_ndx(n), abort=.false.)
+       end do
+       call addfld('HIO3_CMAN', (/ 'lev' /), 'A', 'mol/mol', &
+                   'HIO3 after CMAN iodine NPF and aerosol uptake/recycling')
+       call addfld('IOP', (/ 'lev' /), 'A', 'kg-I/kg-air', &
+                   'total particulate iodine mass in IOP (interstitial plus cloud-borne)')
+       call addfld('IOP_INTERST', (/ 'lev' /), 'A', 'kg-I/kg-air', &
+                   'interstitial particulate iodine mass in IOP')
+       call addfld('IOP_CLOUD', (/ 'lev' /), 'A', 'kg-I/kg-air', &
+                   'cloud-borne particulate iodine mass in IOP')
+       call addfld('I_TOTAL_CMAN', (/ 'lev' /), 'A', 'mol-I/mol-air', &
+                   'total iodine atoms in gas plus particulate IOP')
+       call addfld('I_HIO3_FRAC', (/ 'lev' /), 'A', '1', &
+                   'fraction of total gas plus aerosol iodine present as HIO3')
+       call addfld('I_IOP_FRAC', (/ 'lev' /), 'A', '1', &
+                   'fraction of total gas plus aerosol iodine present as IOP')
+       call addfld('SAD_CMAN_TOTAL', (/ 'lev' /), 'A', 'cm2/cm3', &
+                   'tropospheric chemical aerosol SAD including particulate iodine')
+       call addfld('SAD_CMAN_IOP', (/ 'lev' /), 'A', 'cm2/cm3', &
+                   'increment in tropospheric chemical aerosol SAD attributed to IOP')
+       call addfld('SAD_CMAN_IOP_FRAC', (/ 'lev' /), 'A', '1', &
+                   'fraction of CMAN chemical aerosol SAD attributed to IOP')
+       call add_default('HIO3_CMAN', 1, ' ')
+       call add_default('IOP', 1, ' ')
+       call add_default('IOP_INTERST', 1, ' ')
+       call add_default('IOP_CLOUD', 1, ' ')
+       call add_default('I_TOTAL_CMAN', 1, ' ')
+       call add_default('I_HIO3_FRAC', 1, ' ')
+       call add_default('I_IOP_FRAC', 1, ' ')
+       call add_default('SAD_CMAN_TOTAL', 1, ' ')
+       call add_default('SAD_CMAN_IOP', 1, ' ')
+       call add_default('SAD_CMAN_IOP_FRAC', 1, ' ')
+       if (masterproc) write(iulog,*) 'CMAN IOP property mapping: ', trim(iop_property_mapping)
+    end if
 
     ! call aero_deposition_cam_init only if the user has not specified
     ! prescribed aerosol deposition fluxes
@@ -494,8 +555,10 @@ contains
 
     allocate(index_tot_mass(nmodes,nspec_max))
     allocate(index_chm_mass(nmodes,nspec_max))
+    allocate(index_iop_mass(nmodes,nspec_max))
     index_tot_mass = -1
     index_chm_mass = -1
+    index_iop_mass = -1
     allocate(index_ssa_mass(nmodes,nspec_max))
     index_ssa_mass = -1
 
@@ -514,6 +577,11 @@ contains
                   trim(spec_type) == 'ammonium') then
                 index_chm_mass(n,l) = get_spc_ndx(spec_name)
              endif
+             ! CMAN CHANGE: keep IOP separate so its incremental contribution
+             ! to chemically active aerosol surface area can be diagnosed.
+             if (trim(spec_type) == 'iodine') then
+                index_iop_mass(n,l) = get_spc_ndx(spec_name)
+             end if
              if ( trim(spec_type) == 'seasalt')  then
                 index_ssa_mass(n,l) = get_spc_ndx(spec_name)
              endif
@@ -919,6 +987,8 @@ contains
 
     ! local vars
     real(r8), pointer, dimension(:,:,:) :: dgnumwet
+    real(r8) :: sad_cman_iop(pcols,pver)
+    real(r8) :: sad_cman_iop_frac(pcols,pver)
     integer :: beglev(ncol)
     integer :: endlev(ncol)
     integer :: i,k
@@ -927,7 +997,15 @@ contains
 
     beglev(:ncol)=ltrop(:ncol)+1
     endlev(:ncol)=pver
-    call surf_area_dens( ncol, mmr, pmid, temp, dgnumwet, beglev, endlev, sad_trop, reff_trop, sfc=sfc, sad_ssa=sad_ssa )
+    call surf_area_dens( ncol, mmr, pmid, temp, dgnumwet, beglev, endlev, &
+         sad_trop, reff_trop, sfc=sfc, sad_ssa=sad_ssa, &
+         sad_iop=sad_cman_iop, sad_iop_fraction=sad_cman_iop_frac )
+
+    if (do_cman_iodine_npf) then
+       call outfld('SAD_CMAN_TOTAL', sad_trop(:ncol,:), ncol, state%lchnk)
+       call outfld('SAD_CMAN_IOP', sad_cman_iop(:ncol,:), ncol, state%lchnk)
+       call outfld('SAD_CMAN_IOP_FRAC', sad_cman_iop_frac(:ncol,:), ncol, state%lchnk)
+    end if
 
     do i = 1,ncol
        do k = ltrop(i)+1,pver
@@ -1030,6 +1108,15 @@ contains
     real(r8) :: dvmrcwdt(ncol,pver,gas_pcnst)
     real(r8) :: dvmrdt(ncol,pver,gas_pcnst)
     real(r8) :: vmrcw(ncol,pver,gas_pcnst)            ! cloud-borne aerosol (vmr)
+    real(r8) :: iop_interstitial(ncol,pver)
+    real(r8) :: iop_cloud(ncol,pver)
+    real(r8) :: iop_total(ncol,pver)
+    real(r8) :: iop_molar_total(ncol,pver)
+    real(r8) :: iodine_gas_total(ncol,pver)
+    real(r8) :: iodine_total(ncol,pver)
+    real(r8) :: iodine_hio3_fraction(ncol,pver)
+    real(r8) :: iodine_iop_fraction(ncol,pver)
+    integer  :: iop_ndx, hio3_local_ndx, iodine_local_ndx
 
     real(r8) ::  aqso4(ncol,ntot_amode)               ! aqueous phase chemistry
     real(r8) ::  aqh2so4(ncol,ntot_amode)             ! aqueous phase chemistry
@@ -1174,7 +1261,7 @@ contains
          tfld,     pmid,     pdel,             &
          zm,       pblh,                       &
          qh2o,     cldfr,                      &
-         vmr,                                  &
+         vmr0,     vmr,       dgnum,           &
          del_h2so4_gasprod,  del_h2so4_aeruptk )
 
     call t_stopf('modal_nucl')
@@ -1191,6 +1278,56 @@ contains
          wetdens                          )
 
     call t_stopf('modal_coag')
+
+    if (do_cman_iodine_npf) then
+       iop_interstitial(:,:) = 0._r8
+       iop_cloud(:,:) = 0._r8
+       do n = 1, ntot_amode
+          iop_ndx = lptr_iop_a_amode(n) - loffset
+          if (iop_ndx > 0 .and. iop_ndx <= gas_pcnst) then
+             iop_interstitial(:ncol,:) = iop_interstitial(:ncol,:) + vmr(:ncol,:,iop_ndx)
+          end if
+          iop_ndx = lptr_iop_cw_amode(n) - loffset
+          if (iop_ndx > 0 .and. iop_ndx <= gas_pcnst) then
+             iop_cloud(:ncol,:) = iop_cloud(:ncol,:) + vmrcw(:ncol,:,iop_ndx)
+          end if
+       end do
+
+       ! Each mole of IOP is represented as HIO3-equivalent particulate mass and
+       ! contains one mole of iodine.  Convert here to elemental-I mass mixing ratio.
+       iop_molar_total(:ncol,:) = iop_interstitial(:ncol,:) + iop_cloud(:ncol,:)
+       iodine_gas_total(:ncol,:) = 0._r8
+       do n = 1, num_iodine_gas_species
+          iodine_local_ndx = iodine_gas_ndx(n) - loffset
+          if (iodine_local_ndx > 0 .and. iodine_local_ndx <= gas_pcnst) then
+             iodine_gas_total(:ncol,:) = iodine_gas_total(:ncol,:) + &
+                  iodine_atom_weights(n)*max(vmr(:ncol,:,iodine_local_ndx),0._r8)
+          end if
+       end do
+       iodine_total(:ncol,:) = iodine_gas_total(:ncol,:) + iop_molar_total(:ncol,:)
+       iodine_hio3_fraction(:ncol,:) = 0._r8
+       iodine_iop_fraction(:ncol,:) = 0._r8
+       hio3_local_ndx = hio3_ndx - loffset
+       where (iodine_total(:ncol,:) > 0._r8)
+          iodine_iop_fraction(:ncol,:) = iop_molar_total(:ncol,:)/iodine_total(:ncol,:)
+          iodine_hio3_fraction(:ncol,:) = &
+               max(vmr(:ncol,:,hio3_local_ndx),0._r8)/iodine_total(:ncol,:)
+       end where
+
+       iop_interstitial(:ncol,:) = iop_interstitial(:ncol,:) * 126.90447_r8 / mbar(:ncol,:)
+       iop_cloud(:ncol,:) = iop_cloud(:ncol,:) * 126.90447_r8 / mbar(:ncol,:)
+       iop_total(:ncol,:) = iop_interstitial(:ncol,:) + iop_cloud(:ncol,:)
+       call outfld('IOP_INTERST', iop_interstitial(:ncol,:), ncol, lchnk)
+       call outfld('IOP_CLOUD', iop_cloud(:ncol,:), ncol, lchnk)
+       call outfld('IOP', iop_total(:ncol,:), ncol, lchnk)
+       call outfld('I_TOTAL_CMAN', iodine_total(:ncol,:), ncol, lchnk)
+       call outfld('I_HIO3_FRAC', iodine_hio3_fraction(:ncol,:), ncol, lchnk)
+       call outfld('I_IOP_FRAC', iodine_iop_fraction(:ncol,:), ncol, lchnk)
+
+       if (hio3_local_ndx > 0 .and. hio3_local_ndx <= gas_pcnst) then
+          call outfld('HIO3_CMAN', vmr(:ncol,:,hio3_local_ndx), ncol, lchnk)
+       end if
+    end if
 
     call vmr2qqcw( lchnk, vmrcw, mbar, ncol, loffset, pbuf )
 
@@ -1280,7 +1417,8 @@ contains
 
   !=============================================================================
   !=============================================================================
-  subroutine surf_area_dens( ncol, mmr, pmid, temp, diam, beglev, endlev, sad, reff, sfc, sad_ssa )
+  subroutine surf_area_dens( ncol, mmr, pmid, temp, diam, beglev, endlev, sad, reff, &
+                             sfc, sad_ssa, sad_iop, sad_iop_fraction )
     use mo_constants,    only : pi
     use modal_aero_data, only : nspec_amode, alnsg_amode
 
@@ -1296,6 +1434,8 @@ contains
     real(r8), intent(out) :: reff(:,:)
     real(r8),optional, intent(out) :: sfc(:,:,:)
     real(r8),optional, intent(out) :: sad_ssa(:,:)
+    real(r8),optional, intent(out) :: sad_iop(:,:)
+    real(r8),optional, intent(out) :: sad_iop_fraction(:,:)
 
     ! local vars
     real(r8) :: sad_mode(pcols,pver,ntot_amode),radeff(pcols,pver)
@@ -1305,6 +1445,9 @@ contains
     real(r8) :: chm_mass, tot_mass
     real(r8) :: ssa_mass
     real(r8) :: sad_mode_ssa(pcols,pver,ntot_amode)
+    real(r8) :: sad_mode_iop(pcols,pver,ntot_amode)
+    real(r8) :: sad_iop_local(pcols,pver)
+    real(r8) :: iop_mass, surface_area_all_mass
 
     !
     ! Compute surface aero for each mode.
@@ -1313,6 +1456,8 @@ contains
 
     sad = 0._r8
     sad_mode = 0._r8
+    sad_mode_iop = 0._r8
+    sad_iop_local = 0._r8
     vol = 0._r8
     vol_mode = 0._r8
     reff = 0._r8
@@ -1330,12 +1475,15 @@ contains
              !
              tot_mass = 0._r8
              chm_mass = 0._r8
+             iop_mass = 0._r8
              ssa_mass = 0._r8
              do m=1,nspec_amode(l)
                if ( index_tot_mass(l,m) > 0 ) &
                     tot_mass = tot_mass + mmr(i,k,index_tot_mass(l,m))
                if ( index_chm_mass(l,m) > 0 ) &
                     chm_mass = chm_mass + mmr(i,k,index_chm_mass(l,m))
+               if ( index_iop_mass(l,m) > 0 ) &
+                    iop_mass = iop_mass + mmr(i,k,index_iop_mass(l,m))
                if (present(sad_ssa)) then
                  if ( index_ssa_mass(l,m) > 0 ) &
                       ssa_mass = ssa_mass + mmr(i,k,index_ssa_mass(l,m))
@@ -1343,10 +1491,17 @@ contains
              end do
              if ( tot_mass > 0._r8 ) then
               ! surface area density
-               sad_mode(i,k,l) = chm_mass/tot_mass &
-                               * mmr(i,k,num_idx(l))*rho_air*pi*diam(i,k,l)**2._r8 &
-                               * exp(2._r8*alnsg_amode(l)**2._r8)  ! m^2/m^3
+               surface_area_all_mass = mmr(i,k,num_idx(l))*rho_air*pi*diam(i,k,l)**2._r8 &
+                                     * exp(2._r8*alnsg_amode(l)**2._r8)
+
+               ! ORIGINAL CESM EXPRESSION (before CMAN IOP):
+               ! sad_mode(i,k,l) = chm_mass/tot_mass * surface_area_all_mass
+               ! CMAN CHANGE: IOP is included as chemically active aerosol and its
+               ! incremental contribution is retained as a separate diagnostic.
+               sad_mode(i,k,l) = (chm_mass+iop_mass)/tot_mass * surface_area_all_mass
+               sad_mode_iop(i,k,l) = iop_mass/tot_mass * surface_area_all_mass
                sad_mode(i,k,l) = 1.e-2_r8 * sad_mode(i,k,l) ! cm^2/cm^3
+               sad_mode_iop(i,k,l) = 1.e-2_r8 * sad_mode_iop(i,k,l) ! cm^2/cm^3
 
                if (present(sad_ssa)) then
                  sad_mode_ssa(i,k,l) = ssa_mass/tot_mass &
@@ -1355,12 +1510,14 @@ contains
                  sad_mode_ssa(i,k,l) = 1.e-2_r8 * sad_mode_ssa(i,k,l) ! cm^2/cm^3
                end if
 
-              ! volume calculation, for use in effective radius calculation
-               vol_mode(i,k,l) = chm_mass/tot_mass &
+              ! Volume used for the chemically active effective radius must use
+              ! the same IOP-inclusive mass fraction as SAD above.
+               vol_mode(i,k,l) = (chm_mass+iop_mass)/tot_mass &
                                * mmr(i,k,num_idx(l))*rho_air*pi/6._r8*diam(i,k,l)**3._r8  &
                                * exp(4.5_r8*alnsg_amode(l)**2._r8)  ! m^3/m^3 = cm^3/cm^3
              else
                sad_mode(i,k,l) = 0._r8
+               sad_mode_iop(i,k,l) = 0._r8
                vol_mode(i,k,l) = 0._r8
                if (present(sad_ssa)) then
                  sad_mode_ssa(i,k,l) = 0._r8
@@ -1368,6 +1525,7 @@ contains
              end if
           end do
           sad(i,k) = sum(sad_mode(i,k,:))
+          sad_iop_local(i,k) = sum(sad_mode_iop(i,k,:))
           vol(i,k) = sum(vol_mode(i,k,:))
           reff(i,k) = 3._r8*vol(i,k)/sad(i,k)
           if (present(sad_ssa)) then
@@ -1380,6 +1538,13 @@ contains
     if (present(sfc)) then
        sfc(:,:,:) = sad_mode(:,:,:)
     endif
+    if (present(sad_iop)) sad_iop(:,:) = sad_iop_local(:,:)
+    if (present(sad_iop_fraction)) then
+       sad_iop_fraction(:,:) = 0._r8
+       where (sad(:,:) > 0._r8)
+          sad_iop_fraction(:,:) = sad_iop_local(:,:)/sad(:,:)
+       end where
+    end if
 
   end subroutine surf_area_dens
 

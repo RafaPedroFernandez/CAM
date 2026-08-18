@@ -16,6 +16,7 @@ module modal_aerosol_properties_mod
      real(r8), allocatable :: voltonumblo_(:)
      real(r8), allocatable :: voltonumbhi_(:)
      integer,  allocatable :: sulfate_mode_ndxs_(:)
+     integer,  allocatable :: iodine_mode_ndxs_(:)
      integer,  allocatable :: dust_mode_ndxs_(:)
      integer,  allocatable :: ssalt_mode_ndxs_(:)
      integer,  allocatable :: ammon_mode_ndxs_(:)
@@ -188,6 +189,11 @@ contains
        nullify(newobj)
        return
     end if
+    allocate(newobj%iodine_mode_ndxs_(newobj%nbins()),stat=ierr)
+    if( ierr /= 0 ) then
+       nullify(newobj)
+       return
+    end if
     allocate(newobj%dust_mode_ndxs_(newobj%nbins()),stat=ierr)
     if( ierr /= 0 ) then
        nullify(newobj)
@@ -215,6 +221,7 @@ contains
     end if
 
     newobj%sulfate_mode_ndxs_ = 0
+    newobj%iodine_mode_ndxs_ = 0
     newobj%dust_mode_ndxs_ = 0
     newobj%ssalt_mode_ndxs_ = 0
     newobj%ammon_mode_ndxs_ = 0
@@ -253,6 +260,8 @@ contains
           select case ( trim(spectype) )
           case('sulfate')
              newobj%sulfate_mode_ndxs_(m) = mm
+          case('iodine')
+             newobj%iodine_mode_ndxs_(m) = mm
           case('dust')
              newobj%dust_mode_ndxs_(m) = mm
           case('nitrate')
@@ -306,6 +315,9 @@ contains
 
     if (allocated(self%sulfate_mode_ndxs_)) then
        deallocate(self%sulfate_mode_ndxs_)
+    end if
+    if (allocated(self%iodine_mode_ndxs_)) then
+       deallocate(self%iodine_mode_ndxs_)
     end if
     if (allocated(self%dust_mode_ndxs_)) then
        deallocate(self%dust_mode_ndxs_)
@@ -936,6 +948,7 @@ contains
     character(len=4) :: spcstr
 
     call accumulate_to_larger_mode( 'SO4', self%sulfate_mode_ndxs_, dcondt )
+    call accumulate_to_larger_mode( 'IOP', self%iodine_mode_ndxs_, dcondt )
     call accumulate_to_larger_mode( 'DUST',self%dust_mode_ndxs_,dcondt )
     call accumulate_to_larger_mode( 'NACL',self%ssalt_mode_ndxs_,dcondt )
     call accumulate_to_larger_mode( 'MSA', self%msa_mode_ndxs_, dcondt )

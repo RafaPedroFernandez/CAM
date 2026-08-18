@@ -29,7 +29,8 @@ module mo_sethet
   integer :: so2_ndx, soa_ndx, so4_ndx, cb2_ndx, oc2_ndx, nh3_ndx, nh4no3_ndx, &
              sa1_ndx, sa2_ndx, sa3_ndx, sa4_ndx, nh4_ndx, h2so4_ndx
   integer :: xisopno3_ndx,xho2no2_ndx,xonitr_ndx,xhno3_ndx,xonit_ndx
-  integer :: clono2_ndx, brono2_ndx, hcl_ndx, n2o5_ndx, hocl_ndx, hobr_ndx, hbr_ndx 
+  integer :: clono2_ndx, brono2_ndx, hcl_ndx, n2o5_ndx, hocl_ndx, hobr_ndx, hbr_ndx
+  integer :: hio3_ndx, i2o5_ndx
   integer :: ch3cn_ndx, hcn_ndx, hcooh_ndx
   integer, allocatable :: wetdep_map(:)
   integer :: sogm_ndx, sogi_ndx, sogt_ndx, sogb_ndx, sogx_ndx
@@ -84,6 +85,8 @@ contains
     hocl_ndx   = get_het_ndx( 'HOCL' )
     hobr_ndx   = get_het_ndx( 'HOBR' )
     hbr_ndx    = get_het_ndx( 'HBR' )
+    hio3_ndx   = get_het_ndx( 'HIO3' )
+    i2o5_ndx   = get_het_ndx( 'I2O5' )
 
     h2o2_ndx   = get_het_ndx( 'H2O2' )
     hno3_ndx   = get_het_ndx( 'HNO3' )
@@ -198,6 +201,9 @@ contains
     real(r8), parameter ::  satf_so2   = .016_r8        ! saturation factor for so2 in clouds 
     real(r8), parameter ::  satf_ch2o  = .1_r8          ! saturation factor for ch2o in clouds 
     real(r8), parameter ::  satf_sog  =  .016_r8        ! saturation factor for sog in clouds
+    ! Temporary CMAN solubility mappings pending dedicated measurements.
+    real(r8), parameter ::  henry_hio3_mapped_to_hoi = 4.1e2_r8
+    real(r8), parameter ::  henry_i2o5_high_solubility = 1.0e15_r8
     real(r8), parameter ::  const0   = boltz_cgs * 1.e-6_r8 ! (atmospheres/deg k/cm^3)
     real(r8), parameter ::  hno3_diss = 15.4_r8         ! hno3 dissociation constant
     real(r8), parameter ::  geo_fac  = 6._r8            ! geometry factor (surf area/volume = geo_fac/diameter)
@@ -807,6 +813,15 @@ contains
           end if
           if( hbr_ndx > 0 ) then
              het_rates(i,k, hbr_ndx) = work3(i)
+          end if
+
+          if (hio3_ndx > 0) then
+             het_rates(i,k,hio3_ndx) = max(rain(i,k) / &
+                  (h2o_mol*(work1(i) + 1._r8/(henry_hio3_mapped_to_hoi*work2(i)))), 0._r8)
+          end if
+          if (i2o5_ndx > 0) then
+             het_rates(i,k,i2o5_ndx) = max(rain(i,k) / &
+                  (h2o_mol*(work1(i) + 1._r8/(henry_i2o5_high_solubility*work2(i)))), 0._r8)
           end if
 
           if( soa_ndx > 0 ) then

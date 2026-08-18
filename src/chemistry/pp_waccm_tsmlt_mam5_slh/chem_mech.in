@@ -8,6 +8,7 @@
 *     jz : 2025-02-25 : MAM5
 *     lke : 2023-06-22 : SLH halogens in MOZART-TS1.2. (NOTE .. hand-written by rpf instead of using CAFE)
 *     rpf : 2024-09-18 : Updates in reactions not related to SLH when porting to CESM3.
+*     CMAN/Finkenzeller notation: transported species I2O5 represents IOIO4.
 *     rpf : 2026-02-24 : Merge CESM2-SLH into cam6_4_153_SLHtag
 
       SPECIES
@@ -109,6 +110,7 @@
  H2402 -> CBrF2CBrF2,
  H2O2,
  H2SO4 -> H2SO4,
+ HIO3 -> HIO3,
  HBR -> HBr,
  HCFC141B -> CH3CCl2F,
  HCFC142B -> CH3CClF2,
@@ -133,6 +135,7 @@
  I2O2 -> I2O2,
  I2O3 -> I2O3,
  I2O4 -> I2O4,
+ I2O5 -> I2O5,
  IBR -> IBr,
  ICL -> ICl,
  IEPOX -> C5H10O3,
@@ -147,6 +150,8 @@
  ISOPOOH -> HOCH2COOHCH3CHCH2,
  IVOC -> C13H28,
  IY -> I,
+ iop_a1 -> HIO3,
+ iop_a2 -> HIO3,
  MACR -> CH2CCH3CHO,
  MACROOH -> CH3COCHOOHCH2OH,
  MEK -> C4H8O,
@@ -457,6 +462,7 @@
  H2402
  H2O2
  H2SO4
+ HIO3
  HBR
  HCFC141B
  HCFC142B
@@ -481,6 +487,7 @@
  I2O2
  I2O3
  I2O4
+ I2O5
  IBR
  ICL
  IEPOX
@@ -495,6 +502,8 @@
  ISOPOOH
  IVOC
  IY
+ iop_a1
+ iop_a2
  MACR
  MACROOH
  MEK
@@ -1019,6 +1028,9 @@
 [IO_OH]                IO + OH  -> HO2 + I                                      ; 1e-10 
 [OH_HI]                OH + HI  -> I + H2O                                      ; 1.6e-11, 440 
 [OIO_NO]               OIO + NO  -> IO + NO2                                    ; 1.1e-12, 542 
+[I2O2_O3_I2O5]        I2O2 + O3  -> I2O5 + O3                                  ; 8.2e-15, 763
+[I2O5_H2O_HIO3]       I2O5 + H2O  -> HIO3 + HOI + O2                           ; 2.5e-12, -2481
+[OIO_OH_HIO3]         OIO + OH  -> HIO3                                         ; 2.2e-10, 243
 [usr_HOI_NO3]          HOI + NO3  -> IO + HNO3                                   
 [usr_I2O2_a]           I2O2  -> OIO + I                                          
 [usr_I2O2_b]           I2O2  -> IO + IO                                          

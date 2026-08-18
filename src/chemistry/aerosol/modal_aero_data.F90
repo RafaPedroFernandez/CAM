@@ -87,6 +87,7 @@
 
       integer, public, protected, allocatable ::  &
            lptr_so4_a_amode(:),     lptr_so4_cw_amode(:), &
+           lptr_iop_a_amode(:),     lptr_iop_cw_amode(:), &
            lptr_msa_a_amode(:),     lptr_msa_cw_amode(:), &
            lptr_nh4_a_amode(:),     lptr_nh4_cw_amode(:), &
            lptr_no3_a_amode(:),     lptr_no3_cw_amode(:), &
@@ -198,6 +199,7 @@
          fmactlongname(ntot_amode ), &
          nactlongname(ntot_amode ), &
          lptr_so4_a_amode(ntot_amode), lptr_so4_cw_amode(ntot_amode), &
+         lptr_iop_a_amode(ntot_amode), lptr_iop_cw_amode(ntot_amode), &
          lptr_msa_a_amode(ntot_amode), lptr_msa_cw_amode(ntot_amode), &
          lptr_nh4_a_amode(ntot_amode), lptr_nh4_cw_amode(ntot_amode), &
          lptr_nacl_a_amode(ntot_amode), lptr_nacl_cw_amode(ntot_amode), &
@@ -887,6 +889,8 @@
 
           lptr_so4_a_amode(m)    = init_val
           lptr_so4_cw_amode(m)   = init_val
+          lptr_iop_a_amode(m)    = init_val
+          lptr_iop_cw_amode(m)   = init_val
           lptr_msa_a_amode(m)    = init_val
           lptr_msa_cw_amode(m)   = init_val
           lptr_nh4_a_amode(m)    = init_val
@@ -922,6 +926,9 @@
              case('so4')
                 lptr_so4_a_amode(m)  = lmassa
                 lptr_so4_cw_amode(m) = lmassc
+             case('iop')
+                lptr_iop_a_amode(m)  = lmassa
+                lptr_iop_cw_amode(m) = lmassc
              case('msa')
                 lptr_msa_a_amode(m)  = lmassa
                 lptr_msa_cw_amode(m) = lmassc
@@ -989,6 +996,12 @@
        do m = 1, ntot_amode
           call initaermodes_setspecptrs_write2( m,                    &
                lptr_so4_a_amode(m), lptr_so4_cw_amode(m),  'so4' )
+       end do
+
+       write(iulog,9000) 'iodine particles (IOP; namelist-selected proxy properties)'
+       do m = 1, ntot_amode
+          call initaermodes_setspecptrs_write2( m,                    &
+               lptr_iop_a_amode(m), lptr_iop_cw_amode(m),  'iop' )
        end do
 
        write(iulog,9000) 'msa        '
